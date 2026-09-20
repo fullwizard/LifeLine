@@ -52,9 +52,9 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
 
   return (
     <div className="space-y-6">
-      <StepIndicator current={step.kind} />
+      {step.kind !== "input" && <StepIndicator current={step.kind} />}
       {error && (
-        <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div role="alert" className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </div>
       )}
@@ -75,29 +75,10 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
 }
 
 function StepIndicator({ current }: { current: Step["kind"] }) {
-  const steps: { kind: Step["kind"]; label: string }[] = [
-    { kind: "input", label: "Your situation" },
-    { kind: "followup", label: "One question" },
-    { kind: "plan", label: "Your plan" },
-  ];
-  const idx = steps.findIndex((s) => s.kind === current);
-  return (
-    <ol className="flex items-center gap-2 text-xs sm:text-sm text-stone-500" aria-label="Progress">
-      {steps.map((s, i) => (
-        <li key={s.kind} className="flex items-center gap-2">
-          <span
-            className={
-              "inline-flex h-6 w-6 items-center justify-center rounded-full border text-xs font-medium " +
-              (i <= idx ? "border-teal-700 bg-teal-700 text-white" : "border-stone-300 bg-white text-stone-500")
-            }
-            aria-current={i === idx ? "step" : undefined}
-          >
-            {i + 1}
-          </span>
-          <span className={i === idx ? "font-medium text-stone-900" : ""}>{s.label}</span>
-          {i < steps.length - 1 && <span className="mx-1 h-px w-6 bg-stone-300" aria-hidden />}
-        </li>
-      ))}
-    </ol>
-  );
+  const labels = {
+    input: "Step 1: Tell us about your situation.",
+    followup: "Step 2: A little more about you.",
+    plan: "Step 3: Your next steps.",
+  };
+  return <h2 className="text-xl sm:text-2xl font-medium text-accent-700" aria-live="polite">{labels[current]}</h2>;
 }

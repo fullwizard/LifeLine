@@ -19,11 +19,11 @@ export function FollowUpStep({
   const [value, setValue] = useState("");
 
   return (
-    <div className="space-y-6">
+    <div className="grid items-start gap-8 md:grid-cols-[1fr_1.65fr]">
       <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} parsedBy={parsed.parsedBy} />
 
       <form
-        className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm space-y-4"
+        className="rounded-none bg-paper p-5 space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           if (pending) return;
@@ -31,11 +31,11 @@ export function FollowUpStep({
         }}
       >
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-teal-700">One quick question</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">One quick question</p>
           <label htmlFor="answer" className="mt-1 block text-lg font-medium">
             {q.prompt}
           </label>
-          <p className="mt-1 text-sm text-stone-500">{q.rationale}</p>
+          <p className="mt-1 text-sm text-neutral-500">{q.rationale}</p>
         </div>
 
         {q.inputType === "select" && (
@@ -44,8 +44,8 @@ export function FollowUpStep({
               <label
                 key={o.value}
                 className={
-                  "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-2.5 text-sm transition " +
-                  (value === o.value ? "border-teal-600 bg-teal-50" : "border-stone-200 hover:border-stone-300")
+                  "flex cursor-pointer items-start gap-3 rounded-none border px-3 py-2.5 text-sm transition " +
+                  (value === o.value ? "border-accent-600 bg-accent-50" : "border-neutral-200 hover:border-neutral-300")
                 }
               >
                 <input
@@ -54,7 +54,7 @@ export function FollowUpStep({
                   value={o.value}
                   checked={value === o.value}
                   onChange={() => setValue(o.value)}
-                  className="mt-0.5 accent-teal-700"
+                  className="mt-0.5 accent-accent-700"
                 />
                 <span>{o.label}</span>
               </label>
@@ -73,8 +73,8 @@ export function FollowUpStep({
                 type="button"
                 onClick={() => setValue(o.v)}
                 className={
-                  "rounded-lg border px-5 py-2 text-sm font-medium transition " +
-                  (value === o.v ? "border-teal-600 bg-teal-50 text-teal-900" : "border-stone-200 bg-white hover:border-stone-300")
+                  "rounded-none border px-5 py-2 text-sm font-medium transition " +
+                  (value === o.v ? "border-accent-600 bg-accent-50 text-accent-900" : "border-neutral-200 bg-paper hover:border-neutral-300")
                 }
               >
                 {o.label}
@@ -92,7 +92,7 @@ export function FollowUpStep({
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={q.field === "location" ? "e.g. Seattle, King County, or 98104" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-base focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/30"
+            className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
           />
         )}
 
@@ -100,11 +100,11 @@ export function FollowUpStep({
           <button
             type="submit"
             disabled={pending}
-            className="rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-teal-800 disabled:opacity-50"
+            className="rounded-none bg-accent-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-800 disabled:bg-neutral-200 disabled:text-neutral-600"
           >
             {pending ? "Building your plan…" : value.trim() ? "Continue" : "Skip and build my plan"}
           </button>
-          <button type="button" onClick={onBack} disabled={pending} className="text-sm text-stone-500 hover:text-stone-800">
+          <button type="button" onClick={onBack} disabled={pending} className="text-sm text-neutral-500 hover:text-neutral-800">
             Edit my description
           </button>
         </div>
@@ -151,10 +151,10 @@ export function UnderstoodFacts({
   if (situation.needs?.length) chips.push(`Needs: ${situation.needs.map((n) => NEED_LABEL[n] ?? n).join(", ")}`);
 
   return (
-    <section className="rounded-xl border border-stone-200 bg-stone-100/60 px-4 py-3">
+    <section className="rounded-none bg-neutral-100 px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-medium text-stone-700">What we understood</h2>
-        <span className="text-xs text-stone-500">
+        <h2 className="text-sm font-medium text-neutral-700">What we understood</h2>
+        <span className="text-xs text-neutral-500">
           {candidateCount !== undefined && `${candidateCount} possible resource${candidateCount === 1 ? "" : "s"} so far`}
           {parsedBy && ` · read by ${parsedBy === "gemini" ? "Gemini" : "keyword reader"}`}
         </span>
@@ -162,13 +162,13 @@ export function UnderstoodFacts({
       {chips.length ? (
         <ul className="mt-2 flex flex-wrap gap-2">
           {chips.map((c) => (
-            <li key={c} className="rounded-full border border-stone-300 bg-white px-3 py-1 text-xs text-stone-800">
+            <li key={c} className="rounded-none bg-paper px-3 py-1 text-xs text-neutral-800">
               {c}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-2 text-sm text-stone-500">We could not pick out specific details yet.</p>
+        <p className="mt-2 text-sm text-neutral-500">We could not pick out specific details yet.</p>
       )}
     </section>
   );
