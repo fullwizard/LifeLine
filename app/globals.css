@@ -6,8 +6,106 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --color-sunflower: #fbd95b;
+  --color-sunflower-hover: #f6ce3b;
+  --color-paper: #ffffff;
+  --color-neutral-50: #fff9eb;
+  --color-neutral-100: #ffe9a3;
+  --color-neutral-200: #f0d489;
+  --color-neutral-300: #bca269;
+  --color-neutral-400: #8d794e;
+  --color-neutral-500: #6e6044;
+  --color-neutral-600: #594d36;
+  --color-neutral-700: #463a28;
+  --color-neutral-800: #33291d;
+  --color-neutral-900: #251d15;
+  --color-accent-50: #ffdfcb;
+  --color-accent-200: #ffae82;
+  --color-accent-600: #ce3517;
+  --color-accent-700: #b52a16;
+  --color-accent-800: #93200e;
+  --color-accent-900: #731b10;
+  --color-accent-950: #491108;
 }
 
 body {
   font-family: var(--font-sans);
+}
+
+@layer base {
+  ::selection {
+    background: var(--color-neutral-200);
+    color: var(--color-neutral-900);
+  }
+
+  button:not(:disabled), a, input[type="radio"] {
+    cursor: pointer;
+  }
+
+  :where(button, a, input, textarea):focus-visible {
+    outline: 2px solid var(--color-accent-600);
+    outline-offset: 4px;
+  }
+
+  textarea, input:not([type="radio"]) {
+    background: var(--color-paper);
+    border-radius: 0;
+  }
+}
+
+/* Keep the brand and navigation on one responsive row. */
+.site-masthead {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 5vw, 4rem);
+}
+
+.site-brand {
+  flex: 0 0 auto;
+  font-size: clamp(1.25rem, 3vw, 1.875rem);
+  white-space: nowrap;
+}
+
+.site-nav {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(1rem, 4vw, 3.5rem);
+}
+
+.site-nav > span {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-family: Impact, "Arial Narrow", var(--font-sans);
+  font-size: clamp(0.75rem, 2vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+@media (min-width: 640px) {
+  .site-nav {
+    gap: clamp(2rem, 8vw, 7rem);
+  }
+}
+
+/* The paint stays decorative and scales with the paragraph's height. */
+.intro-brush {
+  position: relative;
+  isolation: isolate;
+  padding: 2rem 1.75rem;
+  color: var(--color-paper);
+}
+
+.intro-brush::before {
+  content: "";
+  position: absolute;
+  inset: -1.5rem 0;
+  z-index: -1;
+  background: url("/intro-brush.svg") center / 100% 100% no-repeat;
+  transform: skewY(-5deg);
+  pointer-events: none;
 }
