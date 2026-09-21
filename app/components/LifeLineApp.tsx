@@ -52,6 +52,11 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
 
   return (
     <div className="space-y-6">
+      {step.kind === "input" && (
+        <h1 className="headline-georgia mx-auto max-w-4xl text-center text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-balance">
+          Housing help, in the right order.
+        </h1>
+      )}
       {step.kind !== "input" && <StepIndicator current={step.kind} />}
       {error && (
         <div role="alert" className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">

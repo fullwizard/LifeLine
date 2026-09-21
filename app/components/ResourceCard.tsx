@@ -129,5 +129,5 @@ const STATUS_TEXT: Record<BreakdownItem["status"], string> = {
 
 function StatusDot({ status }: { status: BreakdownItem["status"] }) {
   const color = status === "met" ? "bg-emerald-500" : status === "unverified" ? "bg-amber-500" : "bg-neutral-400";
-  return <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-none ${color}`} role="img" aria-label={STATUS_TEXT[status]} />;
+  return <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${color}`} role="img" aria-label={STATUS_TEXT[status]} />;
 }
