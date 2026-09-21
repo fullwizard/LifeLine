@@ -71,13 +71,13 @@ function Legend() {
   return (
     <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-600">
       <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-none bg-emerald-500" aria-hidden /> Confirmed from what you told us
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden /> Confirmed from what you told us
       </li>
       <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-none bg-amber-500" aria-hidden /> Needs verification with the organization
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden /> Needs verification with the organization
       </li>
       <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-none bg-neutral-400" aria-hidden /> Not met yet
+        <span className="h-2.5 w-2.5 rounded-full bg-neutral-400" aria-hidden /> Not met yet
       </li>
     </ul>
   );
