@@ -11,12 +11,10 @@ const EXAMPLES = [
 export function SituationForm({
   initialText,
   pending,
-  aiEnabled,
   onSubmit,
 }: {
   initialText: string;
   pending: boolean;
-  aiEnabled: boolean;
   onSubmit: (text: string) => void;
 }) {
   const [text, setText] = useState(initialText);
@@ -140,7 +138,7 @@ export function SituationForm({
             {pending ? "Reading your situation…" : "Find help"}
           </button>
           <span className="text-xs text-neutral-500">
-            {aiEnabled ? "Using Gemini to read your description." : "Running fully offline with a keyword reader."}
+            Running fully offline with a keyword reader. Your data isn&apos;t going to a 3rd party.
           </span>
         </div>
       </div>

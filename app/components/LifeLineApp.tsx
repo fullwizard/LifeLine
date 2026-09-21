@@ -9,7 +9,7 @@ import { SituationForm } from "./SituationForm";
 
 type Step = { kind: "input" } | { kind: "followup"; parsed: ParseResponse } | { kind: "plan"; plan: Plan };
 
-export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
+export function LifeLineApp() {
   const [step, setStep] = useState<Step>({ kind: "input" });
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
         </div>
       )}
       {step.kind === "input" && (
-        <SituationForm initialText={text} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
+        <SituationForm initialText={text} pending={pending} onSubmit={submitSituation} />
       )}
       {step.kind === "followup" && (
         <FollowUpStep

@@ -3,7 +3,6 @@ import { HomeLink } from "./components/HomeLink";
 import { LifeLineApp } from "./components/LifeLineApp";
 
 export default function Home() {
-  const aiEnabled = Boolean(process.env.GEMINI_API_KEY?.trim());
   return (
     <main id="home" className="flex-1 w-full max-w-6xl mx-auto px-5 pb-10 sm:px-10">
       <header className="mb-6">
@@ -16,7 +15,7 @@ export default function Home() {
           </nav>
         </div>
       </header>
-      <LifeLineApp aiEnabled={aiEnabled} />
+      <LifeLineApp />
     </main>
   );
 }
