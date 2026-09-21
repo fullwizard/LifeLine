@@ -57,6 +57,7 @@ body {
 .site-masthead {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: clamp(1rem, 5vw, 4rem);
 }
 

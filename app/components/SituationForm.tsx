@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GUIDANCE = "Where you live, who lives with you, what you are facing, and roughly what your household earns. Anything you leave out, we may ask about.";
-const PLACEHOLDERS = [
-  GUIDANCE,
-  "For example: I live in Seattle with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
-  "For example: Veteran in Kent, WA. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
-  "For example: Family of 4 in Tacoma, behind on rent, no eviction notice yet. Income around $3,800 a month.",
+const EXAMPLES = [
+  "I live in Seattle with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
+  "Veteran in Kent, WA. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
+  "Family of 4 in Tacoma, behind on rent, no eviction notice yet. Income around $3,800 a month.",
 ];
-
 export function SituationForm({
   initialText,
   pending,
@@ -22,21 +20,64 @@ export function SituationForm({
   onSubmit: (text: string) => void;
 }) {
   const [text, setText] = useState(initialText);
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholderText, setPlaceholderText] = useState(GUIDANCE);
   const [focused, setFocused] = useState(false);
+  const [exampleIndex, setExampleIndex] = useState(0);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const canSubmit = text.trim().length > 0 && !pending;
+
+  function tryExample() {
+    setText(EXAMPLES[exampleIndex]);
+    setExampleIndex((index) => (index + 1) % EXAMPLES.length);
+    textareaRef.current?.focus();
+  }
 
   useEffect(() => {
     if (text.length > 0 || focused || pending) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const timer = window.setInterval(() => {
-      if (!reducedMotion.matches && !document.hidden) {
-        setPlaceholderIndex((index) => (index + 1) % PLACEHOLDERS.length);
-      }
-    }, 4000);
 
-    return () => window.clearInterval(timer);
+    if (reducedMotion.matches) return;
+
+    let sampleIndex = 0;
+    let characterIndex = 0;
+    let deleting = false;
+    let timer = window.setTimeout(tick, 2200);
+
+    function tick() {
+      if (document.hidden) {
+        timer = window.setTimeout(tick, 500);
+        return;
+      }
+
+      const sample = EXAMPLES[sampleIndex];
+
+      if (deleting) {
+        characterIndex = Math.max(0, characterIndex - 1);
+        setPlaceholderText(sample.slice(0, characterIndex));
+
+        if (characterIndex === 0) {
+          sampleIndex = (sampleIndex + 1) % EXAMPLES.length;
+          deleting = false;
+          timer = window.setTimeout(tick, 500);
+        } else {
+          timer = window.setTimeout(tick, 24);
+        }
+        return;
+      }
+
+      characterIndex = Math.min(sample.length, characterIndex + 1);
+      setPlaceholderText(sample.slice(0, characterIndex));
+
+      if (characterIndex === sample.length) {
+        deleting = true;
+        timer = window.setTimeout(tick, 2200);
+      } else {
+        timer = window.setTimeout(tick, 42);
+      }
+    }
+
+    return () => window.clearTimeout(timer);
   }, [text, focused, pending]);
 
   return (
@@ -53,20 +94,43 @@ export function SituationForm({
           What is happening with your housing?
         </label>
         <p id="situation-guidance" className="sr-only">{GUIDANCE}</p>
-        <textarea
-          id="situation"
-          name="situation"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          aria-describedby="situation-guidance"
-          rows={6}
-          maxLength={4000}
-          placeholder={PLACEHOLDERS[placeholderIndex]}
-          className="w-full rounded-none border-0 bg-paper px-4 py-3 text-base leading-relaxed placeholder:text-gray-500 placeholder:opacity-100 focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
-          disabled={pending}
-        />
+        <div className="rounded-none bg-paper focus-within:ring-2 focus-within:ring-accent-600">
+          <textarea
+            ref={textareaRef}
+            id="situation"
+            name="situation"
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (e.target.value.length === 0) setPlaceholderText(GUIDANCE);
+            }}
+            onFocus={() => {
+              setFocused(true);
+              if (text.length === 0) setPlaceholderText(GUIDANCE);
+            }}
+            onBlur={() => setFocused(false)}
+            aria-describedby="situation-guidance"
+            rows={6}
+            maxLength={4000}
+            placeholder={placeholderText}
+            className="block w-full resize-y border-0 bg-transparent px-4 py-3 text-base leading-relaxed placeholder:text-gray-500 placeholder:opacity-100 focus:outline-none"
+            disabled={pending}
+          />
+          <div className="flex justify-end px-4 pb-3">
+            <button
+              type="button"
+              onClick={tryExample}
+              disabled={pending}
+              className="inline-flex min-h-8 items-center gap-1.5 bg-transparent text-sm font-medium text-accent-700 underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-gray-500"
+            >
+              Try an example
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                <path d="M9 5 11.5 11.5 18 14 11.5 16.5 9 23 6.5 16.5 0 14 6.5 11.5Z" transform="translate(2 -2) scale(.9)" />
+                <path d="m18 2 1.2 3.8L23 7l-3.8 1.2L18 12l-1.2-3.8L13 7l3.8-1.2Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="submit"
