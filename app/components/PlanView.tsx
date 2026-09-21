@@ -8,7 +8,7 @@ export function PlanView({ plan, onReset }: { plan: Plan; onReset: () => void })
   const confirmed = plan.ranked.filter((r) => !r.needsVerification).length;
   return (
     <div className="space-y-6">
-      <UnderstoodFacts situation={plan.situation} parsedBy={plan.parsedBy} />
+      <UnderstoodFacts situation={plan.situation} />
 
       <section className="rounded-none bg-accent-50 p-5">
         <h2 className="text-lg font-semibold text-accent-950">Your plan</h2>
@@ -25,10 +25,6 @@ export function PlanView({ plan, onReset }: { plan: Plan; onReset: () => void })
             ))}
           </ol>
         )}
-        <p className="mt-4 text-xs text-accent-900">
-          Written by {plan.generatedBy === "gemini" ? "Gemini" : "a template"} from the verified list below. Resources
-          were selected and ordered by rules, not by AI.
-        </p>
       </section>
 
       <section>

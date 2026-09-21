@@ -20,7 +20,7 @@ export function FollowUpStep({
 
   return (
     <div className="grid items-start gap-8 md:grid-cols-[1fr_1.65fr]">
-      <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} parsedBy={parsed.parsedBy} />
+      <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} />
 
       <form
         className="rounded-none bg-paper p-5 space-y-4"
@@ -132,11 +132,9 @@ const NEED_LABEL: Record<string, string> = {
 export function UnderstoodFacts({
   situation,
   candidateCount,
-  parsedBy,
 }: {
   situation: Situation;
   candidateCount?: number;
-  parsedBy?: "gemini" | "fallback";
 }) {
   const chips: string[] = [];
   const loc = situation.location;
@@ -154,10 +152,11 @@ export function UnderstoodFacts({
     <section className="rounded-none bg-neutral-100 px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-sm font-medium text-neutral-700">What we understood</h2>
-        <span className="text-xs text-neutral-500">
-          {candidateCount !== undefined && `${candidateCount} possible resource${candidateCount === 1 ? "" : "s"} so far`}
-          {parsedBy && ` · read by ${parsedBy === "gemini" ? "Gemini" : "keyword reader"}`}
-        </span>
+        {candidateCount !== undefined && (
+          <span className="text-xs text-neutral-500">
+            {candidateCount} possible resource{candidateCount === 1 ? "" : "s"} so far
+          </span>
+        )}
       </div>
       {chips.length ? (
         <ul className="mt-2 flex flex-wrap gap-2">
