@@ -109,3 +109,11 @@ body {
     inset 0 -2px 0 rgb(0 0 0 / 12%),
     0 1px 0 rgb(0 0 0 / 8%);
 }
+
+.site-nav > .site-nav-current,
+.site-nav > .site-nav-current > a {
+  color: var(--color-accent-950);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
