@@ -3,6 +3,7 @@
  * — or on any error — the deterministic keyword parser.
  */
 import { resolvePlace } from "../data/places";
+import { withCrisisIndicators } from "../safety/crisis";
 import {
   HOUSING_STATUSES,
   REPORTED_CONDITIONS,
@@ -90,12 +91,14 @@ export const geminiParser: SituationParser = {
 
 /** Default entry point: Gemini if configured, else keyword fallback. */
 export async function parseSituation(text: string): Promise<ParseResult> {
+  let result: ParseResult | undefined;
   if (geminiEnabled()) {
     try {
-      return await geminiParser.parse(text);
+      result = await geminiParser.parse(text);
     } catch (err) {
       console.warn("[LifeLine] Gemini parse failed, using keyword fallback:", err);
     }
   }
-  return keywordParser.parse(text);
+  result ??= await keywordParser.parse(text);
+  return { ...result, situation: withCrisisIndicators(result.situation, text) };
 }

@@ -3,11 +3,20 @@
 import { useState, useTransition } from "react";
 import type { AskableField, Plan } from "@/lib/types";
 import { answerAndBuildPlan, answerAndContinue, parseAndAsk, type ParseResponse } from "../actions";
+import { CrisisBanner, CrisisStep } from "./CrisisStep";
 import { FollowUpStep } from "./FollowUpStep";
 import { PlanView } from "./PlanView";
 import { SituationForm } from "./SituationForm";
 
-type Step = { kind: "input" } | { kind: "followup"; parsed: ParseResponse } | { kind: "plan"; plan: Plan };
+type Step =
+  | { kind: "input" }
+  | { kind: "crisis"; parsed: ParseResponse }
+  | { kind: "followup"; parsed: ParseResponse }
+  | { kind: "plan"; plan: Plan };
+
+function hasCrisis(parsed: ParseResponse): boolean {
+  return (parsed.situation.crisisIndicators?.length ?? 0) > 0;
+}
 
 export function LifeLineApp() {
   const [step, setStep] = useState<Step>({ kind: "input" });
@@ -21,12 +30,31 @@ export function LifeLineApp() {
     startTransition(async () => {
       try {
         const parsed = await parseAndAsk(value);
-        if (parsed.question) {
-          setStep({ kind: "followup", parsed });
+        if (hasCrisis(parsed)) {
+          setStep({ kind: "crisis", parsed });
         } else {
-          const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
-          setStep({ kind: "plan", plan });
+          await advancePastParse(parsed);
         }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      }
+    });
+  }
+
+  async function advancePastParse(parsed: ParseResponse) {
+    if (parsed.question) {
+      setStep({ kind: "followup", parsed });
+    } else {
+      const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
+      setStep({ kind: "plan", plan });
+    }
+  }
+
+  function continueFromCrisis(parsed: ParseResponse) {
+    setError(null);
+    startTransition(async () => {
+      try {
+        await advancePastParse(parsed);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
       }
@@ -72,9 +100,11 @@ export function LifeLineApp() {
           {error}
         </div>
       )}
+      {step.kind !== "input" && step.kind !== "crisis" && crisisDetected(step) && <CrisisBanner />}
       {step.kind === "input" && (
         <SituationForm initialText={text} pending={pending} onSubmit={submitSituation} />
       )}
+      {step.kind === "crisis" && <CrisisStep pending={pending} onContinue={() => continueFromCrisis(step.parsed)} />}
       {step.kind === "followup" && (
         <FollowUpStep
           key={step.parsed.question?.field}
@@ -89,9 +119,16 @@ export function LifeLineApp() {
   );
 }
 
+function crisisDetected(step: Step): boolean {
+  if (step.kind === "followup") return hasCrisis(step.parsed);
+  if (step.kind === "plan") return (step.plan.situation.crisisIndicators?.length ?? 0) > 0;
+  return false;
+}
+
 function StepIndicator({ current }: { current: Step["kind"] }) {
   const labels = {
     input: "Step 1: Tell us about your situation.",
+    crisis: "Before we continue.",
     followup: "Step 2: A little more about you.",
     plan: "Step 3: Your next steps.",
   };
