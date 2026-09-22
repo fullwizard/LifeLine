@@ -31,6 +31,7 @@ function toResource(candidate: CandidateRecord): Resource | undefined {
     service_area: candidate.service_area,
     active: candidate.active,
     eligibility: candidate.eligibility,
+    ...(candidate.eligibility_verified !== undefined ? { eligibility_verified: candidate.eligibility_verified } : {}),
     required_documents: candidate.required_documents,
     application_url: candidate.application_url,
     source_url: candidate.source_url,

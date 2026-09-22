@@ -102,6 +102,13 @@ describe("gates: structural ineligibility", () => {
     expect(runGates(capped, under, KING_COUNTY_AMI)).toEqual([]);
   });
 
+  it("enforces a stated annual income cap", () => {
+    const eitc = makeResource({ id: "caleitc", category: "benefits", eligibility: { max_annual_income: 31_950 } });
+    const over: Situation = { ...seattleSituation, monthlyIncome: 4_000 };
+    expect(runGates(eitc, over).map((f) => f.gate)).toEqual(["income_limit"]);
+    expect(evaluateIncome(eitc.eligibility, over, undefined).status).toBe("unmet");
+  });
+
   it("excludes shelter for someone who is stably housed", () => {
     const shelter = makeResource({
       id: "shelter",
@@ -135,6 +142,13 @@ describe("scoring: unverified eligibility is flagged, not assumed", () => {
     const factor = scored.breakdown.find((b) => b.factor === "income_limit");
     expect(factor?.status).toBe("unverified");
     expect(factor?.points).toBe(0);
+  });
+
+  it("does not claim an unreviewed source has no income limit", () => {
+    const crawled = makeResource({ id: "crawled", eligibility: {}, eligibility_verified: false });
+    const factor = scoreResource(crawled, seattleSituation).breakdown.find((b) => b.factor === "income_limit");
+    expect(factor?.status).toBe("unverified");
+    expect(factor?.detail).toContain("not been verified");
   });
 
   it("flags income as unverified when the answer depends on unknown household size", () => {

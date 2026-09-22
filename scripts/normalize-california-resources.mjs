@@ -51,55 +51,87 @@ function clean(value, max = 800) {
 function programNameKey(value) {
   return clean(value, 220)
     .toLowerCase()
-    .replace(/\b(?:outreach|expansion|program|programs|services?|service|page|application)\b/g, " ")
+    .replace(/\s+-\s+(?:consumer|medicare services|state of california)\s*$/i, "")
+    .replace(/\b(?:program|programs|services?|service|page)\b/g, " ")
     .replace(/[^a-z0-9]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function duplicateKey(candidate) {
-  const acronym = candidate.name.match(/\b[A-Z]{2,}\b/)?.[0]?.toLowerCase();
-  if (acronym) {
-    return [
-      candidate.organization.toLowerCase(),
-      acronym,
-      candidate.category ?? "uncategorized",
-      [...candidate.service_area].sort().join("|").toLowerCase(),
-    ].join("\u001f");
-  }
   return [
     candidate.organization.toLowerCase(),
     programNameKey(candidate.name),
     candidate.category ?? "uncategorized",
     [...candidate.service_area].sort().join("|").toLowerCase(),
-    clean(candidate.description, 900).toLowerCase(),
   ].join("\u001f");
 }
 
-function isNavigationPage(name, description = "") {
-  if (/^(?:how to apply|other resources?|partners?|contact us|home|welcome|about us|faq|frequently asked questions?)\??$/i.test(name.trim())) return true;
+function sharedProgramKey(candidate) {
+  const name = programNameKey(candidate.name);
+  // Generic service labels can refer to different local programs.
+  if (name.length < 6 || /^(?:(?:food|housing|rental|utility|health|mental health|legal|veteran|family|employment|disability|community|human|social|senior|aging) )?(?:assistance|benefits|help|resources|support|programs|services)(?: (?:and|for|of) .*)?$/.test(name)) return null;
+  return [name, candidate.category ?? "uncategorized"].join("\u001f");
+}
+
+function normalizedDescription(value) {
+  return clean(value, 900)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function descriptionDuplicateKey(candidate) {
+  const description = normalizedDescription(candidate.description);
+  // Short or boilerplate descriptions are common on unrelated pages and are
+  // not strong enough evidence that two records are the same program.
+  if (description.length < 70 || /^(?:state of california|california state government)/.test(description)) return null;
+  return [
+    candidate.organization.toLowerCase(),
+    candidate.category ?? "uncategorized",
+    [...candidate.service_area].sort().join("|").toLowerCase(),
+    description,
+  ].join("\u001f");
+}
+
+function isNavigationPage(name, description = "", url = "") {
+  const baseName = name.replace(/\s+-\s+(?:consumer|state of california)\s*$/i, "").trim();
+  if (/^(?:how to apply|other resources?|partners?|contact us|home|welcome|about us|faq|frequently asked questions?|find services in my county|assistance and social programs|find assistance|programs? & services?|benefits? & services?|human services|local resources|program support|who is eligible|what is .+|applying for .+|.+ eligibility|.+ faq|become a volunteer|(?:housing|health|food|utility|rental|benefits|community|sacred heart) programs?|programs - .+|services|legal|community services)\??$/i.test(baseName)) return true;
+  if (/\b(?:outreach materials|success stories|social media toolkit|resource videos|citizenship guide|frequently asked questions?|faq)\b|\s-\sHow Do I\s*$/i.test(name)) return true;
+  if (/\/(?:job_fairs_and_workshops|social-media-toolkit|successstories|my_county)\//i.test(new URL(url).pathname)) return true;
   return description.trim().length < 80 && /\b(?:outreach|partners?|other resources?)\b/i.test(name);
 }
 
-function categoryFor(page) {
-  const evidence = [page.title, ...(page.headings ?? []).slice(0, 4), page.description, page.excerpt].join(" ");
-  const strongSignals = [
+function categoryFor(page, name, description) {
+  const signals = [
     ["shelter", /\b(?:emergency shelter|temporary shelter|homeless shelter|homeless(?:ness)? assistance|shelter services?)\b/i],
     ["rental_assistance", /\b(?:rental assistance|rent assistance|eviction (?:prevention|help)|housing (?:assistance|support|programs?))\b/i],
     ["food", /\b(?:food assistance|food bank|food pantry|calfresh|snap|wic|free meals?|meal program)\b/i],
     ["utility", /\b(?:utility assistance|energy assistance|liheap|help (?:with|paying) (?:your )?(?:energy|utility|electric|water) bills?)\b/i],
-    ["legal", /\b(?:legal aid|legal help|legal services?|tenant rights|free or low-cost legal)\b/i],
+    ["legal", /\b(?:legal aid|legal help|legal services?|tenant rights|free or low-cost legal|bankruptcy)\b/i],
     ["employment", /\b(?:employment assistance|job training|job search|workforce development|unemployment benefits|services for job seekers?)\b/i],
+    ["benefits", /\b(?:earned income tax credit|cal(?:ifornia)?e?itc|tax credit|cash[- ]back tax credit|cash back tax credit)\b/i],
     ["substance_use", /\b(?:substance use|addict(?:ed|ion)|recovery|rehab|detox|opioid|meth(?:amphetamine)?|fentanyl|cocaine|heroin)\b/i],
-    ["mental_health", /\b(?:mental health|behavioral health|counseling|depression|anxiety|ptsd|bipolar|schizophrenia)\b/i],
+    ["mental_health", /\b(?:mental health|behavioral health|mental health counseling|crisis counseling|depression|anxiety|ptsd|bipolar|schizophrenia)\b/i],
+    ["veteran_support", /\b(?:veteran|calvet|military)\b/i],
+    ["older_adult_support", /\b(?:seniors?|older adults?|aging|elderly|fall prevention|medicare counseling)\b/i],
+    ["family_support", /\b(?:family caregiver|caregiver services|child care|childcare|parenting|pregnancy|maternal|foster)\b/i],
+    ["disability", /\b(?:disability|disabilities|disabled|independent living|assistive technology)\b/i],
+    ["health", /\b(?:health care|healthcare|medical care|clinic|medi[- ]cal)\b/i],
+    ["condition_support", /\b(?:diabetes|cancer|hiv|aids|heart disease|kidney disease|asthma|copd)\b/i],
   ];
-  const matches = strongSignals.filter(([, pattern]) => pattern.test(evidence)).map(([category]) => category);
+  // The page title describes this program. Site menus and related links do not.
+  for (const [category, pattern] of signals) if (pattern.test(name)) return category;
+  if (/\/housing-programs\//i.test(new URL(page.url).pathname)
+    && /\b(?:housing|rental assistance|homelessness)\b/i.test(description.slice(0, 900))) return "rental_assistance";
+  const intro = description.slice(0, 300);
+  const matches = signals.filter(([, pattern]) => pattern.test(intro)).map(([category]) => category);
   if (matches.length === 1) return matches[0];
   if (matches.length > 1) {
-    for (const [topic, category] of CATEGORY_BY_TOPIC) if (matches.includes(category) && page.relevance?.topics?.includes(topic)) return category;
-  }
-  for (const [topic, category] of CATEGORY_BY_TOPIC.slice(6)) {
-    if (page.relevance?.topics?.includes(topic)) return category;
+    const first = signals.map(([category, pattern]) => ({ category, index: intro.search(pattern) }))
+      .filter(({ index }) => index >= 0).sort((a, b) => a.index - b.index)[0];
+    if (first) return first.category;
   }
   return null;
 }
@@ -123,14 +155,84 @@ function usefulLinks(page) {
     .map((link) => ({ url: link.url, text: clean(link.text, 180), context: clean(link.context, 600), ...(link.related ? { related: true } : {}) }));
 }
 
+function bestDescription(page) {
+  const title = clean(page.title?.split(/\s+\|\s+/)[0], 180).replace(/\s+-\s+(?:consumer|medicare services|care options)\s*$/i, "");
+  const text = clean(page.text, 60_000);
+  const normalizedTitle = normalizedDescription(title);
+  const matchingHeading = (page.headings ?? []).find((heading) => {
+    const normalizedHeading = normalizedDescription(heading);
+    return normalizedHeading === normalizedTitle
+      || (normalizedTitle.length >= 12 && normalizedHeading.startsWith(`${normalizedTitle} `)
+        && normalizedHeading.length - normalizedTitle.length <= 40);
+  });
+  let focusedText = text;
+  if (matchingHeading && text.length > 0) {
+    const needle = clean(matchingHeading);
+    let index = text.toLowerCase().indexOf(needle.toLowerCase());
+    // Some templates repeat the title in a menu before the actual article.
+    if (index >= 0 && index < 250) {
+      const second = text.toLowerCase().indexOf(needle.toLowerCase(), index + needle.length);
+      if (second >= 0 && second < 1500) index = second;
+    }
+    if (index >= 0) focusedText = text.slice(index);
+  }
+  const genericReferral = focusedText.search(/\bHow To Find Services In My Area\b/i);
+  const serviceDetails = focusedText.search(/\bWhat Services Are Available\b/i);
+  if (genericReferral >= 0 && genericReferral < 250 && serviceDetails > genericReferral && serviceDetails < 1200) {
+    focusedText = focusedText.slice(serviceDetails + "What Services Are Available".length).trim();
+  }
+  const candidates = [focusedText, page.excerpt, page.description]
+    .map((value) => clean(value, 900))
+    .filter(Boolean);
+  const meaningful = candidates.find((value) => value.length >= 100 && !/^(?:state of california|california state government)$/i.test(value));
+  return meaningful ?? candidates.sort((a, b) => b.length - a.length)[0] ?? "";
+}
+
+function extractEligibility(page) {
+  const evidence = [page.title, ...(page.headings ?? []), page.description, page.excerpt, page.text].join(" ");
+  const annualIncome = evidence.match(/\b(?:earning|earns|income|incomes|gross income|annual income|yearly income)[^$\d]{0,45}\$\s*([\d,]+)\s*(?:a|per|each)?\s*(?:year|yr|annually)\b/i)
+    ?? evidence.match(/\b(?:not more than|maximum income(?: allowed)?)[^$]{0,20}\$\s*([\d,]+)\b/i)
+    ?? evidence.match(/\b(?:under|below|less than|no more than|up to)\s+\$\s*([\d,]+)\s*(?:a|per|each)?\s*(?:year|yr|annually)\b/i);
+  if (!annualIncome) return {};
+  const amount = Number(annualIncome[1].replace(/,/g, ""));
+  return Number.isFinite(amount) && amount > 0 ? { max_annual_income: amount } : {};
+}
+
+function organizationFor(page, source) {
+  if (/\b(?:earned income tax credit|caleitc)\b/i.test(`${page.title} ${page.excerpt} ${page.text}`)) {
+    return "California Franchise Tax Board";
+  }
+  return source.name;
+}
+
+function mergeCandidate(existing, candidate) {
+  const existingLinks = existing.linkedPrograms ?? [];
+  const candidateLinks = candidate.linkedPrograms ?? [];
+  const candidateIsPrimary = /ftb\.ca\.gov$/i.test(new URL(candidate.source_url).hostname) && /earned income tax credit|caleitc/i.test(candidate.source_url);
+  const candidateIsGovernment = /(?:^|\.)ca\.gov$/i.test(new URL(candidate.source_url).hostname);
+  const existingIsGovernment = /(?:^|\.)ca\.gov$/i.test(new URL(existing.source_url).hostname);
+  const existingHasEligibility = Object.keys(existing.eligibility ?? {}).length > 0;
+  const candidateHasEligibility = Object.keys(candidate.eligibility ?? {}).length > 0;
+  const shouldReplace = (candidateIsPrimary && (candidateHasEligibility || !existingHasEligibility))
+    || (candidateIsGovernment && !existingIsGovernment && (candidateHasEligibility || !existingHasEligibility))
+    || (!existingHasEligibility && candidateHasEligibility);
+  if (shouldReplace) Object.assign(existing, candidate);
+  existing.linkedPrograms = [...new Map(
+    [...existingLinks, ...candidateLinks].map((link) => [link.url, link]),
+  ).values()];
+}
+
 function makeCandidate(page, source, generatedAt) {
   const topics = page.relevance?.topics ?? [];
   const rawName = clean(page.title, 180) || clean(page.headings?.[0], 180) || new URL(page.url).pathname;
-  const name = clean(rawName.split(/\s+\|\s+/)[0], 180);
+  const pageEvidence = `${page.url} ${page.title} ${(page.headings ?? []).slice(0, 1).join(" ")}`;
+  const name = /\b(?:earned income tax credit|caleitc)\b/i.test(pageEvidence)
+    ? "California Earned Income Tax Credit"
+    : clean(rawName.split(/\s+\|\s+/)[0], 180);
   const application = bestApplicationLink(page);
-  const description = clean(page.description || page.excerpt || page.text, 900);
+  const description = bestDescription(page);
   const contacts = page.contacts ?? { phones: [], emails: [] };
-  const category = categoryFor(page);
+  const category = categoryFor(page, name, description);
   const evidence = {
     pageTitle: name,
     excerpt: clean(page.excerpt || page.text, 1_200),
@@ -144,12 +246,13 @@ function makeCandidate(page, source, generatedAt) {
   return {
     id: stableId(name, page.canonicalUrl || page.url),
     name,
-    organization: source.name,
+    organization: organizationFor(page, source),
     category,
     topics,
     description,
     service_area: [source.serviceArea],
-    eligibility: {},
+    eligibility: extractEligibility(page),
+    eligibility_verified: false,
     required_documents: [],
     application_url: application?.url ?? page.url,
     source_url: page.url,
@@ -172,6 +275,7 @@ export function normalizeCrawl(crawl) {
   const seenHashes = new Set();
   const seenCanonicalUrls = new Set();
   const candidateByKey = new Map();
+  const candidateBySharedProgram = new Map();
   for (const source of crawl.sources ?? []) {
     for (const page of source.pages ?? []) {
       if (!page.relevance?.relevant) continue;
@@ -181,16 +285,23 @@ export function normalizeCrawl(crawl) {
       if (page.contentHash) seenHashes.add(page.contentHash);
       seen.add(canonical);
       const candidate = makeCandidate(page, source, generatedAt);
-      if (isNavigationPage(candidate.name, candidate.description)) continue;
+      if (isNavigationPage(candidate.name, candidate.description, candidate.source_url)) continue;
       const key = duplicateKey(candidate);
-      const existing = candidateByKey.get(key);
+      const descriptionKey = descriptionDuplicateKey(candidate);
+      const sharedKey = sharedProgramKey(candidate);
+      const existing = candidateByKey.get(key)
+        ?? (descriptionKey ? candidateByKey.get(`description:${descriptionKey}`) : undefined)
+        ?? (sharedKey ? candidateBySharedProgram.get(sharedKey) : undefined);
       if (existing) {
-        existing.linkedPrograms = [...new Map(
-          [...(existing.linkedPrograms ?? []), ...(candidate.linkedPrograms ?? [])].map((link) => [link.url, link]),
-        ).values()];
+        mergeCandidate(existing, candidate);
+        candidateByKey.set(key, existing);
+        if (descriptionKey) candidateByKey.set(`description:${descriptionKey}`, existing);
+        if (sharedKey) candidateBySharedProgram.set(sharedKey, existing);
         continue;
       }
       candidateByKey.set(key, candidate);
+      if (descriptionKey) candidateByKey.set(`description:${descriptionKey}`, candidate);
+      if (sharedKey) candidateBySharedProgram.set(sharedKey, candidate);
       candidates.push(candidate);
     }
   }

@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import { extractPage } from "./content.mjs";
+import { programPageKey } from "./identity.mjs";
 import { createHttpClient } from "./http.mjs";
 import { createPageCache } from "./cache.mjs";
 import { crawlTrap, documentKind, inSourceScope, linkPriority, normalizeUrl, usefulLead } from "./urls.mjs";
@@ -47,6 +48,7 @@ export async function crawlSources(sources, options = {}, dependencies = {}) {
   const seen = new Set();
   const processedUrls = new Set();
   const contentHashes = new Map();
+  const programPages = new Map();
   const sitemapCache = new Map();
   let attemptedPages = 0;
   let cacheRevalidations = 0;
@@ -231,11 +233,16 @@ export async function crawlSources(sources, options = {}, dependencies = {}) {
       page.fetchStatus = revalidated ? "not_modified" : "downloaded";
       page.reviewStatus = "needs_review";
       const duplicateOf = page.text.length > 80 ? contentHashes.get(page.contentHash) : null;
+      const programKey = programPageKey(page);
+      const sameProgramPage = programKey ? programPages.get(programKey) : null;
       if (duplicateOf) {
         result.duplicates.push({ url: page.url, duplicateOf, reason: "same_content" });
+      } else if (sameProgramPage) {
+        result.duplicates.push({ url: page.url, duplicateOf: sameProgramPage, reason: "same_program_name_and_description" });
       } else if (page.relevance.relevant) {
         result.pages.push(page);
         if (page.text.length > 80) contentHashes.set(page.contentHash, page.url);
+        if (programKey) programPages.set(programKey, page.url);
       } else {
         result.skippedIrrelevant.push({ url: page.url, title: page.title, relevance: page.relevance, discoveredFrom: page.discoveredFrom });
       }

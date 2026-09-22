@@ -84,6 +84,8 @@ export type ReportedCondition = (typeof REPORTED_CONDITIONS)[number];
  * structurally goes in `notes` and is always surfaced as "unverified".
  */
 export interface Eligibility {
+  /** Gross annual household income must be at or below this amount. */
+  max_annual_income?: number;
   /** Household income must be at or below this % of Area Median Income. */
   max_ami_percent?: number;
   /** Household income must be at or below this % of the Federal Poverty Level. */
@@ -113,6 +115,8 @@ export interface Resource {
   service_area: string[];
   active: boolean;
   eligibility: Eligibility;
+  /** False when the source has not been reviewed for eligibility details. */
+  eligibility_verified?: boolean;
   required_documents: string[];
   application_url: string;
   source_url: string;
