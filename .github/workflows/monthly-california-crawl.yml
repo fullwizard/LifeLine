@@ -1,0 +1,55 @@
+name: Refresh California resource database
+
+on:
+  # GitHub evaluates scheduled workflows in UTC. Run at midnight on the first
+  # day of each month.
+  schedule:
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: california-resource-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the database branch
+        uses: actions/checkout@v4
+        with:
+          ref: scrapper-testing
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Crawl California sources
+        run: npm run crawl:california -- --no-cache
+
+      - name: Normalize resource candidates
+        run: npm run normalize:california
+
+      - name: Commit and push changed database
+        shell: bash
+        run: |
+          if git ls-files --error-unmatch data/crawl-output/california-resource-candidates.json >/dev/null 2>&1 \
+            && git diff --quiet -- data/crawl-output/california-resource-candidates.json; then
+            echo "No resource changes found."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/crawl-output/california-resource-candidates.json
+          git commit -m "chore: refresh California resource database"
+          git push origin HEAD:scrapper-testing
