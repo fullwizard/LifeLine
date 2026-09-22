@@ -38,12 +38,44 @@ describe("normalizeCrawl", () => {
       relevance: { relevant: true, topics: ["rental_assistance", "health_care", "disability"] },
       links: [{ url: "https://dhcs.ca.gov/apply", text: "Apply for Medi-Cal", context: "Apply for Medi-Cal" }],
     })] }] });
-    expect(result.candidates[0].category).toBe("health");
+    expect(result.candidates[0].category).toBe("disability");
     expect(result.candidates[0].application_url).toBe("https://example.ca.gov/food");
+  });
+
+  it("prioritizes substance-use support when page evidence names it", () => {
+    const result = normalizeCrawl({ sources: [{ ...source, pages: [page({
+      title: "Substance Use Recovery Services",
+      description: "Treatment, recovery, and behavioral health support for people using methamphetamine or opioids.",
+      relevance: { relevant: true, topics: ["health_care", "substance_use_disorder"], matchedTerms: ["substance use"] },
+      links: [],
+    })] }] });
+    expect(result.candidates[0].category).toBe("substance_use");
   });
 
   it("deduplicates canonical/content-identical pages and excludes skipped pages", () => {
     const result = normalizeCrawl({ sources: [{ ...source, pages: [page(), page({ url: "https://example.ca.gov/food?utm_source=x", canonicalUrl: "https://example.ca.gov/food" }), page({ relevance: { relevant: false, topics: [] } })] }] });
     expect(result.summary.candidates).toBe(1);
+  });
+
+  it("deduplicates localized and renamed copies of the same program", () => {
+    const first = page({ title: "CFAP", description: "California food assistance benefits.", excerpt: "California food assistance benefits." });
+    const copy = page({
+      url: "https://example.ca.gov/food-ko",
+      title: "CFAP Outreach",
+      description: "California food assistance benefits.",
+      excerpt: "California food assistance benefits.",
+      contentHash: "different-page-but-same-program",
+    });
+    const result = normalizeCrawl({ sources: [{ ...source, pages: [first, copy] }] });
+    expect(result.summary.candidates).toBe(1);
+  });
+
+  it("omits navigation pages that are not programs", () => {
+    const result = normalizeCrawl({ sources: [{ ...source, pages: [
+      page({ title: "How to Apply?", description: "A page about applying for this program." }),
+      page({ title: "Other Resources", description: "Links and references." }),
+      page({ url: "https://example.ca.gov/cfap", title: "CFAP", description: "A real food assistance program with application details.", contentHash: "real-program" }),
+    ] }] });
+    expect(result.candidates.map((candidate) => candidate.name)).toEqual(["CFAP"]);
   });
 });

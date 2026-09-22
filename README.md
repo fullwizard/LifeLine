@@ -3,8 +3,8 @@
 An MVP web app that helps people facing housing instability get a prioritized,
 explained plan of local assistance resources.
 
-Describe your situation in plain language → answer at most one follow-up
-question → get a ranked list of resources, each with a structured "why"
+Describe your situation in plain language → answer a few focused follow-up
+questions → get a ranked list of resources, each with a structured "why"
 breakdown that separates **confirmed** facts from eligibility that still
 **needs verification** with the organization.
 

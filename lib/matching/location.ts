@@ -24,7 +24,7 @@ export function norm(s: string | undefined): string {
 }
 
 function normCounty(s: string): string {
-  return norm(s).replace(/\s+county$/, "");
+  return norm(s).replace(/\s+count(?:y|ies)$/, "");
 }
 
 export function parseArea(entry: string): ParsedArea {
@@ -36,7 +36,7 @@ export function parseArea(entry: string): ParsedArea {
   }
   const state = parts[parts.length - 1];
   const place = parts.slice(0, -1).join(", ");
-  if (/\bcounty$/.test(place)) {
+  if (/\bcount(?:y|ies)$/.test(place)) {
     return { kind: "county", county: normCounty(place), state };
   }
   return { kind: "city", city: place, state };
@@ -56,7 +56,10 @@ export function matchArea(entry: string, loc: Location | undefined): AreaMatch {
       // State-wide resource records remain available but need confirmation.
       return "unknown";
     case "county":
-      if (uCounty) return uCounty === area.county ? "match" : "mismatch";
+      if (uCounty) {
+        const counties = area.county.split(/\s+and\s+/).map((county) => county.trim());
+        return counties.includes(uCounty) ? "match" : "mismatch";
+      }
       return "unknown";
     case "city":
       if (uCity) return uCity === area.city ? "match" : "mismatch";
@@ -85,6 +88,11 @@ export function evaluateServiceArea(
 /** True if any service-area entry is national (no meaningful distance). */
 export function isNational(resource: { service_area: string[] }): boolean {
   return resource.service_area.some((e) => parseArea(e).kind === "national");
+}
+
+/** Statewide listings do not have one meaningful point for distance scoring. */
+export function isStatewide(resource: { service_area: string[] }): boolean {
+  return resource.service_area.some((e) => parseArea(e).kind === "state");
 }
 
 export function describeLocation(loc: Location | undefined): string {

@@ -49,7 +49,7 @@ export default function MissionPage() {
               matched, what still needs confirming, and who makes the final call.
             </li>
             <li>
-              Respect for your time. One description, at most one question, and a plan. No
+              Respect for your time. One description, a short set of focused questions, and a plan. No
               accounts, no forms that take an hour.
             </li>
             <li>

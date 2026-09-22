@@ -14,21 +14,21 @@ const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
   employment: /\b(job|jobs|work|employment|unemployed|laid off|lost my job|hiring|income)\b/i,
   legal: /\b(court|lawyer|attorney|legal|lawsuit|sued|summons|unlawful detainer)\b/i,
   health: /\b(health|medical|doctor|clinic|medicaid|medi[- ]cal|medicare|prescription|dental|maternal)\b/i,
-  benefits: /\b(benefits?|calworks|ssi|ssdi|cash assistance|financial assistance|public assistance|calfresh|snap|wic)\b/i,
+  benefits: /\b(benefits?|calworks|ssi|ssdi|cash assistance|financial assistance|financial hardship|finances? (?:are )?(?:starting to )?(?:slip|fall)|public assistance|calfresh|snap|wic)\b/i,
   family_support: /\b(child care|childcare|children|family|parent|pregnan|foster|domestic violence)\b/i,
   veteran_support: /\b(veteran|military|calvet)\b/i,
   older_adult_support: /\b(senior|older adult|aging|elderly|medicare)\b/i,
   disability: /\b(disabilit|disabled|ihss|developmental services|assistive)\b/i,
-  mental_health: /\b(mental health|behavioral health|depression|anxiety|ptsd|counseling)\b/i,
-  substance_use: /\b(substance use|addiction|recovery|rehab|detox|opioid)\b/i,
+  mental_health: /\b(mental health|behavioral health|depression|anxiety|ptsd|counseling|self[- ]?harm|suicid(?:al|e)|hurt myself|harm myself|kill myself|end my life)\b/i,
+  substance_use: /\b(substance use|addict(?:ed|ion)|recently off the wagon|off the wagon|relaps(?:e|ed|ing)|in recovery|recovery|rehab|detox|opioid|meth(?:amphetamine)?|fentanyl|cocaine|heroin)\b/i,
   condition_support: /\b(diabetes|cancer|hiv|aids|heart disease|kidney disease|asthma|copd|chronic illness)\b/i,
 };
 
 const CONDITION_KEYWORDS: Record<ReportedCondition, RegExp> = {
   disability: /\b(disabled|disability|developmental disability|intellectual disability)\b/i,
   mobility_impairment: /\b(wheelchair|mobility (impairment|issue|disability)|paraly[sz](ed|is)|amputee)\b/i,
-  mental_health_condition: /\b(mental health|depression|anxiety|ptsd|bipolar|schizophrenia)\b/i,
-  substance_use_disorder: /\b(substance use|addiction|alcohol use disorder|drug use disorder|in recovery)\b/i,
+  mental_health_condition: /\b(mental health|depression|anxiety|ptsd|bipolar|schizophrenia|self[- ]?harm|suicid(?:al|e)|hurt myself|harm myself|kill myself|end my life)\b/i,
+  substance_use_disorder: /\b(substance use|addict(?:ed|ion)|alcohol use disorder|drug use disorder|recently off the wagon|off the wagon|relaps(?:e|ed|ing)|in recovery|meth(?:amphetamine)?|fentanyl|cocaine|heroin)\b/i,
   diabetes: /\bdiabetes\b/i,
   cancer: /\bcancer\b/i,
   chronic_illness: /\b(chronic illness|chronic condition|chronic pain)\b/i,
@@ -37,6 +37,26 @@ const CONDITION_KEYWORDS: Record<ReportedCondition, RegExp> = {
   respiratory_condition: /\b(asthma|copd|emphysema|respiratory condition)\b/i,
   hiv_aids: /\b(hiv|aids)\b/i,
 };
+
+// Keep urgent, high-impact needs at the front of the summary when a person
+// describes several concerns at once.
+const NEED_PRIORITY: ResourceCategory[] = [
+  "mental_health",
+  "substance_use",
+  "shelter",
+  "rental_assistance",
+  "utility",
+  "legal",
+  "employment",
+  "benefits",
+  "family_support",
+  "health",
+  "disability",
+  "condition_support",
+  "food",
+  "veteran_support",
+  "older_adult_support",
+];
 
 function detectHousingStatus(t: string): HousingStatus | undefined {
   if (/\b(eviction notice|notice to vacate|pay or vacate|pay-or-vacate|being evicted|evict(ed|ion)|unlawful detainer|court date)\b/i.test(t)) {
@@ -120,7 +140,10 @@ export function parseSituationByKeywords(text: string): Situation {
   } else if (housingStatus === "unhoused" && !needs.includes("shelter")) {
     needs.push("shelter");
   }
-  if (needs.length) situation.needs = needs;
+  if (needs.length) {
+    needs.sort((a, b) => NEED_PRIORITY.indexOf(a) - NEED_PRIORITY.indexOf(b));
+    situation.needs = needs;
+  }
 
   const hasChildren = detectChildren(t);
   if (hasChildren !== undefined) situation.hasChildren = hasChildren;

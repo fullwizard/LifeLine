@@ -211,8 +211,18 @@ describe("ranking", () => {
       "fast-local-rent", // need + urgency + no income limit
       "capped-rent", // need + urgency, income unverified (0 pts) → below fast-local
       "slow-local-rent", // need, but too slow
-      "food", // fast, but not what was asked for
     ]);
+  });
+
+  it("does not show unrelated categories when a need is explicit", () => {
+    const result = matchResources(
+      [
+        makeResource({ id: "energy", category: "utility" }),
+        makeResource({ id: "food", category: "food" }),
+      ],
+      { ...seattleSituation, needs: ["utility"] },
+    );
+    expect(result.ranked.map((r) => r.resource.id)).toEqual(["energy"]);
   });
 
   it("promotes the income-limited resource once income is confirmed", () => {

@@ -13,7 +13,7 @@ export const PLACES: Place[] = [
   { city: "Mountain View", county: "Santa Clara County", lat: 37.3861, lng: -122.0839, zipPrefixes: ["94040", "94041", "94043"] },
   { city: "Milpitas", county: "Santa Clara County", lat: 37.4323, lng: -121.8996, zipPrefixes: ["95035", "95036"] },
   { city: "Palo Alto", county: "Santa Clara County", lat: 37.4419, lng: -122.143, zipPrefixes: ["94301", "94303", "94304", "94305", "94306", "94309"] },
-  { city: "East Palo Alto", county: "San Mateo County", lat: 37.4688, lng: -122.1411, zipPrefixes: ["94303"] },
+  { city: "East Palo Alto", county: "San Mateo County", lat: 37.4688, lng: -122.1411, aliases: ["EPA"], zipPrefixes: ["94303"] },
   { city: "Menlo Park", county: "San Mateo County", lat: 37.453, lng: -122.1817, zipPrefixes: ["94025", "94026"] },
   { city: "Redwood City", county: "San Mateo County", lat: 37.4852, lng: -122.2364, zipPrefixes: ["94002", "94061", "94062", "94063", "94065"] },
   { city: "San Mateo", county: "San Mateo County", lat: 37.563, lng: -122.3255, zipPrefixes: ["94401", "94402", "94403", "94404"] },
