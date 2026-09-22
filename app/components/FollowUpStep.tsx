@@ -17,6 +17,27 @@ export function FollowUpStep({
 }) {
   const q = parsed.question!;
   const [value, setValue] = useState("");
+  const [locationStatus, setLocationStatus] = useState<"idle" | "loading" | "error">("idle");
+
+  function useBrowserLocation() {
+    if (!navigator.geolocation) {
+      setLocationStatus("error");
+      return;
+    }
+    setLocationStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const answer = `Current location (${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)})`;
+        setValue(answer);
+        setLocationStatus("idle");
+        // A successful location lookup is already an answer. Continue the
+        // follow-up flow immediately instead of making the user press again.
+        onAnswer({ field: q.field, value: answer });
+      },
+      () => setLocationStatus("error"),
+      { enableHighAccuracy: false, maximumAge: 300_000, timeout: 10_000 },
+    );
+  }
 
   return (
     <div className="grid items-start gap-8 md:grid-cols-[1fr_1.65fr]">
@@ -31,7 +52,7 @@ export function FollowUpStep({
         }}
       >
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">One quick question</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">A few focused questions</p>
           <label htmlFor="answer" className="mt-1 block text-lg font-medium">
             {q.prompt}
           </label>
@@ -84,16 +105,38 @@ export function FollowUpStep({
         )}
 
         {(q.inputType === "text" || q.inputType === "number") && (
-          <input
-            id="answer"
-            type={q.inputType}
-            inputMode={q.inputType === "number" ? "decimal" : undefined}
-            min={q.inputType === "number" ? 0 : undefined}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={q.field === "location" ? "e.g. San Jose, Santa Clara County, or 95112" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
-            className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
-          />
+          <div className="space-y-2">
+            <input
+              id="answer"
+              type={q.inputType}
+              inputMode={q.inputType === "number" ? "decimal" : undefined}
+              min={q.inputType === "number" ? 0 : undefined}
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                if (q.field === "location") setLocationStatus("idle");
+              }}
+              placeholder={q.field === "location" ? "e.g. San Jose, Santa Clara County, or 95112" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
+              className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
+            />
+            {q.field === "location" && (
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={useBrowserLocation}
+                  disabled={pending || locationStatus === "loading"}
+                  className="text-sm font-medium text-accent-700 underline underline-offset-4 hover:text-accent-900 disabled:text-neutral-400"
+                >
+                  {locationStatus === "loading" ? "Finding your location…" : "Use my location"}
+                </button>
+                {locationStatus === "error" && (
+                  <span className="text-sm text-neutral-500" role="status">
+                    Location access was unavailable. Enter a city, county, or ZIP instead.
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         )}
 
         <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -127,6 +170,15 @@ const NEED_LABEL: Record<string, string> = {
   shelter: "shelter",
   employment: "work",
   legal: "legal help",
+  health: "health care",
+  benefits: "public benefits",
+  family_support: "family support",
+  veteran_support: "veteran services",
+  older_adult_support: "older adult services",
+  disability: "disability services",
+  mental_health: "mental health support",
+  substance_use: "substance-use support",
+  condition_support: "condition-specific support",
 };
 
 export function UnderstoodFacts({
@@ -138,7 +190,10 @@ export function UnderstoodFacts({
 }) {
   const chips: string[] = [];
   const loc = situation.location;
-  if (loc) chips.push([loc.city, loc.county].filter(Boolean).join(", ") || `ZIP ${loc.zip}`);
+  if (loc) {
+    const label = [loc.city, loc.county].filter(Boolean).join(", ") || (loc.zip ? `ZIP ${loc.zip}` : undefined);
+    chips.push(label ?? (loc.lat !== undefined && loc.lng !== undefined ? "Current location" : "Location provided"));
+  }
   if (situation.housingStatus) chips.push(STATUS_LABEL[situation.housingStatus]);
   if (situation.householdSize) chips.push(`Household of ${situation.householdSize}`);
   if (situation.monthlyIncome !== undefined) chips.push(`$${situation.monthlyIncome.toLocaleString("en-US")}/month`);

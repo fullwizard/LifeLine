@@ -40,8 +40,8 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold text-neutral-900">How it works</h2>
           <ol className="space-y-3 text-neutral-800 leading-relaxed">
             <li>
-              1. You describe what is going on. Plain language is fine. If we need one more detail
-              to narrow things down, we ask a single follow-up question, never a long form.
+              1. You describe what is going on. Plain language is fine. If we need more detail to narrow things
+              down, we ask a few focused follow-up questions instead of sending you through a long form.
             </li>
             <li>
               2. Rules pick and rank the programs. Every resource is checked against fixed,

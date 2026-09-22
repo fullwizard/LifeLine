@@ -36,4 +36,29 @@ describe("keyword parser fallback", () => {
     const s = parseSituationByKeywords("I have diabetes and PTSD, use a wheelchair, and do not have asthma.");
     expect(s.conditions).toEqual(["mobility_impairment", "mental_health_condition", "diabetes"]);
   });
+
+  it("recognises local abbreviations and indirect employment and family needs", () => {
+    const s = parseSituationByKeywords(
+      "I live in EPA. I'm a plumber and after a mass firing spree I got laid off. My wife is pregnant. I want to ensure a better future for my family.",
+    );
+    expect(s.location?.city).toBe("East Palo Alto");
+    expect(s.needs).toEqual(expect.arrayContaining(["employment", "family_support"]));
+  });
+
+  it("recognises direct substance-use language", () => {
+    const s = parseSituationByKeywords("I'm addicted to meth and need help finding treatment.");
+    expect(s.needs).toContain("substance_use");
+    expect(s.conditions).toContain("substance_use_disorder");
+  });
+
+  it("prioritizes self-harm and relapse over secondary financial and family needs", () => {
+    const s = parseSituationByKeywords(
+      "feeling of self harm, recently off the wagon, finances starting to slip, my family won't help",
+    );
+    expect(s.needs?.slice(0, 2)).toEqual(["mental_health", "substance_use"]);
+    expect(s.needs).toEqual(expect.arrayContaining(["benefits", "family_support"]));
+    expect(s.conditions).toEqual(
+      expect.arrayContaining(["mental_health_condition", "substance_use_disorder"]),
+    );
+  });
 });
