@@ -91,7 +91,7 @@ export function FollowUpStep({
             min={q.inputType === "number" ? 0 : undefined}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder={q.field === "location" ? "e.g. Seattle, King County, or 98104" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
+            placeholder={q.field === "location" ? "e.g. San Jose, Santa Clara County, or 95112" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
             className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
           />
         )}
@@ -138,7 +138,7 @@ export function UnderstoodFacts({
 }) {
   const chips: string[] = [];
   const loc = situation.location;
-  if (loc) chips.push([loc.city, loc.county, loc.state].filter(Boolean).join(", ") || `ZIP ${loc.zip}`);
+  if (loc) chips.push([loc.city, loc.county].filter(Boolean).join(", ") || `ZIP ${loc.zip}`);
   if (situation.housingStatus) chips.push(STATUS_LABEL[situation.housingStatus]);
   if (situation.householdSize) chips.push(`Household of ${situation.householdSize}`);
   if (situation.monthlyIncome !== undefined) chips.push(`$${situation.monthlyIncome.toLocaleString("en-US")}/month`);

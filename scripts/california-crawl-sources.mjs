@@ -1,0 +1,357 @@
+export const CALIFORNIA_CRAWL_SCOPE = {
+  region: "California",
+  // User-selected coverage priorities, not a claim about district boundaries.
+  priorityCounties: ["Santa Clara County, CA", "San Mateo County, CA"],
+};
+
+/**
+ * Public government pages and explicitly county-referenced providers used for
+ * discovery. Provider entries retain the official referring page as evidence.
+ * These are deliberately separate from the app's Resource records: every
+ * discovered item must be reviewed before it can appear in LifeLine.
+ *
+ * CA.gov is always the initial origin. County services get higher discovery
+ * priority after that first page; statewide benefits remain in scope.
+ * startUrls are additional entry points into departments with multiple service
+ * directories. A source's serviceArea is a discovery hint, not proof of a
+ * particular program's eligibility or geographic coverage.
+ *
+ * Some departments publish services at unrelated top-level paths, so their
+ * entire explicitly listed origin is allowed. The crawler still applies
+ * relevance checks, robots rules and page budgets. No wildcard subdomains.
+ */
+export const CALIFORNIA_CRAWL_SOURCES = [
+  {
+    id: "ca-gov-assistance",
+    name: "CA.gov assistance and social programs",
+    startUrl: "https://www.ca.gov/topics/assistance/",
+    allowedOrigins: ["https://ca.gov", "https://www.ca.gov"],
+    allowedPathPrefixes: ["/topics", "/services", "/departments"],
+    serviceArea: "California",
+    crawlOrder: 0,
+    priority: 25,
+    maxPages: 25,
+  },
+  {
+    id: "santa-clara-supportive-housing",
+    name: "Santa Clara County Office of Supportive Housing",
+    startUrl: "https://osh.santaclaracounty.gov/services",
+    allowedOrigins: ["https://osh.santaclaracounty.gov"],
+    startUrls: [
+      "https://osh.santaclaracounty.gov/temporary-and-emergency-shelter",
+    ],
+    // The service directory links to both flat URLs and /housing-and-shelter-support.
+    allowedPathPrefixes: ["/"],
+    serviceArea: "Santa Clara County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 40,
+  },
+  {
+    id: "santa-clara-housing-help",
+    name: "Santa Clara County housing, legal and immigrant resources",
+    startUrl: "https://desj.santaclaracounty.gov/oir/resources/housing",
+    allowedOrigins: ["https://desj.santaclaracounty.gov"],
+    allowedPathPrefixes: ["/oir/resources"],
+    serviceArea: "Santa Clara County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 30,
+  },
+  {
+    id: "san-mateo-housing",
+    name: "San Mateo County Department of Housing",
+    startUrl: "https://www.smcgov.org/housing/need-rental-housing",
+    allowedOrigins: ["https://www.smcgov.org"],
+    allowedPathPrefixes: ["/housing"],
+    serviceArea: "San Mateo County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 30,
+  },
+  {
+    id: "santa-clara-social-services",
+    name: "Santa Clara County Social Services Agency",
+    startUrl: "https://ssa.santaclaracounty.gov/apply-public-benefits",
+    startUrls: [
+      "https://ssa.santaclaracounty.gov/food-assistance/get-help-buying-groceries-calfresh-food",
+    ],
+    allowedOrigins: ["https://ssa.santaclaracounty.gov"],
+    allowedPathPrefixes: ["/"],
+    serviceArea: "Santa Clara County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 50,
+  },
+  {
+    id: "santa-clara-health",
+    name: "Santa Clara County Public and Behavioral Health services",
+    startUrl: "https://publichealth.santaclaracounty.gov/services",
+    startUrls: ["https://bhsd.santaclaracounty.gov/get-help-now"],
+    allowedOrigins: [
+      "https://publichealth.santaclaracounty.gov",
+      "https://bhsd.santaclaracounty.gov",
+    ],
+    allowedPathPrefixes: ["/"],
+    serviceArea: "Santa Clara County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 60,
+  },
+  {
+    id: "san-mateo-human-services",
+    name: "San Mateo County Human Services Agency",
+    startUrl: "https://www.smcgov.org/hsa",
+    startUrls: [
+      "https://www.smcgov.org/hsa/core-service-agencies-emergency-safety-net-assistance",
+      "https://www.smcgov.org/hsa/veterans-services-office",
+    ],
+    allowedOrigins: ["https://www.smcgov.org"],
+    allowedPathPrefixes: ["/hsa"],
+    serviceArea: "San Mateo County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 50,
+  },
+  {
+    id: "san-mateo-health",
+    name: "San Mateo County Health",
+    startUrl: "https://www.smchealth.org/health-care-services",
+    startUrls: [
+      "https://www.smchealth.org/bhrsservices",
+      "https://www.smchealth.org/services-aging-and-disability",
+    ],
+    allowedOrigins: ["https://www.smchealth.org"],
+    allowedPathPrefixes: ["/"],
+    // The county government's department directory links to this .org site.
+    evidenceUrls: ["https://www.smcgov.org/hsa/veterans-services-office"],
+    serviceArea: "San Mateo County, CA",
+    crawlOrder: 1,
+    priority: 100,
+    maxPages: 60,
+  },
+  {
+    id: "second-harvest-silicon-valley",
+    name: "Second Harvest of Silicon Valley food and CalFresh assistance",
+    kind: "county_referenced_provider",
+    startUrl: "https://www.shfb.org/get-food/",
+    startUrls: ["https://www.shfb.org/get-food/calfresh/"],
+    allowedOrigins: ["https://www.shfb.org", "https://shfb.org"],
+    allowedPathPrefixes: ["/get-food", "/calfresh-scc"],
+    evidenceUrls: [
+      "https://www.smcgov.org/hsa/food-resources",
+      "https://youth.smcgov.org/directory-youth_servic/listing/second-harvest-food-bank/",
+    ],
+    serviceArea: "Santa Clara and San Mateo counties, CA",
+    crawlOrder: 1,
+    priority: 90,
+    maxPages: 15,
+  },
+  {
+    id: "sacred-heart-community-service",
+    name: "Sacred Heart Community Service assistance programs",
+    kind: "county_referenced_provider",
+    startUrl: "https://www.sacredheartcs.org/programs",
+    startUrls: [
+      "https://www.sacredheartcs.org/housing-assistance",
+      "https://www.sacredheartcs.org/utility-assistance",
+    ],
+    allowedOrigins: ["https://www.sacredheartcs.org", "https://sacredheartcs.org"],
+    // Squarespace uses flat program URLs rather than /programs/... children.
+    allowedPathPrefixes: [
+      "/programs", "/programs-food-clothing", "/programs-housing-financial-assistance",
+      "/programs-education", "/programs-finding-a-job", "/programs-applying-for-public-benefits",
+      "/housing-assistance", "/housing-assistance-faq", "/rental-assistance",
+      "/deposit-assistance", "/utility-assistance", "/energy-service",
+    ],
+    evidenceUrls: ["https://desj.santaclaracounty.gov/oir/resources/basic-needs"],
+    serviceArea: "Santa Clara County, CA",
+    crawlOrder: 1,
+    priority: 90,
+    maxPages: 25,
+  },
+  {
+    id: "samaritan-house-san-mateo",
+    name: "Samaritan House food, housing, health and financial assistance",
+    kind: "county_referenced_provider",
+    startUrl: "https://samaritanhousesanmateo.org/find-help/",
+    startUrls: ["https://samaritanhousesanmateo.org/service/health-dental/"],
+    allowedOrigins: ["https://samaritanhousesanmateo.org", "https://www.samaritanhousesanmateo.org"],
+    allowedPathPrefixes: ["/find-help", "/service", "/what-we-do", "/family-sharing-program"],
+    evidenceUrls: ["https://www.smcgov.org/hsa/core-service-agencies-emergency-safety-net-assistance"],
+    serviceArea: "San Mateo County, CA",
+    crawlOrder: 1,
+    priority: 90,
+    maxPages: 25,
+  },
+  {
+    id: "community-legal-services-east-palo-alto",
+    name: "Community Legal Services in East Palo Alto",
+    kind: "county_referenced_provider",
+    startUrl: "https://clsepa.org/services/",
+    allowedOrigins: ["https://clsepa.org", "https://www.clsepa.org"],
+    allowedPathPrefixes: ["/services", "/resources", "/contact"],
+    evidenceUrls: [
+      "https://www.smcgov.org/ceo/find-legal-assistance",
+      "https://www.smcgov.org/housing/tenants-protections-and-rights",
+    ],
+    serviceArea: "Santa Clara and San Mateo counties, CA",
+    crawlOrder: 1,
+    priority: 90,
+    maxPages: 15,
+  },
+  {
+    id: "california-social-services",
+    name: "California Department of Social Services benefits",
+    startUrl: "https://www.cdss.ca.gov/benefits-services",
+    startUrls: [
+      "https://www.cdss.ca.gov/inforesources/calfresh",
+      "https://www.cdss.ca.gov/calworks",
+    ],
+    allowedOrigins: ["https://www.cdss.ca.gov", "https://cdss.ca.gov"],
+    allowedPathPrefixes: ["/benefits-services", "/inforesources", "/calworks"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 60,
+    maxPages: 50,
+  },
+  {
+    id: "california-health-care-services",
+    name: "California health coverage and condition-specific care",
+    startUrl: "https://www.dhcs.ca.gov/individuals/",
+    startUrls: [
+      "https://www.dhcs.ca.gov/services/diseases-and-conditions/",
+      "https://www.dhcs.ca.gov/medi-cal/benefits/",
+    ],
+    allowedOrigins: ["https://www.dhcs.ca.gov", "https://dhcs.ca.gov"],
+    allowedPathPrefixes: ["/individuals", "/services", "/medi-cal"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 60,
+    maxPages: 50,
+  },
+  {
+    id: "california-public-health-assistance",
+    name: "California WIC, HIV medication and chronic disease support",
+    startUrl: "https://www.cdph.ca.gov/Programs/CID/DOA/Pages/OA_adap_eligibility.aspx",
+    startUrls: [
+      "https://www.cdph.ca.gov/Programs/CFH/DWICSN/Pages/HowCanIGetWIC.aspx",
+      "https://www.cdph.ca.gov/Programs/CCDPHP/DCDIC/CDCB/Pages/CAWISEWOMAN.aspx",
+    ],
+    allowedOrigins: ["https://www.cdph.ca.gov"],
+    allowedPathPrefixes: [
+      "/Programs/CID/DOA",
+      "/Programs/CFH/DWICSN",
+      "/Programs/CCDPHP/DCDIC/CDCB",
+    ],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 35,
+  },
+  {
+    id: "california-community-services",
+    name: "California energy bills, weatherization and community assistance",
+    startUrl: "https://www.csd.ca.gov/find-assistance",
+    startUrls: ["https://www.csd.ca.gov/Pages/LIHEAPProgram.aspx"],
+    allowedOrigins: ["https://www.csd.ca.gov", "https://csd.ca.gov"],
+    allowedPathPrefixes: ["/Pages", "/find-assistance", "/programs", "/energybills"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 60,
+    maxPages: 30,
+  },
+  {
+    id: "california-employment-benefits",
+    name: "California jobs, unemployment and disability benefits",
+    startUrl: "https://edd.ca.gov/en/jobs_and_training/",
+    startUrls: [
+      "https://edd.ca.gov/en/disability/disability_insurance/",
+      "https://edd.ca.gov/en/unemployment/",
+    ],
+    allowedOrigins: ["https://edd.ca.gov", "https://www.edd.ca.gov"],
+    allowedPathPrefixes: [
+      "/en/jobs_and_training",
+      "/en/disability",
+      "/en/unemployment",
+      "/en/About_EDD/disability-resources",
+    ],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 60,
+    maxPages: 40,
+  },
+  {
+    id: "california-developmental-services",
+    name: "California developmental disability and family support",
+    startUrl: "https://www.dds.ca.gov/individuals-and-families/",
+    startUrls: [
+      "https://www.dds.ca.gov/general/eligibility/support-services/",
+      "https://www.dds.ca.gov/rc/listings/",
+    ],
+    allowedOrigins: ["https://www.dds.ca.gov", "https://dds.ca.gov"],
+    allowedPathPrefixes: [
+      "/individuals-and-families", "/general/eligibility", "/rc/listings", "/services",
+    ],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 35,
+  },
+  {
+    id: "california-aging-services",
+    name: "California older adult, caregiver and disability services",
+    startUrl: "https://www.aging.ca.gov/Programs_and_Services/",
+    startUrls: ["https://www.aging.ca.gov/Find_Services_in_My_County/"],
+    allowedOrigins: ["https://www.aging.ca.gov", "https://aging.ca.gov"],
+    allowedPathPrefixes: [
+      "/Programs_and_Services", "/Find_Services_in_My_County", "/How_Do_I", "/Care_Options",
+    ],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 35,
+  },
+  {
+    id: "california-rehabilitation",
+    name: "California rehabilitation, independent living and assistive technology",
+    startUrl: "https://www.dor.ca.gov/Home/Programs",
+    allowedOrigins: ["https://www.dor.ca.gov", "https://dor.ca.gov"],
+    allowedPathPrefixes: ["/Home"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 30,
+  },
+  {
+    id: "california-veterans",
+    name: "California Department of Veterans Affairs",
+    startUrl: "https://www.calvet.ca.gov/",
+    startUrls: ["https://www.calvet.ca.gov/VetServices/Pages/CVSO-Locations.aspx"],
+    allowedOrigins: ["https://www.calvet.ca.gov", "https://calvet.ca.gov"],
+    allowedPathPrefixes: ["/"],
+    evidenceUrls: [
+      "https://www.ca.gov/departments/163/",
+      "https://www.smcgov.org/hsa/veterans-services-office",
+    ],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 30,
+  },
+  {
+    id: "california-courts-self-help",
+    name: "California Courts free legal help and self-help services",
+    startUrl: "https://selfhelp.courts.ca.gov/get-free-or-low-cost-legal-help",
+    allowedOrigins: ["https://selfhelp.courts.ca.gov"],
+    allowedPathPrefixes: ["/"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 55,
+    maxPages: 30,
+  },
+];
+
+// The next source will be the 211 API. Keep it separate from HTML crawling so
+// its access token, terms, rate limits, and attribution can be handled exactly.
+export const PLANNED_API_SOURCES = ["211.org API"];

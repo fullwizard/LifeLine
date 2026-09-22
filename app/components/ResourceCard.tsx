@@ -10,6 +10,15 @@ const CATEGORY_LABEL: Record<ScoredResource["resource"]["category"], string> = {
   shelter: "Shelter",
   employment: "Work",
   legal: "Legal",
+  health: "Health",
+  benefits: "Benefits",
+  family_support: "Family support",
+  veteran_support: "Veteran services",
+  older_adult_support: "Older adult services",
+  disability: "Disability services",
+  mental_health: "Mental health",
+  substance_use: "Recovery support",
+  condition_support: "Condition support",
 };
 
 const FACTOR_LABEL: Record<BreakdownItem["factor"], string> = {

@@ -31,7 +31,7 @@ function makeResource(overrides: Partial<Resource> & { id: string }): Resource {
 const KING_COUNTY_AMI: MatchContext = { areaMedianIncomeAnnual: 160_000 };
 
 const seattleSituation: Situation = {
-  location: { city: "Seattle", county: "King County", state: "WA", lat: 47.6062, lng: -122.3321 },
+  location: { city: "Seattle", county: "King County", lat: 47.6062, lng: -122.3321 },
   housingStatus: "eviction_notice",
   needs: ["rental_assistance"],
 };
@@ -68,12 +68,9 @@ describe("gates: geographic exclusion", () => {
     expect(runGates(tacoma, { needs: ["rental_assistance"] })).toEqual([]);
   });
 
-  it("uses state alone to exclude when county is unknown", () => {
-    const oregon = makeResource({ id: "or", service_area: ["Multnomah County, OR"] });
-    expect(runGates(oregon, { location: { state: "WA" } }).map((f) => f.gate)).toEqual(["service_area"]);
-    const kingOnly = makeResource({ id: "king", service_area: ["King County, WA"] });
-    // Same state, county unknown → survives (will be flagged unverified by scoring).
-    expect(runGates(kingOnly, { location: { state: "WA" } })).toEqual([]);
+  it("keeps statewide resources unverified when only a county is collected", () => {
+    const statewide = makeResource({ id: "statewide", service_area: ["WA"] });
+    expect(runGates(statewide, { location: { county: "King County" } })).toEqual([]);
   });
 });
 
@@ -158,7 +155,7 @@ describe("scoring: unverified eligibility is flagged, not assumed", () => {
 
   it("marks service area as unverified (not met) when county is unknown", () => {
     const king = makeResource({ id: "king" });
-    const scored = scoreResource(king, { location: { state: "WA" } });
+    const scored = scoreResource(king, { location: { county: "Pierce County" } });
     expect(scored.breakdown.find((b) => b.factor === "service_area")?.status).toBe("unverified");
   });
 

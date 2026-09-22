@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { AskableField, Plan } from "@/lib/types";
-import { answerAndBuildPlan, parseAndAsk, type ParseResponse } from "../actions";
+import { answerAndBuildPlan, answerAndContinue, parseAndAsk, type ParseResponse } from "../actions";
 import { FollowUpStep } from "./FollowUpStep";
 import { PlanView } from "./PlanView";
 import { SituationForm } from "./SituationForm";
@@ -37,8 +37,17 @@ export function LifeLineApp() {
     setError(null);
     startTransition(async () => {
       try {
-        const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, answer);
-        setStep({ kind: "plan", plan });
+        if (!answer) {
+          const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
+          setStep({ kind: "plan", plan });
+          return;
+        }
+        const next = await answerAndContinue(parsed.situation, parsed.parsedBy, answer);
+        if ("plan" in next) {
+          setStep({ kind: "plan", plan: next.plan });
+        } else {
+          setStep({ kind: "followup", parsed: next });
+        }
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
       }
@@ -54,7 +63,7 @@ export function LifeLineApp() {
     <div className="space-y-6">
       {step.kind === "input" && (
         <h1 className="headline-georgia mx-auto max-w-4xl text-center text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-balance">
-          Housing help, in the right order.
+          A Personalized Assistance Plan, At Your Finger Tips.
         </h1>
       )}
       {step.kind !== "input" && <StepIndicator current={step.kind} />}
@@ -68,6 +77,7 @@ export function LifeLineApp() {
       )}
       {step.kind === "followup" && (
         <FollowUpStep
+          key={step.parsed.question?.field}
           parsed={step.parsed}
           pending={pending}
           onAnswer={(a) => submitAnswer(step.parsed, a)}

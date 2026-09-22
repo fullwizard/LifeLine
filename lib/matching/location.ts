@@ -3,9 +3,9 @@
  *
  * Service area entries are one of:
  *   "US"                 national
- *   "WA"                 state
- *   "King County, WA"    county
- *   "Seattle, WA"        city
+ *   "CA"                 state
+ *   "Santa Clara County, CA" county
+ *   "San Jose, CA"          city
  */
 import type { Location } from "../types";
 
@@ -47,15 +47,14 @@ export function matchArea(entry: string, loc: Location | undefined): AreaMatch {
   const area = parseArea(entry);
   if (area.kind === "national") return "match";
 
-  const uState = norm(loc?.state) || undefined;
   const uCounty = loc?.county ? normCounty(loc.county) : undefined;
   const uCity = norm(loc?.city) || undefined;
 
-  if (uState && uState !== area.state) return "mismatch";
-
   switch (area.kind) {
     case "state":
-      return uState ? "match" : "unknown";
+      // A person only supplies city, county, or ZIP in the California flow.
+      // State-wide resource records remain available but need confirmation.
+      return "unknown";
     case "county":
       if (uCounty) return uCounty === area.county ? "match" : "mismatch";
       return "unknown";
@@ -90,6 +89,6 @@ export function isNational(resource: { service_area: string[] }): boolean {
 
 export function describeLocation(loc: Location | undefined): string {
   if (!loc) return "unknown location";
-  const parts = [loc.city, loc.county, loc.state].filter(Boolean);
+  const parts = [loc.city, loc.county].filter(Boolean);
   return parts.length ? parts.join(", ") : loc.zip ? `ZIP ${loc.zip}` : "unknown location";
 }

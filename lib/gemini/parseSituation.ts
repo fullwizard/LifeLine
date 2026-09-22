@@ -3,7 +3,15 @@
  * — or on any error — the deterministic keyword parser.
  */
 import { resolvePlace } from "../data/places";
-import { HOUSING_STATUSES, RESOURCE_CATEGORIES, type HousingStatus, type ResourceCategory, type Situation } from "../types";
+import {
+  HOUSING_STATUSES,
+  REPORTED_CONDITIONS,
+  RESOURCE_CATEGORIES,
+  type HousingStatus,
+  type ReportedCondition,
+  type ResourceCategory,
+  type Situation,
+} from "../types";
 import { generateJson, geminiEnabled } from "./client";
 import { keywordParser } from "./fallback/keywordParser";
 import type { ParseResult, SituationParser } from "./types";
@@ -16,18 +24,20 @@ interface GeminiSituation {
   hasChildren?: boolean | null;
   isVeteran?: boolean | null;
   needs?: string[] | null;
+  conditions?: string[] | null;
 }
 
 const SCHEMA = {
   type: "object",
   properties: {
-    locationText: { type: "string", nullable: true, description: "City, county, state, or ZIP mentioned, verbatim" },
+    locationText: { type: "string", nullable: true, description: "City, county, or ZIP mentioned, verbatim" },
     householdSize: { type: "integer", nullable: true },
     monthlyIncome: { type: "number", nullable: true, description: "Gross household income per month in USD" },
     housingStatus: { type: "string", nullable: true, enum: [...HOUSING_STATUSES] },
     hasChildren: { type: "boolean", nullable: true },
     isVeteran: { type: "boolean", nullable: true },
     needs: { type: "array", nullable: true, items: { type: "string", enum: [...RESOURCE_CATEGORIES] } },
+    conditions: { type: "array", nullable: true, items: { type: "string", enum: [...REPORTED_CONDITIONS] } },
   },
 };
 
@@ -38,6 +48,7 @@ function buildPrompt(text: string): string {
     "Never guess income, household size, or location.",
     "housingStatus: housed_stable (no threat), housed_at_risk (behind on rent / worried), eviction_notice (formal notice or court filing), unhoused (no housing).",
     "needs: the kinds of help they are asking for, from: " + RESOURCE_CATEGORIES.join(", ") + ".",
+    "conditions: explicitly stated health conditions or disabilities, from: " + REPORTED_CONDITIONS.join(", ") + ". Never infer a condition from medications or circumstances.",
     "",
     "Description:",
     text,
@@ -60,6 +71,12 @@ function toSituation(text: string, g: GeminiSituation): Situation {
   if (Array.isArray(g.needs)) {
     const needs = g.needs.filter((n): n is ResourceCategory => RESOURCE_CATEGORIES.includes(n as ResourceCategory));
     if (needs.length) s.needs = needs;
+  }
+  if (Array.isArray(g.conditions)) {
+    const conditions = g.conditions.filter((condition): condition is ReportedCondition =>
+      REPORTED_CONDITIONS.includes(condition as ReportedCondition),
+    );
+    if (conditions.length) s.conditions = conditions;
   }
   return s;
 }
