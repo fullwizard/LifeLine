@@ -1,20 +1,10 @@
-import Image from "next/image";
-import { HomeLink } from "./components/HomeLink";
 import { LifeLineApp } from "./components/LifeLineApp";
+import { SiteHeader } from "./components/SiteHeader";
 
 export default function Home() {
   return (
     <main id="home" className="flex-1 w-full max-w-6xl mx-auto px-5 pb-10 sm:px-10">
-      <header className="mb-6">
-        <div className="site-masthead py-6">
-          <Image src="/lifeline-logo.png" alt="LifeLine" width={1000} height={1000} className="site-brand" priority />
-          <nav aria-label="Main navigation" className="site-nav">
-            <HomeLink />
-            <span>About</span>
-            <span>Our mission</span>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader current="home" />
       <LifeLineApp />
     </main>
   );
