@@ -208,3 +208,26 @@ describe("keyword parser: end to end", () => {
     expect(s.needs).toEqual(["food"]);
   });
 });
+
+describe("keyword parser: cases from the crawl review", () => {
+  it("recognises local abbreviations and indirect employment and family needs", () => {
+    const s = parse(
+      "I live in EPA. I'm a plumber and after a mass firing spree I got laid off. My wife is pregnant. I want to ensure a better future for my family.",
+    );
+    expect(s.location?.city).toBe("East Palo Alto");
+    expect(s.needs).toEqual(expect.arrayContaining(["employment", "family_support"]));
+  });
+
+  it("recognises direct substance-use language", () => {
+    const s = parse("I'm addicted to meth and need help finding treatment.");
+    expect(s.needs).toContain("substance_use");
+    expect(s.conditions).toContain("substance_use_disorder");
+  });
+
+  it("prioritizes self-harm and relapse over secondary financial needs", () => {
+    const s = parse("feeling of self harm, recently off the wagon, finances starting to slip, my family won't help");
+    expect(s.needs?.slice(0, 2)).toEqual(["mental_health", "substance_use"]);
+    expect(s.needs).toContain("benefits");
+    expect(s.conditions).toEqual(expect.arrayContaining(["mental_health_condition", "substance_use_disorder"]));
+  });
+});

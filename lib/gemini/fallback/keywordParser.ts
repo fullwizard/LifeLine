@@ -351,16 +351,16 @@ const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
   health:
     /\b(?:health insurance|health care|healthcare|medical|doctor|clinic|hospital|medi[- ]?cal|medicaid|medicare|prescriptions?|medication|meds|dental|dentist|pregnan\w*|maternal|insurance lapsed|uninsured|covered california)\b/i,
   benefits:
-    /\b(?:benefits?|calworks|calfresh|ssi|ssdi|cash aid|cash assistance|general assistance|public assistance|apply for (?:aid|assistance)|food stamps|wic|unemployment(?: benefits| insurance| claim)?|edd|eitc|tax credit|social security)\b/i,
+    /\b(?:benefits?|calworks|calfresh|ssi|ssdi|cash aid|cash assistance|general assistance|public assistance|financial (?:assistance|hardship|help)|finances? (?:are )?(?:starting to )?(?:slip|fall|falling apart)|apply for (?:aid|assistance)|food stamps|wic|unemployment(?: benefits| insurance| claim)?|edd|eitc|tax credit|social security)\b/i,
   family_support:
     /\b(?:child ?care|daycare|day care|domestic violence|abus(?:e|ive|ed)|pregnan\w*|foster|diapers|formula|parenting (?:help|class|support)|custody|newborn|head start)\b/i,
   veteran_support: /\b(?:veterans?|va (?:benefits|disability|claim)|calvet|military)\b/i,
   older_adult_support: /\b(?:seniors?|older adults?|aging|elderly|retired|retirement|in[- ]home care|caregiver|caregiving|alzheimer'?s|dementia|memory)\b/i,
   disability: /\b(?:disabilit(?:y|ies)|disabled|ihss|developmental services|assistive|wheelchair|accessib\w+)\b/i,
   mental_health:
-    /\b(?:mental health|behavioral health|depress(?:ed|ion)|anxiety|ptsd|counsel(?:ing|or)|therap(?:y|ist)|suicid\w*|bipolar|schizophreni\w*|panic attacks?|crisis line)\b/i,
+    /\b(?:mental health|behavioral health|depress(?:ed|ion)|anxiety|ptsd|counsel(?:ing|or)|therap(?:y|ist)|suicid\w*|self[- ]?harm(?:ing)?|(?:hurt|harm|kill)(?:ing)? myself|end(?:ing)? my life|bipolar|schizophreni\w*|panic attacks?|crisis line)\b/i,
   substance_use:
-    /\b(?:substance (?:use|abuse)|addiction|addicted|recovery|rehab|detox|opioids?|fentanyl|meth|heroin|sober|sobriety|drinking problem|alcoholi\w+|drug (?:use|problem))\b/i,
+    /\b(?:substance (?:use|abuse)|addict(?:ed|ion)|(?:in )?recovery|relaps(?:e|ed|ing)|(?:recently )?off the wagon|rehab|detox|opioids?|fentanyl|meth(?:amphetamine)?|heroin|cocaine|sober|sobriety|drinking problem|alcoholi\w+|drug (?:use|problem))\b/i,
   condition_support:
     /\b(?:diabetes|diabetic|cancer|hiv|aids|heart (?:disease|failure|condition)|kidney (?:disease|failure)|dialysis|asthma|copd|chronic (?:illness|pain|condition)|epilepsy|seizures)\b/i,
 };
@@ -368,8 +368,8 @@ const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
 const CONDITION_KEYWORDS: Record<ReportedCondition, RegExp> = {
   disability: /\b(?:disabled|disability|developmental disability|intellectual disability|on ssdi)\b/i,
   mobility_impairment: /\b(?:wheelchair|mobility (?:impairment|issue|disability|problems?)|paraly[sz](?:ed|is)|amputee|walker|can't walk)\b/i,
-  mental_health_condition: /\b(?:mental health|depression|depressed|anxiety|ptsd|bipolar|schizophreni\w*)\b/i,
-  substance_use_disorder: /\b(?:substance (?:use|abuse)|addiction|addicted|alcohol use disorder|drug use disorder|in recovery|alcoholi\w+)\b/i,
+  mental_health_condition: /\b(?:mental health|depression|depressed|anxiety|ptsd|bipolar|schizophreni\w*|self[- ]?harm(?:ing)?|suicid\w*|(?:hurt|harm|kill)(?:ing)? myself|end(?:ing)? my life)\b/i,
+  substance_use_disorder: /\b(?:substance (?:use|abuse)|addict(?:ed|ion)|alcohol use disorder|drug use disorder|in recovery|relaps(?:e|ed|ing)|off the wagon|meth(?:amphetamine)?|fentanyl|cocaine|heroin|alcoholi\w+)\b/i,
   diabetes: /\b(?:diabetes|diabetic)\b/i,
   cancer: /\bcancer\b/i,
   chronic_illness: /\b(?:chronic illness|chronic condition|chronic pain|chronically ill)\b/i,
@@ -409,9 +409,27 @@ function detectNeeds(t: string, facts: { housingStatus?: HousingStatus; isVetera
   const medical: ReportedCondition[] = ["diabetes", "cancer", "chronic_illness", "heart_disease", "kidney_disease", "respiratory_condition", "hiv_aids"];
   if (facts.conditions.some((c) => medical.includes(c))) needs.add("condition_support");
 
-  // A "shelter" ask from someone housed at risk is really a rent problem; keep both.
-  return Array.from(needs);
+  return Array.from(needs).sort((a, b) => NEED_PRIORITY.indexOf(a) - NEED_PRIORITY.indexOf(b));
 }
+
+/** Urgent, high-impact needs first when several are raised at once. */
+const NEED_PRIORITY: ResourceCategory[] = [
+  "mental_health",
+  "substance_use",
+  "shelter",
+  "rental_assistance",
+  "utility",
+  "legal",
+  "employment",
+  "benefits",
+  "family_support",
+  "health",
+  "disability",
+  "condition_support",
+  "food",
+  "veteran_support",
+  "older_adult_support",
+];
 
 // ---------------------------------------------------------------------------
 // Entry point

@@ -10,6 +10,7 @@
  * Pure: no I/O, no AI. Imports only the matching engine and types.
  */
 import { runGates } from "../matching/gates";
+import { scoreResource } from "../matching/score";
 import type {
   AskableField,
   HousingStatus,
@@ -43,7 +44,7 @@ function serviceAreaLocations(resources: Resource[]): Partial<Situation>[] {
   for (const r of resources) {
     for (const entry of r.service_area) {
       const parts = entry.split(",").map((p) => p.trim());
-      if (parts.length === 2 && /county$/i.test(parts[0])) {
+      if (parts.length === 2 && /count(?:y|ies)$/i.test(parts[0])) {
         const key = entry.toLowerCase();
         if (!seen.has(key)) {
           seen.add(key);
@@ -66,7 +67,7 @@ function serviceAreaLocations(resources: Resource[]): Partial<Situation>[] {
 const CANDIDATES: Candidate[] = [
   {
     field: "location",
-    isMissing: (s) => !s.location || (!s.location.county && !s.location.city && !s.location.zip),
+    isMissing: (s) => !s.location || (!s.location.county && !s.location.city && !s.location.zip && (s.location.lat === undefined || s.location.lng === undefined)),
     answers: (_s, resources) => serviceAreaLocations(resources),
     question: () => ({
       field: "location",
@@ -132,10 +133,36 @@ function survivors(resources: Resource[], situation: Situation, context: MatchCo
   return resources.filter((r) => runGates(r, situation, context).length === 0).length;
 }
 
+/**
+ * Some facts improve the usefulness of a plan even when the current data does
+ * not contain a hard eligibility rule for them. Keep asking for those facts
+ * when the resource pool makes them relevant instead of treating zero gate
+ * eliminations as zero value.
+ */
+function isHighValueField(field: AskableField, resources: Resource[]): boolean {
+  switch (field) {
+    case "location":
+      return true;
+    case "housingStatus":
+      return resources.some((r) => ["rental_assistance", "shelter", "legal"].includes(r.category) || r.eligibility.housing_status_any_of || r.eligibility.requires_eviction_notice);
+    case "monthlyIncome":
+      return resources.some((r) => r.eligibility.max_ami_percent !== undefined || r.eligibility.max_fpl_percent !== undefined || ["rental_assistance", "utility", "benefits", "health", "family_support"].includes(r.category));
+    case "householdSize":
+      return resources.some((r) => r.eligibility.max_ami_percent !== undefined || r.eligibility.max_fpl_percent !== undefined || ["rental_assistance", "benefits", "family_support"].includes(r.category));
+    case "hasChildren":
+      return resources.some((r) => r.eligibility.requires_children || r.category === "family_support");
+    case "isVeteran":
+      return resources.some((r) => r.eligibility.requires_veteran || r.category === "veteran_support");
+  }
+}
+
 export interface QuestionScore {
   field: AskableField;
   expectedEliminations: number;
   maximumEliminations: number;
+  /** Equivalent candidate count from meaningful score changes, not just gates. */
+  expectedFitImpact: number;
+  maximumFitImpact: number;
 }
 
 export function importantQuestionThreshold(candidateCount: number): number {
@@ -156,13 +183,35 @@ export function scoreQuestions(
     if (answers.length === 0) continue;
     let total = 0;
     let maximum = 0;
+    let fitTotal = 0;
+    let fitMaximum = 0;
     for (const a of answers) {
       const remaining = survivors(candidates, { ...situation, ...a }, context);
       const eliminated = baseline - remaining;
       total += eliminated;
       maximum = Math.max(maximum, eliminated);
+
+      // Count material ranking changes as a small number of equivalent
+      // candidates, so a question can matter even when it does not gate a
+      // program out entirely.
+      const beforeScores = new Map(candidates.map((resource) => [resource.id, scoreResource(resource, situation, context).score]));
+      const afterScores = new Map(
+        candidates
+          .filter((resource) => runGates(resource, { ...situation, ...a }, context).length === 0)
+          .map((resource) => [resource.id, scoreResource(resource, { ...situation, ...a }, context).score]),
+      );
+      const changedPoints = [...afterScores].reduce((sum, [id, score]) => sum + Math.abs(score - (beforeScores.get(id) ?? score)), 0);
+      const fitImpact = changedPoints / 30;
+      fitTotal += fitImpact;
+      fitMaximum = Math.max(fitMaximum, fitImpact);
     }
-    out.push({ field: c.field, expectedEliminations: total / answers.length, maximumEliminations: maximum });
+    out.push({
+      field: c.field,
+      expectedEliminations: total / answers.length,
+      maximumEliminations: maximum,
+      expectedFitImpact: fitTotal / answers.length,
+      maximumFitImpact: fitMaximum,
+    });
   }
   return out;
 }
@@ -172,12 +221,17 @@ export function nextQuestion(
   candidates: Resource[],
   context: MatchContext = {},
 ): Question | null {
+  if (candidates.length === 0) return null;
   const scores = scoreQuestions(situation, candidates, context);
   const threshold = importantQuestionThreshold(candidates.length);
   let best: QuestionScore | undefined;
   for (const s of scores) {
-    if (s.maximumEliminations <= 0 || s.maximumEliminations < threshold) continue;
-    if (!best || s.expectedEliminations > best.expectedEliminations) best = s;
+    const highValue = isHighValueField(s.field, candidates);
+    if (s.maximumEliminations <= 0 && s.maximumFitImpact < 1 && !highValue) continue;
+    if (s.maximumEliminations < threshold && s.maximumFitImpact < 1 && !highValue) continue;
+    const currentValue = s.expectedEliminations + s.expectedFitImpact;
+    const bestValue = best ? best.expectedEliminations + best.expectedFitImpact : -1;
+    if (!best || currentValue > bestValue) best = s;
     // Ties resolve to CANDIDATES order (location, housing status, income, ...).
   }
   if (!best) return null;
@@ -185,10 +239,13 @@ export function nextQuestion(
   const def = CANDIDATES.find((c) => c.field === best!.field)!;
   const q = def.question();
   const rounded = Math.round(best.expectedEliminations * 10) / 10;
+  const rationale = rounded > 0
+    ? `Answering this would rule out about ${rounded} of ${candidates.length} possible resources so your plan is more accurate.`
+    : "This helps compare programs by fit and gives you more useful next steps.";
   return {
     ...q,
     expectedEliminations: rounded,
-    rationale: `Answering this would rule out about ${rounded} of ${candidates.length} possible resources so your plan is more accurate.`,
+    rationale,
   };
 }
 
@@ -203,6 +260,14 @@ export function applyAnswer(
   if (value === "") return situation;
   switch (field) {
     case "location": {
+      const coordinates = value.match(/^Current location \((-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)\)$/i);
+      if (coordinates) {
+        const lat = Number(coordinates[1]);
+        const lng = Number(coordinates[2]);
+        if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+          return { ...situation, location: { lat, lng } };
+        }
+      }
       const loc = resolveLocation(value);
       return loc ? { ...situation, location: loc } : situation;
     }

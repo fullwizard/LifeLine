@@ -14,7 +14,7 @@ import {
   type Situation,
 } from "../types";
 import { generateJson, geminiEnabled } from "./client";
-import { keywordParser } from "./fallback/keywordParser";
+import { keywordParser, parseSituationByKeywords } from "./fallback/keywordParser";
 import type { ParseResult, SituationParser } from "./types";
 
 interface GeminiSituation {
@@ -85,7 +85,20 @@ function toSituation(text: string, g: GeminiSituation): Situation {
 export const geminiParser: SituationParser = {
   async parse(text: string): Promise<ParseResult> {
     const g = await generateJson<GeminiSituation>(buildPrompt(text), SCHEMA);
-    return { situation: toSituation(text, g), provider: "gemini" };
+    const situation = toSituation(text, g);
+    // Keep explicit keyword signals as a safety net when Gemini misses an
+    // indirect request such as "laid off" or a local abbreviation like EPA.
+    const explicit = parseSituationByKeywords(text);
+    return {
+      situation: {
+        ...explicit,
+        ...situation,
+        location: situation.location ?? explicit.location,
+        needs: Array.from(new Set([...(explicit.needs ?? []), ...(situation.needs ?? [])])),
+        conditions: Array.from(new Set([...(explicit.conditions ?? []), ...(situation.conditions ?? [])])),
+      },
+      provider: "gemini",
+    };
   },
 };
 

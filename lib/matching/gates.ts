@@ -35,7 +35,7 @@ export function runGates(
     });
   }
 
-  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual);
+  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual, resource.eligibility_verified !== false);
   if (income.status === "unmet") {
     failures.push({ gate: "income_limit", detail: income.detail });
   }
