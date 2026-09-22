@@ -16,7 +16,16 @@ export type ResourceCategory =
   | "utility"
   | "shelter"
   | "employment"
-  | "legal";
+  | "legal"
+  | "health"
+  | "benefits"
+  | "family_support"
+  | "veteran_support"
+  | "older_adult_support"
+  | "disability"
+  | "mental_health"
+  | "substance_use"
+  | "condition_support";
 
 export const RESOURCE_CATEGORIES: readonly ResourceCategory[] = [
   "rental_assistance",
@@ -25,6 +34,15 @@ export const RESOURCE_CATEGORIES: readonly ResourceCategory[] = [
   "shelter",
   "employment",
   "legal",
+  "health",
+  "benefits",
+  "family_support",
+  "veteran_support",
+  "older_adult_support",
+  "disability",
+  "mental_health",
+  "substance_use",
+  "condition_support",
 ] as const;
 
 export type HousingStatus =
@@ -39,6 +57,26 @@ export const HOUSING_STATUSES: readonly HousingStatus[] = [
   "eviction_notice",
   "unhoused",
 ] as const;
+
+/**
+ * Health conditions a person explicitly mentions. These are descriptive
+ * context only; the matching engine does not use them to determine eligibility.
+ */
+export const REPORTED_CONDITIONS = [
+  "disability",
+  "mobility_impairment",
+  "mental_health_condition",
+  "substance_use_disorder",
+  "diabetes",
+  "cancer",
+  "chronic_illness",
+  "heart_disease",
+  "kidney_disease",
+  "respiratory_condition",
+  "hiv_aids",
+] as const;
+
+export type ReportedCondition = (typeof REPORTED_CONDITIONS)[number];
 
 /**
  * Structured eligibility rules for a resource. Every field is optional; an
@@ -70,7 +108,7 @@ export interface Resource {
   description: string;
   /**
    * Areas served. Entries are one of:
-   *   "US" (national), "WA" (state), "King County, WA" (county), "Seattle, WA" (city)
+   *   "US" (national), "California" (state), "Santa Clara County, CA" (county), "San Jose, CA" (city)
    */
   service_area: string[];
   active: boolean;
@@ -79,8 +117,9 @@ export interface Resource {
   application_url: string;
   source_url: string;
   phone?: string;
-  lat: number;
-  lng: number;
+  /** Optional until a verified address is geocoded. */
+  lat?: number;
+  lng?: number;
   /** Typical days from application to a decision or aid. */
   response_time_days?: number;
   /** ISO date the listing was last verified against the source. */
@@ -94,8 +133,6 @@ export interface Resource {
 export interface Location {
   city?: string;
   county?: string;
-  /** Two-letter state code, e.g. "WA". */
-  state?: string;
   zip?: string;
   lat?: number;
   lng?: number;
@@ -118,6 +155,8 @@ export interface Situation {
   needs?: ResourceCategory[];
   /** Documents the person says they already have on hand. */
   documentsAvailable?: string[];
+  /** Health conditions or disabilities the person explicitly mentioned. */
+  conditions?: ReportedCondition[];
 }
 
 /** Situation fields the follow-up engine may ask about. */

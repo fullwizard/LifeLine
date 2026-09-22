@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Locally generated crawler review queues
+/data/crawl-output/*
+!/data/crawl-output/california-resource-candidates.json

@@ -268,7 +268,7 @@ export function scoreResource(
       points: 0,
       detail: "Available by phone or online from anywhere.",
     });
-  } else if (loc?.lat !== undefined && loc.lng !== undefined) {
+  } else if (loc?.lat !== undefined && loc.lng !== undefined && resource.lat !== undefined && resource.lng !== undefined) {
     const miles = distanceMiles(loc.lat, loc.lng, resource.lat, resource.lng);
     const rounded = Math.round(miles * 10) / 10;
     const points = miles <= NEAR_MILES ? WEIGHTS.distance_near : miles <= MID_MILES ? WEIGHTS.distance_mid : 0;
@@ -310,5 +310,23 @@ export function humanCategory(c: Resource["category"]): string {
       return "employment help";
     case "legal":
       return "legal help";
+    case "health":
+      return "health care";
+    case "benefits":
+      return "public benefits";
+    case "family_support":
+      return "family support";
+    case "veteran_support":
+      return "veteran services";
+    case "older_adult_support":
+      return "older adult services";
+    case "disability":
+      return "disability services";
+    case "mental_health":
+      return "mental health support";
+    case "substance_use":
+      return "substance-use support";
+    case "condition_support":
+      return "condition-specific support";
   }
 }

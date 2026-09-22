@@ -1,64 +1,44 @@
-/**
- * Tiny gazetteer used by the keyword parser and the follow-up location
- * question. Enough to make the demo area work; expand or replace with a
- * geocoder later.
- */
+/** California gazetteer with extra coverage for the CA-16 area. */
 import type { Location } from "../types";
 
-export interface Place extends Required<Pick<Location, "city" | "county" | "state" | "lat" | "lng">> {
+export interface Place extends Required<Pick<Location, "city" | "county" | "lat" | "lng">> {
   aliases?: string[];
   zipPrefixes?: string[];
 }
 
 export const PLACES: Place[] = [
-  { city: "Seattle", county: "King County", state: "WA", lat: 47.6062, lng: -122.3321, zipPrefixes: ["981"] },
-  { city: "Bellevue", county: "King County", state: "WA", lat: 47.6101, lng: -122.2015, zipPrefixes: ["98004", "98005", "98006", "98007", "98008"] },
-  { city: "Kent", county: "King County", state: "WA", lat: 47.3809, lng: -122.2348, zipPrefixes: ["98030", "98031", "98032", "98042"] },
-  { city: "Renton", county: "King County", state: "WA", lat: 47.4829, lng: -122.2171, zipPrefixes: ["98055", "98056", "98057", "98058", "98059"] },
-  { city: "Federal Way", county: "King County", state: "WA", lat: 47.3223, lng: -122.3126, zipPrefixes: ["98003", "98023"] },
-  { city: "Auburn", county: "King County", state: "WA", lat: 47.3073, lng: -122.2285, zipPrefixes: ["98001", "98002", "98092"] },
-  { city: "Burien", county: "King County", state: "WA", lat: 47.4704, lng: -122.3468, zipPrefixes: ["98146", "98148", "98166", "98168"] },
-  { city: "Shoreline", county: "King County", state: "WA", lat: 47.7557, lng: -122.3415, zipPrefixes: ["98133", "98155", "98177"] },
-  { city: "Tacoma", county: "Pierce County", state: "WA", lat: 47.2529, lng: -122.4443, zipPrefixes: ["984"] },
-  { city: "Puyallup", county: "Pierce County", state: "WA", lat: 47.1854, lng: -122.2929, zipPrefixes: ["98371", "98372", "98373", "98374", "98375"] },
-  { city: "Lakewood", county: "Pierce County", state: "WA", lat: 47.1718, lng: -122.5185, zipPrefixes: ["98498", "98499"] },
-  { city: "Everett", county: "Snohomish County", state: "WA", lat: 47.9790, lng: -122.2021, zipPrefixes: ["982"] },
-  { city: "Lynnwood", county: "Snohomish County", state: "WA", lat: 47.8209, lng: -122.3151, zipPrefixes: ["98036", "98037", "98087"] },
-  { city: "Spokane", county: "Spokane County", state: "WA", lat: 47.6588, lng: -117.4260, zipPrefixes: ["992"] },
-  { city: "Vancouver", county: "Clark County", state: "WA", lat: 45.6387, lng: -122.6615, zipPrefixes: ["986"] },
-  { city: "Portland", county: "Multnomah County", state: "OR", lat: 45.5152, lng: -122.6784, zipPrefixes: ["972"] },
+  { city: "San Jose", county: "Santa Clara County", lat: 37.3382, lng: -121.8863, zipPrefixes: ["951"] },
+  { city: "Santa Clara", county: "Santa Clara County", lat: 37.3541, lng: -121.9552, zipPrefixes: ["95050", "95051", "95053", "95054"] },
+  { city: "Sunnyvale", county: "Santa Clara County", lat: 37.3688, lng: -122.0363, zipPrefixes: ["94085", "94086", "94087", "94089"] },
+  { city: "Mountain View", county: "Santa Clara County", lat: 37.3861, lng: -122.0839, zipPrefixes: ["94040", "94041", "94043"] },
+  { city: "Milpitas", county: "Santa Clara County", lat: 37.4323, lng: -121.8996, zipPrefixes: ["95035", "95036"] },
+  { city: "Palo Alto", county: "Santa Clara County", lat: 37.4419, lng: -122.143, zipPrefixes: ["94301", "94303", "94304", "94305", "94306", "94309"] },
+  { city: "East Palo Alto", county: "San Mateo County", lat: 37.4688, lng: -122.1411, zipPrefixes: ["94303"] },
+  { city: "Menlo Park", county: "San Mateo County", lat: 37.453, lng: -122.1817, zipPrefixes: ["94025", "94026"] },
+  { city: "Redwood City", county: "San Mateo County", lat: 37.4852, lng: -122.2364, zipPrefixes: ["94002", "94061", "94062", "94063", "94065"] },
+  { city: "San Mateo", county: "San Mateo County", lat: 37.563, lng: -122.3255, zipPrefixes: ["94401", "94402", "94403", "94404"] },
+  { city: "Daly City", county: "San Mateo County", lat: 37.6879, lng: -122.4702, zipPrefixes: ["94014", "94015", "94016"] },
+  { city: "South San Francisco", county: "San Mateo County", lat: 37.6547, lng: -122.4077, zipPrefixes: ["94044", "94080"] },
 ];
 
-const COUNTIES = Array.from(new Map(PLACES.map((p) => [`${p.county}|${p.state}`, p])).values());
+const COUNTIES = Array.from(new Map(PLACES.map((place) => [place.county, place])).values());
 
-/** Resolve free text (city, county, ZIP, "Seattle, WA") to a Location. */
 export function resolvePlace(text: string): Location | undefined {
-  const t = text.toLowerCase();
-
-  const zip = t.match(/\b(\d{5})\b/)?.[1];
+  const normalized = text.toLowerCase();
+  const zip = normalized.match(/\b(\d{5})\b/)?.[1];
   if (zip) {
-    const p = PLACES.find((pl) => pl.zipPrefixes?.some((pre) => zip.startsWith(pre)));
-    if (p) return { city: p.city, county: p.county, state: p.state, zip, lat: p.lat, lng: p.lng };
+    const place = PLACES.find((candidate) => candidate.zipPrefixes?.some((prefix) => zip.startsWith(prefix)));
+    if (place) return { city: place.city, county: place.county, zip, lat: place.lat, lng: place.lng };
   }
-
-  // Longest city names first so "Federal Way" wins over "Way".
-  const byLength = [...PLACES].sort((a, b) => b.city.length - a.city.length);
-  for (const p of byLength) {
-    const names = [p.city, ...(p.aliases ?? [])].map((n) => n.toLowerCase());
-    if (names.some((n) => new RegExp(`\\b${n.replace(/\s+/g, "\\s+")}\\b`).test(t))) {
-      return { city: p.city, county: p.county, state: p.state, lat: p.lat, lng: p.lng };
+  for (const place of [...PLACES].sort((a, b) => b.city.length - a.city.length)) {
+    const names = [place.city, ...(place.aliases ?? [])].map((name) => name.toLowerCase());
+    if (names.some((name) => new RegExp(`\\b${name.replace(/\s+/g, "\\s+")}\\b`).test(normalized))) {
+      return { city: place.city, county: place.county, lat: place.lat, lng: place.lng };
     }
   }
-
-  for (const c of COUNTIES) {
-    const base = c.county.replace(/ county$/i, "").toLowerCase();
-    if (new RegExp(`\\b${base}\\s+county\\b`).test(t)) {
-      return { county: c.county, state: c.state };
-    }
+  for (const place of COUNTIES) {
+    const base = place.county.replace(/ county$/i, "").toLowerCase();
+    if (new RegExp(`\\b${base}\\s+county\\b`).test(normalized)) return { county: place.county };
   }
-
-  const state = t.match(/\b(wa|washington|or|oregon)\b/)?.[1];
-  if (state) return { state: state.startsWith("wa") ? "WA" : "OR" };
-
   return undefined;
 }

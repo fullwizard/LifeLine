@@ -2,9 +2,10 @@
  * Deterministic follow-up selection.
  *
  * Given a partial Situation and the current candidate resources, find the
- * single unknown field whose answer would, on average across its plausible
- * answers, eliminate the most candidates through the hard gates. Returns
- * null if no question would eliminate anything.
+ * unknown field that can change enough candidates through the hard gates.
+ * A question is worthwhile when a plausible answer can affect at least 10% of
+ * the current candidate set. Returns
+ * null when no missing field meets that threshold.
  *
  * Pure: no I/O, no AI. Imports only the matching engine and types.
  */
@@ -46,26 +47,26 @@ function serviceAreaLocations(resources: Resource[]): Partial<Situation>[] {
         const key = entry.toLowerCase();
         if (!seen.has(key)) {
           seen.add(key);
-          out.push({ location: { county: parts[0], state: parts[1] } });
+          out.push({ location: { county: parts[0] } });
         }
       } else if (parts.length === 2) {
         const key = entry.toLowerCase();
         if (!seen.has(key)) {
           seen.add(key);
-          out.push({ location: { city: parts[0], state: parts[1] } });
+          out.push({ location: { city: parts[0] } });
         }
       }
     }
   }
-  // Also simulate "somewhere else entirely" — a state none of them serve.
-  out.push({ location: { state: "ZZ" } });
+  // Also simulate a county outside the current source coverage.
+  out.push({ location: { county: "Outside California County" } });
   return out;
 }
 
 const CANDIDATES: Candidate[] = [
   {
     field: "location",
-    isMissing: (s) => !s.location || (!s.location.county && !s.location.city && !s.location.state),
+    isMissing: (s) => !s.location || (!s.location.county && !s.location.city && !s.location.zip),
     answers: (_s, resources) => serviceAreaLocations(resources),
     question: () => ({
       field: "location",
@@ -134,6 +135,11 @@ function survivors(resources: Resource[], situation: Situation, context: MatchCo
 export interface QuestionScore {
   field: AskableField;
   expectedEliminations: number;
+  maximumEliminations: number;
+}
+
+export function importantQuestionThreshold(candidateCount: number): number {
+  return candidateCount * 0.1;
 }
 
 /** Score every missing field. Exposed for tests and debugging. */
@@ -149,11 +155,14 @@ export function scoreQuestions(
     const answers = c.answers(situation, candidates);
     if (answers.length === 0) continue;
     let total = 0;
+    let maximum = 0;
     for (const a of answers) {
       const remaining = survivors(candidates, { ...situation, ...a }, context);
-      total += baseline - remaining;
+      const eliminated = baseline - remaining;
+      total += eliminated;
+      maximum = Math.max(maximum, eliminated);
     }
-    out.push({ field: c.field, expectedEliminations: total / answers.length });
+    out.push({ field: c.field, expectedEliminations: total / answers.length, maximumEliminations: maximum });
   }
   return out;
 }
@@ -164,9 +173,10 @@ export function nextQuestion(
   context: MatchContext = {},
 ): Question | null {
   const scores = scoreQuestions(situation, candidates, context);
+  const threshold = importantQuestionThreshold(candidates.length);
   let best: QuestionScore | undefined;
   for (const s of scores) {
-    if (s.expectedEliminations <= 0) continue;
+    if (s.maximumEliminations <= 0 || s.maximumEliminations < threshold) continue;
     if (!best || s.expectedEliminations > best.expectedEliminations) best = s;
     // Ties resolve to CANDIDATES order (location, housing status, income, ...).
   }

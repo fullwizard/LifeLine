@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 
 const GUIDANCE = "Where you live, who lives with you, what you are facing, and roughly what your household earns. Anything you leave out, we may ask about.";
 const EXAMPLES = [
-  "I live in Seattle with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
-  "Veteran in Kent, WA. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
-  "Family of 4 in Tacoma, behind on rent, no eviction notice yet. Income around $3,800 a month.",
+  "I live in San Jose with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
+  "Veteran in Redwood City. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
+  "Family of 4 in Santa Clara, behind on rent, no eviction notice yet. Income around $3,800 a month.",
 ];
 export function SituationForm({
   initialText,
@@ -143,7 +143,7 @@ export function SituationForm({
         </div>
       </div>
       <p className="mt-7 px-0 text-xs text-neutral-500 leading-relaxed sm:px-8">
-        Nothing you type is saved. LifeLine is an MVP running on sample resource data for the Seattle
+        Nothing you type is saved. LifeLine is an MVP running on California resource data for the
         area. Always confirm program details with the organization.
       </p>
     </form>

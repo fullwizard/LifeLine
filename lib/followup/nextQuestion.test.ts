@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Resource, Situation } from "../types";
-import { applyAnswer, nextQuestion, scoreQuestions } from "./nextQuestion";
+import { applyAnswer, importantQuestionThreshold, nextQuestion, scoreQuestions } from "./nextQuestion";
 
 function makeResource(overrides: Partial<Resource> & { id: string }): Resource {
   return {
@@ -37,7 +37,7 @@ describe("nextQuestion", () => {
   });
 
   it("picks the field that eliminates the most candidates", () => {
-    const known: Situation = { location: { county: "King County", state: "WA" } };
+    const known: Situation = { location: { county: "King County" } };
     const scores = scoreQuestions(known, pool);
     // housingStatus: shelter is excluded for 3 of 4 statuses → 0.75 avg.
     // isVeteran: vets excluded for 1 of 2 answers → 0.5 avg.
@@ -49,13 +49,13 @@ describe("nextQuestion", () => {
   });
 
   it("never asks about a field that is already known", () => {
-    const q = nextQuestion({ location: { county: "King County", state: "WA" }, housingStatus: "eviction_notice" }, pool);
+    const q = nextQuestion({ location: { county: "King County" }, housingStatus: "eviction_notice" }, pool);
     expect(q?.field).toBe("isVeteran");
   });
 
   it("returns null when no remaining question would eliminate anything", () => {
     const situation: Situation = {
-      location: { county: "King County", state: "WA" },
+      location: { county: "King County" },
       housingStatus: "eviction_notice",
       isVeteran: true,
     };
@@ -68,13 +68,32 @@ describe("nextQuestion", () => {
 
   it("asks about income only when candidates have income limits", () => {
     const capped = [makeResource({ id: "cap", eligibility: { max_fpl_percent: 150 } }), makeResource({ id: "open" })];
-    const situation: Situation = { location: { county: "King County", state: "WA" }, housingStatus: "housed_at_risk", householdSize: 2 };
+    const situation: Situation = { location: { county: "King County" }, housingStatus: "housed_at_risk", householdSize: 2 };
     expect(nextQuestion(situation, capped)?.field).toBe("monthlyIncome");
+  });
+
+  it("asks only when a plausible answer can affect at least 10% of candidates", () => {
+    const childrenOnly = makeResource({ id: "children-only", eligibility: { requires_children: true } });
+    const tenPrograms = [childrenOnly, ...Array.from({ length: 9 }, (_, i) => makeResource({ id: `open-${i}` }))];
+    const nineteenPrograms = [childrenOnly, ...Array.from({ length: 18 }, (_, i) => makeResource({ id: `near-open-${i}` }))];
+    const twentyPrograms = [childrenOnly, ...Array.from({ length: 19 }, (_, i) => makeResource({ id: `more-open-${i}` }))];
+    const known: Situation = {
+      location: { county: "King County" },
+      housingStatus: "housed_at_risk",
+      householdSize: 2,
+    };
+
+    expect(importantQuestionThreshold(10)).toBe(1);
+    expect(importantQuestionThreshold(19)).toBeCloseTo(1.9);
+    expect(importantQuestionThreshold(20)).toBe(2);
+    expect(nextQuestion(known, tenPrograms)?.field).toBe("hasChildren");
+    expect(nextQuestion(known, nineteenPrograms)).toBeNull();
+    expect(nextQuestion(known, twentyPrograms)).toBeNull();
   });
 });
 
 describe("applyAnswer", () => {
-  const resolve = (t: string) => (t.toLowerCase().includes("seattle") ? { city: "Seattle", county: "King County", state: "WA" } : undefined);
+  const resolve = (t: string) => (t.toLowerCase().includes("seattle") ? { city: "Seattle", county: "King County" } : undefined);
 
   it("parses numbers, booleans, selects, and locations", () => {
     expect(applyAnswer({}, "monthlyIncome", "$2,400", resolve).monthlyIncome).toBe(2400);

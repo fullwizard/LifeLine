@@ -13,6 +13,8 @@ export interface ParseResponse {
   candidateCount: number;
 }
 
+export type ContinueResponse = ParseResponse | { plan: Plan };
+
 const MAX_INPUT = 4000;
 
 export async function parseAndAsk(text: string): Promise<ParseResponse> {
@@ -30,4 +32,16 @@ export async function answerAndBuildPlan(
 ): Promise<Plan> {
   const updated = answer ? applyAnswer(situation, answer.field, answer.value, resolvePlace) : situation;
   return buildPlan(updated, parsedBy);
+}
+
+/** Continue the follow-up flow after an answered question. */
+export async function answerAndContinue(
+  situation: Situation,
+  parsedBy: Plan["parsedBy"],
+  answer: { field: AskableField; value: string },
+): Promise<ContinueResponse> {
+  const updated = applyAnswer(situation, answer.field, answer.value, resolvePlace);
+  const { question, candidateCount } = await findNextQuestion(updated);
+  if (question) return { situation: updated, parsedBy, question, candidateCount };
+  return { plan: await buildPlan(updated, parsedBy) };
 }

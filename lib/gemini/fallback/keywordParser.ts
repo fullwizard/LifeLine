@@ -3,7 +3,7 @@
  * Gemini is not configured or fails.
  */
 import { resolvePlace } from "../../data/places";
-import type { HousingStatus, ResourceCategory, Situation } from "../../types";
+import { REPORTED_CONDITIONS, type HousingStatus, type ReportedCondition, type ResourceCategory, type Situation } from "../../types";
 import type { ParseResult, SituationParser } from "../types";
 
 const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
@@ -13,6 +13,29 @@ const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
   shelter: /\b(shelter|nowhere to (go|stay|sleep)|sleeping in|homeless|on the street|couch[- ]?surf)\b/i,
   employment: /\b(job|jobs|work|employment|unemployed|laid off|lost my job|hiring|income)\b/i,
   legal: /\b(court|lawyer|attorney|legal|lawsuit|sued|summons|unlawful detainer)\b/i,
+  health: /\b(health|medical|doctor|clinic|medicaid|medi[- ]cal|medicare|prescription|dental|maternal)\b/i,
+  benefits: /\b(benefits?|calworks|ssi|ssdi|cash assistance|financial assistance|public assistance|calfresh|snap|wic)\b/i,
+  family_support: /\b(child care|childcare|children|family|parent|pregnan|foster|domestic violence)\b/i,
+  veteran_support: /\b(veteran|military|calvet)\b/i,
+  older_adult_support: /\b(senior|older adult|aging|elderly|medicare)\b/i,
+  disability: /\b(disabilit|disabled|ihss|developmental services|assistive)\b/i,
+  mental_health: /\b(mental health|behavioral health|depression|anxiety|ptsd|counseling)\b/i,
+  substance_use: /\b(substance use|addiction|recovery|rehab|detox|opioid)\b/i,
+  condition_support: /\b(diabetes|cancer|hiv|aids|heart disease|kidney disease|asthma|copd|chronic illness)\b/i,
+};
+
+const CONDITION_KEYWORDS: Record<ReportedCondition, RegExp> = {
+  disability: /\b(disabled|disability|developmental disability|intellectual disability)\b/i,
+  mobility_impairment: /\b(wheelchair|mobility (impairment|issue|disability)|paraly[sz](ed|is)|amputee)\b/i,
+  mental_health_condition: /\b(mental health|depression|anxiety|ptsd|bipolar|schizophrenia)\b/i,
+  substance_use_disorder: /\b(substance use|addiction|alcohol use disorder|drug use disorder|in recovery)\b/i,
+  diabetes: /\bdiabetes\b/i,
+  cancer: /\bcancer\b/i,
+  chronic_illness: /\b(chronic illness|chronic condition|chronic pain)\b/i,
+  heart_disease: /\b(heart disease|heart failure|heart condition)\b/i,
+  kidney_disease: /\b(kidney disease|renal disease|kidney failure)\b/i,
+  respiratory_condition: /\b(asthma|copd|emphysema|respiratory condition)\b/i,
+  hiv_aids: /\b(hiv|aids)\b/i,
 };
 
 function detectHousingStatus(t: string): HousingStatus | undefined {
@@ -38,6 +61,15 @@ function detectVeteran(t: string): boolean | undefined {
   if (/\b(not a veteran|never served|no military)\b/i.test(t)) return false;
   if (/\b(veteran|vet\b|served in the (army|navy|marines|air force|military)|military service|army|navy|marine corps|air force)\b/i.test(t)) return true;
   return undefined;
+}
+
+function detectConditions(t: string): ReportedCondition[] {
+  return REPORTED_CONDITIONS.filter((condition) => {
+    const match = CONDITION_KEYWORDS[condition].exec(t);
+    if (!match || match.index === undefined) return false;
+    const prefix = t.slice(Math.max(0, match.index - 40), match.index);
+    return !/(?:no|not|without|don'?t have|do not have|never had)\s+(?:any\s+)?(?:a\s+|an\s+)?$/i.test(prefix);
+  });
 }
 
 function detectIncome(t: string): number | undefined {
@@ -98,6 +130,8 @@ export function parseSituationByKeywords(text: string): Situation {
   if (monthlyIncome !== undefined) situation.monthlyIncome = monthlyIncome;
   const householdSize = detectHouseholdSize(t);
   if (householdSize !== undefined) situation.householdSize = householdSize;
+  const conditions = detectConditions(t);
+  if (conditions.length) situation.conditions = conditions;
 
   return situation;
 }
