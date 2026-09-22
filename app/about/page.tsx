@@ -21,7 +21,7 @@ export default function AboutPage() {
           </p>
         </header>
 
-        <section className="rounded-none bg-sunflower p-5 sm:p-8 space-y-3">
+        <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-neutral-900">Who we are</h2>
           <p className="leading-relaxed text-neutral-800">
             We are <strong>Caleb Suh</strong> and <strong>Lior Balan</strong>, juniors at Los Altos High School. We
@@ -39,30 +39,21 @@ export default function AboutPage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold text-neutral-900">How it works</h2>
           <ol className="space-y-3 text-neutral-800 leading-relaxed">
-            <li className="rounded-none bg-neutral-50 p-4">
-              <strong>1. You describe what is going on.</strong> Plain language is fine. If we need one more detail
+            <li>
+              1. You describe what is going on. Plain language is fine. If we need one more detail
               to narrow things down, we ask a single follow-up question, never a long form.
             </li>
-            <li className="rounded-none bg-neutral-50 p-4">
-              <strong>2. Rules pick and rank the programs.</strong> Every resource is checked against fixed,
+            <li>
+              2. Rules pick and rank the programs. Every resource is checked against fixed,
               transparent criteria: where you live, whether the program is open, and whether anything you told us
               rules it out. Programs are ordered by how well they fit and how quickly they can respond.
             </li>
-            <li className="rounded-none bg-neutral-50 p-4">
-              <strong>3. You see the reasoning.</strong> Each program shows exactly which facts matched, which we
+            <li>
+              3. You see the reasoning. Each program shows exactly which facts matched, which we
               could not confirm, and what documents to bring. AI only helps read your description and write the
               summary. It never chooses or invents a resource.
             </li>
           </ol>
-        </section>
-
-        <section className="rounded-none bg-accent-50 p-5 sm:p-6 space-y-2">
-          <h2 className="text-xl font-semibold text-accent-900">What LifeLine is not</h2>
-          <p className="leading-relaxed text-neutral-800">
-            LifeLine does not decide who qualifies for anything. Every organization makes its own decision, and
-            program details change with funding. We mark what still needs to be verified so you can walk in
-            prepared instead of surprised.
-          </p>
         </section>
 
         <p className="text-neutral-700">

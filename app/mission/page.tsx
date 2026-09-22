@@ -32,39 +32,30 @@ export default function MissionPage() {
             people make under pressure, and we noticed that the people facing the hardest one, how to keep a roof
             overhead, were getting the least help making it. Our mission is to give anyone facing housing
             instability a plan they can act on in minutes: the right programs, in the right order, with the
-            reasoning laid out plainly.
+            reasoning laid out plainly. We started in the Bay Area because it is home, and we are building toward
+            verified, up-to-date listings that can serve more communities over time.
           </p>
         </section>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold text-neutral-900">What we promise</h2>
-          <ul className="space-y-3 text-neutral-800 leading-relaxed">
-            <li className="rounded-none bg-sunflower p-4">
-              <strong>Clarity over cleverness.</strong> Resources are chosen by transparent rules, not by a black
+          <ul className="list-disc space-y-3 pl-6 text-neutral-800 leading-relaxed marker:text-accent-700">
+            <li>
+              Clarity over cleverness. Resources are chosen by transparent rules, not by a black
               box. You can see why every program is on your list.
             </li>
-            <li className="rounded-none bg-sunflower p-4">
-              <strong>Honesty about uncertainty.</strong> We will never tell you that you qualify. We show what
+            <li>
+              Honesty about uncertainty. We will never tell you that you qualify. We show what
               matched, what still needs confirming, and who makes the final call.
             </li>
-            <li className="rounded-none bg-sunflower p-4">
-              <strong>Respect for your time.</strong> One description, at most one question, and a plan. No
+            <li>
+              Respect for your time. One description, at most one question, and a plan. No
               accounts, no forms that take an hour.
             </li>
-            <li className="rounded-none bg-sunflower p-4">
-              <strong>Privacy by default.</strong> Nothing you type is stored. Your situation is yours.
+            <li>
+              Privacy by default. Nothing you type is stored. Your situation is yours.
             </li>
           </ul>
-        </section>
-
-        <section className="rounded-none bg-neutral-50 p-5 sm:p-6 space-y-2">
-          <h2 className="text-xl font-semibold text-neutral-900">Where we are headed</h2>
-          <p className="leading-relaxed text-neutral-800">
-            LifeLine started with the Bay Area because it is home. The approach works anywhere there is a
-            directory of local programs to draw from, and we are building the tools to bring in verified,
-            up-to-date listings for more communities. If you run a program or know one that should be here, we
-            want to hear from you.
-          </p>
         </section>
 
         <p className="text-neutral-700">
