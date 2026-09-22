@@ -157,7 +157,14 @@ export interface Situation {
   documentsAvailable?: string[];
   /** Health conditions or disabilities the person explicitly mentioned. */
   conditions?: ReportedCondition[];
+  /**
+   * Safety signals detected deterministically from the text. Never set by AI.
+   * The UI must surface crisis resources before anything else when present.
+   */
+  crisisIndicators?: CrisisIndicator[];
 }
+
+export type CrisisIndicator = "suicide_or_self_harm";
 
 /** Situation fields the follow-up engine may ask about. */
 export type AskableField =
