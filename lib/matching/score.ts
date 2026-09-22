@@ -17,7 +17,7 @@ import type {
 import { humanStatus } from "./gates";
 import { distanceMiles } from "./geo";
 import { evaluateIncome } from "./income";
-import { describeLocation, evaluateServiceArea, isNational } from "./location";
+import { describeLocation, evaluateServiceArea, isNational, isStatewide } from "./location";
 
 export const WEIGHTS = {
   service_area_confirmed: 15,
@@ -114,14 +114,10 @@ export function scoreResource(
         detail: `Typically takes about ${days} days, which may be too slow for your situation.`,
       });
     } else {
-      b.push({
-        factor: "urgency_fit",
-        status: "unverified",
-        points: 0,
-        detail: "Response time unknown — ask how quickly they can help.",
-      });
+      // Most crawled listings do not publish a response-time promise. Do not
+      // turn that missing optional field into a repeated warning on every card.
     }
-  } else {
+  } else if (resource.response_time_days !== undefined) {
     b.push({
       factor: "urgency_fit",
       status: "met",
@@ -131,7 +127,7 @@ export function scoreResource(
   }
 
   // --- income limit ---------------------------------------------------------
-  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual);
+  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual, resource.eligibility_verified !== false);
   if (income.status === "none") {
     b.push({
       factor: "income_limit",
@@ -267,6 +263,13 @@ export function scoreResource(
       status: "met",
       points: 0,
       detail: "Available by phone or online from anywhere.",
+    });
+  } else if (isStatewide(resource)) {
+    b.push({
+      factor: "distance",
+      status: "met",
+      points: 0,
+      detail: "Available statewide; exact distance is not applicable.",
     });
   } else if (loc?.lat !== undefined && loc.lng !== undefined && resource.lat !== undefined && resource.lng !== undefined) {
     const miles = distanceMiles(loc.lat, loc.lng, resource.lat, resource.lng);

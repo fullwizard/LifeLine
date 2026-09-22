@@ -53,13 +53,13 @@ describe("nextQuestion", () => {
     expect(q?.field).toBe("isVeteran");
   });
 
-  it("returns null when no remaining question would eliminate anything", () => {
+  it("continues asking for high-value facts even without a hard gate", () => {
     const situation: Situation = {
       location: { county: "King County" },
       housingStatus: "eviction_notice",
       isVeteran: true,
     };
-    expect(nextQuestion(situation, pool)).toBeNull();
+    expect(nextQuestion(situation, pool)?.field).toBe("monthlyIncome");
   });
 
   it("returns null for an empty candidate set", () => {
@@ -72,7 +72,7 @@ describe("nextQuestion", () => {
     expect(nextQuestion(situation, capped)?.field).toBe("monthlyIncome");
   });
 
-  it("asks only when a plausible answer can affect at least 10% of candidates", () => {
+  it("asks about a targeted program even when it affects less than 10% of candidates", () => {
     const childrenOnly = makeResource({ id: "children-only", eligibility: { requires_children: true } });
     const tenPrograms = [childrenOnly, ...Array.from({ length: 9 }, (_, i) => makeResource({ id: `open-${i}` }))];
     const nineteenPrograms = [childrenOnly, ...Array.from({ length: 18 }, (_, i) => makeResource({ id: `near-open-${i}` }))];
@@ -87,8 +87,8 @@ describe("nextQuestion", () => {
     expect(importantQuestionThreshold(19)).toBeCloseTo(1.9);
     expect(importantQuestionThreshold(20)).toBe(2);
     expect(nextQuestion(known, tenPrograms)?.field).toBe("hasChildren");
-    expect(nextQuestion(known, nineteenPrograms)).toBeNull();
-    expect(nextQuestion(known, twentyPrograms)).toBeNull();
+    expect(nextQuestion(known, nineteenPrograms)?.field).toBe("hasChildren");
+    expect(nextQuestion(known, twentyPrograms)?.field).toBe("hasChildren");
   });
 });
 
@@ -102,6 +102,7 @@ describe("applyAnswer", () => {
     expect(applyAnswer({}, "isVeteran", "false", resolve).isVeteran).toBe(false);
     expect(applyAnswer({}, "housingStatus", "unhoused", resolve).housingStatus).toBe("unhoused");
     expect(applyAnswer({}, "location", "Seattle", resolve).location?.county).toBe("King County");
+    expect(applyAnswer({}, "location", "Current location (37.3382, -121.8863)", resolve).location).toEqual({ lat: 37.3382, lng: -121.8863 });
   });
 
   it("leaves the situation unchanged for blank or unparseable answers", () => {

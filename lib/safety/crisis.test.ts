@@ -28,6 +28,12 @@ describe("crisis detection", () => {
     }
   });
 
+  it("respects an explicit denial but not a loose one", () => {
+    expect(detectCrisisIndicators("I am not suicidal and have no thoughts of self-harm.")).toEqual([]);
+    expect(detectCrisisIndicators("everyone would be better off without me, I'm better off dead")).toEqual(["suicide_or_self_harm"]);
+    expect(detectCrisisIndicators("I don't want to be here anymore")).toEqual(["suicide_or_self_harm"]);
+  });
+
   it("attaches indicators to a situation without touching other fields", () => {
     const s = withCrisisIndicators({ householdSize: 2 }, "I want to die");
     expect(s).toEqual({ householdSize: 2, crisisIndicators: ["suicide_or_self_harm"] });
