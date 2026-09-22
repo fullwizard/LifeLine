@@ -2,12 +2,18 @@
 
 import { useState, useTransition } from "react";
 import type { AskableField, Plan } from "@/lib/types";
+import { hasImmediateSafetyConcern } from "@/lib/safety";
 import { answerAndBuildPlan, answerAndContinue, parseAndAsk, type ParseResponse } from "../actions";
+import { CrisisSupport } from "./CrisisSupport";
 import { FollowUpStep } from "./FollowUpStep";
 import { PlanView } from "./PlanView";
 import { SituationForm } from "./SituationForm";
 
-type Step = { kind: "input" } | { kind: "followup"; parsed: ParseResponse } | { kind: "plan"; plan: Plan };
+type Step =
+  | { kind: "input" }
+  | { kind: "crisis"; parsed: ParseResponse }
+  | { kind: "followup"; parsed: ParseResponse }
+  | { kind: "plan"; plan: Plan };
 
 export function LifeLineApp() {
   const [step, setStep] = useState<Step>({ kind: "input" });
@@ -21,12 +27,30 @@ export function LifeLineApp() {
     startTransition(async () => {
       try {
         const parsed = await parseAndAsk(value);
-        if (parsed.question) {
+        if (hasImmediateSafetyConcern(parsed.situation)) {
+          setStep({ kind: "crisis", parsed });
+        } else if (parsed.question) {
           setStep({ kind: "followup", parsed });
         } else {
           const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
           setStep({ kind: "plan", plan });
         }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      }
+    });
+  }
+
+  function continueFromCrisis(parsed: ParseResponse) {
+    setError(null);
+    if (parsed.question) {
+      setStep({ kind: "followup", parsed });
+      return;
+    }
+    startTransition(async () => {
+      try {
+        const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
+        setStep({ kind: "plan", plan });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
       }
@@ -75,6 +99,13 @@ export function LifeLineApp() {
       {step.kind === "input" && (
         <SituationForm initialText={text} pending={pending} onSubmit={submitSituation} />
       )}
+      {step.kind === "crisis" && (
+        <CrisisSupport
+          pending={pending}
+          onContinue={() => continueFromCrisis(step.parsed)}
+          onEdit={reset}
+        />
+      )}
       {step.kind === "followup" && (
         <FollowUpStep
           key={step.parsed.question?.field}
@@ -92,6 +123,7 @@ export function LifeLineApp() {
 function StepIndicator({ current }: { current: Step["kind"] }) {
   const labels = {
     input: "Step 1: Tell us about your situation.",
+    crisis: "Support is available right now.",
     followup: "Step 2: A little more about you.",
     plan: "Step 3: Your next steps.",
   };

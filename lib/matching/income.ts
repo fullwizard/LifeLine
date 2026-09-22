@@ -85,13 +85,23 @@ export function evaluateIncome(
   eligibility: Eligibility,
   situation: Situation,
   areaMedianIncomeAnnual: number | undefined,
+  eligibilityVerified = true,
 ): IncomeVerdict {
-  const { max_ami_percent, max_fpl_percent } = eligibility;
-  if (max_ami_percent === undefined && max_fpl_percent === undefined) {
-    return { status: "none" };
+  const { max_annual_income, max_ami_percent, max_fpl_percent } = eligibility;
+  if (max_annual_income === undefined && max_ami_percent === undefined && max_fpl_percent === undefined) {
+    return eligibilityVerified
+      ? { status: "none" }
+      : { status: "unverified", detail: "Income eligibility has not been verified from the source." };
   }
 
   const verdicts: IncomeVerdict[] = [];
+
+  if (max_annual_income !== undefined) {
+    const label = `Income limit ${money(max_annual_income)}/yr`;
+    verdicts.push(
+      bracket(label, situation.monthlyIncome, situation.householdSize, () => max_annual_income),
+    );
+  }
 
   if (max_ami_percent !== undefined) {
     const label = `Income limit ${max_ami_percent}% of Area Median Income`;

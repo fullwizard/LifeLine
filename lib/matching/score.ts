@@ -127,7 +127,7 @@ export function scoreResource(
   }
 
   // --- income limit ---------------------------------------------------------
-  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual);
+  const income = evaluateIncome(e, situation, context.areaMedianIncomeAnnual, resource.eligibility_verified !== false);
   if (income.status === "none") {
     b.push({
       factor: "income_limit",

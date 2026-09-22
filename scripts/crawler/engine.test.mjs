@@ -96,6 +96,20 @@ describe("bounded assistance discovery", () => {
     expect(result.summary.keptPages).toBe(2);
   });
 
+  it("deduplicates repeated program pages by name and description despite differing page content", async () => {
+    const a = source();
+    const description = "CalFresh offers food assistance to eligible households in California through a county application process.";
+    const program = (extra) => `<html><head><title>CalFresh | California</title><meta name="description" content="${description}"></head><main><h1>CalFresh</h1><p>Apply for food assistance. ${extra}</p></main></html>`;
+    const { dependencies } = setup({
+      [a.startUrl]: page("Food programs", anchor("/program") + anchor("/copy")),
+      "https://first.ca.gov/program": program("Applications are processed by county offices."),
+      "https://first.ca.gov/copy": program("This page also links to a newsletter and outreach materials."),
+    });
+    const result = await crawlSources([a], settings, dependencies);
+    expect(result.sources[0].pages.filter((item) => item.title.startsWith("CalFresh"))).toHaveLength(1);
+    expect(result.sources[0].duplicates.some((item) => item.reason === "same_program_name_and_description")).toBe(true);
+  });
+
   it("retains external providers and PDFs without fetching them", async () => {
     const a = source();
     const { calls, dependencies } = setup({ [a.startUrl]: page("Food pantry", anchor("https://provider.org/get-help") + anchor("/application.pdf")) });

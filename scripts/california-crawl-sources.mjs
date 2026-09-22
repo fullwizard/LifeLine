@@ -262,6 +262,17 @@ export const CALIFORNIA_CRAWL_SOURCES = [
     maxPages: 30,
   },
   {
+    id: "california-tax-credits",
+    name: "California Franchise Tax Board tax credits",
+    startUrl: "https://www.ftb.ca.gov/file/personal/credits/caleitc/eligibility-and-credit-information.html",
+    allowedOrigins: ["https://www.ftb.ca.gov", "https://ftb.ca.gov"],
+    allowedPathPrefixes: ["/file/personal/credits/caleitc", "/file/personal/credits/california-earned-income-tax-credit.html"],
+    serviceArea: "California",
+    crawlOrder: 2,
+    priority: 65,
+    maxPages: 8,
+  },
+  {
     id: "california-employment-benefits",
     name: "California jobs, unemployment and disability benefits",
     startUrl: "https://edd.ca.gov/en/jobs_and_training/",
