@@ -128,6 +128,12 @@ export interface Resource {
   response_time_days?: number;
   /** ISO date the listing was last verified against the source. */
   last_verified?: string;
+  /**
+   * Street address of a walk-in location, when the source publishes one.
+   * Only records with an address are drawn as pins; lat/lng without an
+   * address is an approximate service-area center.
+   */
+  address?: string;
 }
 
 // ---------------------------------------------------------------------------

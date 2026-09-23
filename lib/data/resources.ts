@@ -43,6 +43,7 @@ function toResource(record: PromotedRecord): Resource {
     application_url: record.application_url,
     source_url: record.source_url,
     ...("phone" in record && record.phone ? { phone: record.phone } : {}),
+    ...("address" in record && typeof record.address === "string" ? { address: record.address } : {}),
     ...("response_time_days" in record && typeof record.response_time_days === "number" ? { response_time_days: record.response_time_days } : {}),
     ...(coordinatesForServiceArea(record.service_area) ?? {}),
     last_verified: record.last_verified,

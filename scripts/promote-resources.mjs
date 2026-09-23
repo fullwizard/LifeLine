@@ -38,7 +38,7 @@ const ELIGIBILITY_KEYS = {
   housing_status_any_of: "housing_statuses",
   notes: "string",
 };
-const OVERRIDE_KEYS = new Set(["reviewed_at", "reviewed_by", "active", "eligibility_verified", "eligibility", "phone", "response_time_days", "required_documents"]);
+const OVERRIDE_KEYS = new Set(["reviewed_at", "reviewed_by", "active", "eligibility_verified", "eligibility", "phone", "address", "response_time_days", "required_documents"]);
 // "US", "California", "Santa Clara County, CA", "Santa Clara and San Mateo counties, CA", "San Jose, CA"
 const SERVICE_AREA = /^(?:US|California|[A-Z][\w .'-]+(?: and [A-Z][\w .'-]+)*(?: count(?:y|ies))?, CA)$/;
 
@@ -78,6 +78,7 @@ export function validateResource(resource, errors) {
   if (!Array.isArray(resource.required_documents) || resource.required_documents.some((d) => typeof d !== "string")) errors.push(`${where}: required_documents must be an array of strings`);
   for (const field of ["application_url", "source_url"]) if (typeof resource[field] === "string" && !isUrl(resource[field])) errors.push(`${where}: ${field} is not a valid http(s) URL`);
   if (resource.phone !== undefined && resource.phone !== null && typeof resource.phone !== "string") errors.push(`${where}: phone must be a string`);
+  if (resource.address !== undefined && resource.address !== null && typeof resource.address !== "string") errors.push(`${where}: address must be a string`);
   if (resource.eligibility_verified !== undefined && typeof resource.eligibility_verified !== "boolean") errors.push(`${where}: eligibility_verified must be boolean`);
   if (resource.response_time_days !== undefined && !(typeof resource.response_time_days === "number" && resource.response_time_days >= 0)) errors.push(`${where}: response_time_days must be a non-negative number`);
   validateEligibility(resource.eligibility ?? {}, where, errors);
@@ -95,6 +96,7 @@ export function applyOverride(candidate, override) {
   }
   if (override.active !== undefined) out.active = override.active;
   if (override.phone !== undefined) out.phone = override.phone;
+  if (override.address !== undefined) out.address = override.address;
   if (override.response_time_days !== undefined) out.response_time_days = override.response_time_days;
   if (override.required_documents !== undefined) out.required_documents = [...override.required_documents];
   if (override.reviewed_at) out.last_verified = override.reviewed_at;
@@ -133,6 +135,7 @@ function toResource(candidate) {
     application_url: candidate.application_url,
     source_url: candidate.source_url,
     ...(candidate.phone ? { phone: candidate.phone } : {}),
+    ...(candidate.address ? { address: candidate.address } : {}),
     ...(candidate.response_time_days !== undefined ? { response_time_days: candidate.response_time_days } : {}),
     last_verified: candidate.last_verified,
   };
