@@ -27,11 +27,12 @@ export async function findNextQuestion(situation: Situation): Promise<{ question
 export async function buildPlan(situation: Situation, parsedBy: Plan["parsedBy"]): Promise<Plan> {
   const resources = await getResources();
   const context = contextFor(situation);
-  const { ranked, excluded } = matchResources(resources, situation, context);
+  const { ranked, related, excluded } = matchResources(resources, situation, context);
   const explanation = await explainPlan(situation, ranked);
   return {
     situation,
     ranked,
+    related,
     excludedCount: excluded.length,
     summary: explanation.summary,
     steps: explanation.steps,

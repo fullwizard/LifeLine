@@ -89,6 +89,9 @@ export function evaluateIncome(
 ): IncomeVerdict {
   const { max_annual_income, max_ami_percent, max_fpl_percent } = eligibility;
   if (max_annual_income === undefined && max_ami_percent === undefined && max_fpl_percent === undefined) {
+    if (/\b(?:income|low[- ]income)\b/i.test(eligibility.notes ?? "")) {
+      return { status: "unverified", detail: "Income limits apply; the exact amounts must be confirmed with the organization." };
+    }
     return eligibilityVerified
       ? { status: "none" }
       : { status: "unverified", detail: "Income eligibility has not been verified from the source." };

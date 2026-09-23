@@ -52,6 +52,22 @@ export function PlanView({ plan, onReset }: { plan: Plan; onReset: () => void })
         )}
       </section>
 
+      {plan.related.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold">Also worth knowing</h2>
+          <p className="text-xs text-neutral-500">
+            Programs in related categories that often help in situations like yours. Same rules, same checks.
+          </p>
+          <ol className="mt-4 space-y-4">
+            {plan.related.map((r, i) => (
+              <li key={r.resource.id}>
+                <ResourceCard rank={plan.ranked.length + i + 1} scored={r} note={plan.resourceNotes[r.resource.id]} />
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
       <p className="rounded-none bg-amber-50 px-4 py-3 text-xs text-amber-900 leading-relaxed">
         {plan.disclaimer}
       </p>

@@ -188,14 +188,77 @@ function bestDescription(page) {
   return meaningful ?? candidates.sort((a, b) => b.length - a.length)[0] ?? "";
 }
 
-function extractEligibility(page) {
-  const evidence = [page.title, ...(page.headings ?? []), page.description, page.excerpt, page.text].join(" ");
+const UNSTABLE_HOUSING = ["unhoused", "housed_at_risk", "eviction_notice"];
+
+/**
+ * Pull structured eligibility out of page evidence. Conservative by design:
+ * only rules the page states in recognisable words are captured, anything
+ * softer becomes a note, and every record stays `eligibility_verified: false`
+ * until a person reviews it (see data/reviewed/eligibility-overrides.json).
+ */
+export function extractEligibility(page) {
+  const evidence = [page.title, ...(page.headings ?? []), page.description, page.excerpt, page.text]
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ");
+  const eligibility = {};
+  const notes = [];
+
   const annualIncome = evidence.match(/\b(?:earning|earns|income|incomes|gross income|annual income|yearly income)[^$\d]{0,45}\$\s*([\d,]+)\s*(?:a|per|each)?\s*(?:year|yr|annually)\b/i)
     ?? evidence.match(/\b(?:not more than|maximum income(?: allowed)?)[^$]{0,20}\$\s*([\d,]+)\b/i)
     ?? evidence.match(/\b(?:under|below|less than|no more than|up to)\s+\$\s*([\d,]+)\s*(?:a|per|each)?\s*(?:year|yr|annually)\b/i);
-  if (!annualIncome) return {};
-  const amount = Number(annualIncome[1].replace(/,/g, ""));
-  return Number.isFinite(amount) && amount > 0 ? { max_annual_income: amount } : {};
+  if (annualIncome) {
+    const amount = Number(annualIncome[1].replace(/,/g, ""));
+    if (Number.isFinite(amount) && amount > 0) eligibility.max_annual_income = amount;
+  }
+
+  const ami = evidence.match(/\b(\d{2,3})\s*(?:%|percent)\s*(?:of\s+)?(?:the\s+)?(?:area median income|ami|median income)\b/i);
+  if (ami) eligibility.max_ami_percent = Number(ami[1]);
+  const fpl = evidence.match(/\b(\d{2,3})\s*(?:%|percent)\s*(?:of\s+)?(?:the\s+)?(?:federal poverty (?:level|line|guidelines?)|poverty (?:level|line|guidelines?)|fpl)\b/i);
+  if (fpl) eligibility.max_fpl_percent = Number(fpl[1]);
+  const smi = evidence.match(/\b(\d{2,3})\s*(?:%|percent)\s*(?:of\s+)?(?:the\s+)?state median income\b/i);
+  if (smi) notes.push(`Income limit ${smi[1]}% of state median income.`);
+  const anyIncomeRule = annualIncome || ami || fpl || smi;
+  if (!anyIncomeRule && /\b(?:low[- ]income|income[- ]eligible|income[- ]qualified|income limits? appl(?:y|ies))\b/i.test(evidence)) {
+    notes.push("Income limits apply; the amounts are not published on the page.");
+  }
+
+  if (/\b(?:must be (?:a )?veterans?|veterans? only|only (?:for|to) (?:eligible )?veterans|for (?:eligible|homeless|low-income) veterans|veterans and their families|serves veterans)\b/i.test(evidence)) {
+    eligibility.requires_veteran = true;
+  }
+  if (/\b(?:families with (?:minor |dependent )?children|households with (?:minor |dependent )?children|must have (?:a|at least one) (?:minor |dependent )?child|families (?:in|receiving|on|enrolled in) (?:the )?calworks(?: program)?)\b/i.test(evidence)) {
+    eligibility.requires_children = true;
+  }
+
+  const homeless = /\b(?:experiencing homelessness|who are homeless|homeless (?:individuals|families|adults|youth|people)|people experiencing homelessness|are homeless)\b/i.test(evidence);
+  const atRisk = /\b(?:at risk of (?:homelessness|losing (?:their |your )?(?:housing|home)|eviction)|risk of homelessness|past[- ]due rent|behind on (?:their |your )?rent|eviction prevention|avoid(?:ing)? eviction|prevent eviction|eviction avoidance|homelessness prevention|facing eviction)\b/i.test(evidence);
+  if (homeless && atRisk) eligibility.housing_status_any_of = [...UNSTABLE_HOUSING];
+  else if (homeless) eligibility.housing_status_any_of = ["unhoused"];
+  else if (atRisk) eligibility.housing_status_any_of = ["housed_at_risk", "eviction_notice"];
+
+  if (/\b(?:must have (?:received )?(?:an? )?(?:eviction |written |court )?notice|with an eviction notice|received an? (?:eviction|3-day|three-day|pay or quit) notice|unlawful detainer (?:case|filed|lawsuit))\b/i.test(evidence)) {
+    eligibility.requires_eviction_notice = true;
+  }
+
+  if (/\b(?:calworks (?:recipients?|participants?|families|applicants?)|in the calworks program|receiving calworks|families in calworks)\b/i.test(evidence)) {
+    notes.push("Must be receiving (or applying for) CalWORKs.");
+  }
+  if (/\b(?:adult protective services|aps clients?)\b/i.test(evidence)) {
+    notes.push("Must be an Adult Protective Services client or in APS intake.");
+  }
+  if (/\bchild welfare\b/i.test(evidence)) {
+    notes.push("Family must be involved with the child welfare system.");
+  }
+  const resident = evidence.match(/\bresident of ([A-Z][\w .]+? County)(?: for at least (\d+|thirty|sixty|ninety) days)?/i);
+  if (resident) notes.push(`Must be a resident of ${resident[1].trim()}${resident[2] ? ` for at least ${resident[2]} days` : ""}.`);
+  const zipBlock = evidence.match(/\bzip codes?\b(.{0,600})/i);
+  if (zipBlock) {
+    const zips = [...new Set(zipBlock[1].match(/\b9\d{4}\b/g) ?? [])];
+    if (zips.length >= 2) notes.push(`Serves ZIP codes ${zips.join(", ")}.`);
+  }
+
+  if (notes.length) eligibility.notes = notes.join(" ");
+  return eligibility;
 }
 
 function organizationFor(page, source) {

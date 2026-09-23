@@ -241,7 +241,10 @@ export interface MatchContext {
 }
 
 export interface MatchResult {
+  /** Resources in the categories the person asked for (or everything, if none stated). */
   ranked: ScoredResource[];
+  /** A short list from closely related categories, shown as "also worth knowing". */
+  related: ScoredResource[];
   excluded: ExcludedResource[];
 }
 
@@ -272,6 +275,8 @@ export interface Question {
 export interface Plan {
   situation: Situation;
   ranked: ScoredResource[];
+  /** Resources from related categories, ranked, capped. */
+  related: ScoredResource[];
   excludedCount: number;
   /** Short, readable overview of the plan. */
   summary: string;
