@@ -1,0 +1,1458 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-22T23:59:22.299Z",
+  "source": {
+    "candidatesGeneratedAt": "2026-09-22T14:49:03.334Z",
+    "overridesCount": 9
+  },
+  "stats": {
+    "candidates": 121,
+    "promoted": 75,
+    "skippedUncategorized": 46,
+    "verified": 9,
+    "withEligibility": 30,
+    "backfilled": 21,
+    "inactive": 1
+  },
+  "resources": [
+    {
+      "id": "adult-protective-services-5ab041903d",
+      "name": "Adult Protective Services",
+      "organization": "California Department of Social Services benefits",
+      "category": "disability",
+      "description": "Adult Protective Services (APS) agency to help elder adults (60 years and older) and dependent adults (18-59 who are disabled), when these adults are unable to meet their own needs, or are victims of abuse, neglect or exploitation. County APS agencies investigate reports of abuse of elders and dependent adults who live in private homes, apartments, hotels or hospitals, or who are, or soon will be, experiencing homelessness. For Whom APS services are available to any elder (60 or older) or dependent adult who is believed to have been a victim of abuse, neglect or exploitation regardless of income at no cost. To report abuse, call this number 1-833-401-0832 and when prompted enter your 5-digit zip code to be connected to the Adult Protective Services in your county, 7 days a week, 24 hours a day. There are many types of abuse. Some of the more common types, with examples, are listed below.",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused"
+        ],
+        "notes": "Must be an Adult Protective Services client or in APS intake."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://cdss.ca.gov/inforesources/adult-protective-services",
+      "source_url": "https://cdss.ca.gov/inforesources/adult-protective-services",
+      "phone": "1-833-401-0832",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "aging-and-adult-services-prevention-f037030595",
+      "name": "Aging and Adult Services: Prevention",
+      "organization": "San Mateo County Health",
+      "category": "older_adult_support",
+      "description": "Aging and Disability Services: Prevention Overview February 2, 2016 Prevention Programs for Older Adults Aging and Disability Services Division collaborates on prevention throughout the county. Fall Prevention Coalition of San Mateo County A countywide coalition that aims to build and maintain a collaborative network to support fall prevention and resources. It also serves as a clearinghouse for fall prevention activities throughout San Mateo County. Tasks for this year include increasing communication on fall prevention and developing a comprehensive fall prevention education campaign. For more information, go to the Fall Prevention Coalition of San Mateo County website. Read more Post February 2, 2016 Protection Adult Protective Services Forms for mandated reporters: Report Suspected Dependent/Elder Abuse by filling out SOC 341* form below: SOC 341 Report suspected Dependent/Elder FINA",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Must be an Adult Protective Services client or in APS intake."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/aging-and-disability-services-prevention",
+      "source_url": "https://www.smchealth.org/aging-and-disability-services-prevention",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "aging-and-disability-resource-connection-consumer-f9a0e33c59",
+      "name": "Aging and Disability Resource Connection - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "A variety of supportive services are available. These services may include: Enhanced Information and Referral Services - Comprehensive resource information, follow-ups, and referrals via \"warm hand-offs.\" Options Counseling - Assist in identifying goals and needs through person-centered counseling and coordinating access to public and private-funded long-term services and supports in the community. Short-Term Service Coordination - Expedited access to services and supports for individuals at risk of institutionalization, generally for 90 days or less, until a longer-term plan is in place. Transition Services - – For people who are currently in a hospital, nursing facility, or other institution and wishes to receive long-term services and supports at home or in a community-based setting. Who Can Get These Services Anyone regardless of age, income, and disability",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Aging_and_Disability_Resource_Connection/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Aging_and_Disability_Resource_Connection/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "bankruptcy-resources-a60c2ccd33",
+      "name": "Bankruptcy resources",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "bankruptcy resources List of informational resources in bankruptcy FTC's Consumer debt advice Information from the Federal Trade Commission about debt relief services, credit counseling, debt consolidation, and bankruptcy. Get information on how to get out of debt.",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/bankruptcy-resources",
+      "source_url": "https://selfhelp.courts.ca.gov/bankruptcy-resources",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "behind-on-your-energy-bills-liheap-may-be-able-to-help-610249020c",
+      "name": "Behind on your energy bills? LIHEAP may be able to help.",
+      "organization": "California energy bills, weatherization and community assistance",
+      "category": "utility",
+      "description": "Behind on your energy bills? LIHEAP may be able to help. ​​​​ ​Get to Know LIHEAP​​ ​​LIHEAP stands for the Low Income Home Energy Assistance ​Program.​ It may be able to help you pay yo​​​ur energy bill. ​​​​ LIHEAP is a federally funded program that helps low-income households pay for heating or cooling in their homes. Many Californians struggling with higher energy costs and making ends meet may qualify. ​​LIHEAP can offer a one-time payment to help you:​​​ ​Pay your heating or cooling bills, even if you use wood, propane, or oil.​ In an emergency or energy crisis, such as a utility disconnection.​​ In addition to help with paying ​​your energy bill, LIHEAP can also provide in-home weatherization services for: ​Improved energy efficiency;​ and Health and safety.​​​​ ​​​Federal Funding Status California continues to receive federal funding for Low Income Home Energy Assistance Program ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.csd.ca.gov/energybills",
+      "source_url": "https://www.csd.ca.gov/energybills",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "bringing-families-home-program-ee933260c9",
+      "name": "Bringing Families Home Program",
+      "organization": "California Department of Social Services benefits",
+      "category": "rental_assistance",
+      "description": "Bringing Families Home Program The Bringing Families Home (BFH) Program was established in 2016 to reduce the number of families in the child welfare system experiencing, or at risk of homelessness, to increase family reunification and to prevent foster care placement. BFH offers financial assistance and housing-related wraparound supportive services, including but not limited to: rental assistance, housing navigation, case management, security deposits, utility payments, moving costs, interim shelter assistance, legal services, and credit repair. As of Fiscal Year (FY) 2022-23, there are 53 counties and 25 Tribes and tribal entities operating a BFH program, with each program tailored to meet the needs of the local community. More information about participating BFH grantees is available in CFL 22/23-43. Eligibility BFH targets families involved with the child welfare system who are expe",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Family must be involved with the child welfare system. Administered by each county; contact your county child welfare agency."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/bringing-families-home-program",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/bringing-families-home-program",
+      "phone": "(916) 651-5155",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "calfresh-6604f187c8",
+      "name": "CalFresh",
+      "organization": "California Department of Social Services benefits",
+      "category": "food",
+      "description": "CalFresh CalFresh, known federally as the Supplemental Nutrition Assistance Program or SNAP, provides monthly food benefits to individuals and families with low-income and provides economic benefits to communities. CalFresh is the largest food program in California and provides an essential hunger safety net. CalFresh is federally mandated and in California, is state-supervised and county-operated. CalFresh benefits can help buy nutritious foods for a better diet. CalFresh benefits stretch food budgets, allowing individuals and families to afford nutritious food, including more fruit, vegetables and other healthy foods. The amount of benefits a household receives is dependent on household size countable income, and monthly expenses, such as housing and utilities. The program issues monthly benefits on an Electronic Benefit Transfer (EBT) card. Food may be purchased at any grocery store o",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/calfresh",
+      "source_url": "https://www.cdss.ca.gov/inforesources/calfresh",
+      "phone": "1-877-847-3663",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "calfresh-outreach-4b56288b4e",
+      "name": "CalFresh Outreach",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "food",
+      "description": "How Do I? Get home delivered meals Find a nutrition or exercise class Digital Resources Apply for Medi-Cal Get help with Medicare Determine the best housing option for me Get help with my landlord Get legal assistance Make home modifications so that I can safely stay in my current home Get help dealing with memory problems Learn more about hearing, vision, and speech assistive technology Get transportation to appointments Learn more about safe senior driving Get paid to take care of a family member Open an Adult Day Care Center Report elder abuse or neglect Outside California Call 1-800-677-1116 Eldercare Locator For information on services for seniors or adults with disabilities who live outside California. State Health Insurance Assistance Programs (SHIP) For one-on-one insurance counseling and assistance to Medicare beneficiaries, their families, friends, and caregivers. Contact Infor",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/CalFresh_Outreach/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/CalFresh_Outreach/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "california-earned-income-tax-credit-0205287d8e",
+      "name": "California Earned Income Tax Credit",
+      "organization": "California Franchise Tax Board",
+      "category": "benefits",
+      "description": "Eligibility and credit information CalEITC Check if you qualify for CalEITC The amount of California Earned Income Tax Credit (CalEITC) you may receive depends on your income and family size. CalEITC may provide you with cash back or reduce any tax you owe. To qualify for CalEITC you must meet all of the following requirements during the tax year: You’re at least 18 years old or have a qualifying child Have earned income of at least $1 and not more than $32,900 Have a valid Social Security Number or Individual Taxpayer Identification Number (ITIN) for you, your spouse/RDP, and any qualifying children Live in California for more than half the filing year Not be eligible to be claimed as a qualifying child of another taxpayer Not be eligible to be claimed as a dependent of another taxpayer unless you have a qualifying child Married/registered domestic partner (RDP) filing separately filers",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "max_annual_income": 32900
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.ftb.ca.gov/file/personal/credits/caleitc/eligibility-and-credit-information.html",
+      "source_url": "https://www.ftb.ca.gov/file/personal/credits/caleitc/eligibility-and-credit-information.html",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "california-training-benefits-a8e94f7785",
+      "name": "California Training Benefits",
+      "organization": "California jobs, unemployment and disability benefits",
+      "category": "employment",
+      "description": "California Training Benefits (CTB) program allows you to attend school or training while receiving unemployment benefits. If you’re approved for CTB, you’ll need to keep certifying for unemployment benefits. But don’t worry—you do not have to be available for work, look for a job, or accept a job while you’re in school or training. How to Participate in the Program To join the CTB program, you need to have a current and valid unemployment benefits claim. Here are the other things you need to do: Step 1: Let us Know You’re Interested If you want to join the CTB program, contact us online, by phone, or in person at an America’s Job Center of California (AJCC) as soon as you can. Note: You must contact us before the sixteenth week of your benefit payments to qualify for a training extension. If you qualify, you can get extra weeks of benefits. Learn more at Qualify for a Training Extension.",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://edd.ca.gov/siteassets/files/pdf_pub_ctr/de3100t.pdf",
+      "source_url": "https://edd.ca.gov/en/unemployment/California_Training_Benefits/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "calworks-homeless-assistance-4d40222943",
+      "name": "CalWORKs Homeless Assistance",
+      "organization": "California Department of Social Services benefits",
+      "category": "shelter",
+      "description": "CalWORKs Homeless Assistance The CalWORKs Homeless Assistance (HA) Program was established to help families in the CalWORKs program meet the costs of securing or maintaining permanent housing or to provide emergency shelter when a family is experiencing homelessness. CalWORKs HA program serves eligible CalWORKs recipients or apparently eligible CalWORKs applicants, who are homeless or at risk of homelessness. CalWORKs HA can provide payments for temporary shelter for up to 16 days, once every 12 months with exceptions, as well as payments to secure or maintain housing, including a security deposit and last month’s rent, or up to two months of rent arrearages. For more information about the program, see the Homeless Assistance (HA) Fact Sheet. Types of Homeless Assistance Temporary HA, which helps families pay the costs of temporary shelter. 16 days of temporary shelter with exceptions, i",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "For CalWORKs recipients or apparently eligible applicants. Temporary shelter payments for up to 16 days once every 12 months, plus help with a security deposit or last month's rent."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/calworks-homeless-assistance",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/calworks-homeless-assistance",
+      "phone": "(916) 651-5155",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "calworks-housing-support-program-90723f9adf",
+      "name": "CalWORKs Housing Support Program",
+      "organization": "California Department of Social Services benefits",
+      "category": "rental_assistance",
+      "description": "CalWORKs Housing Support Program The CalWORKs Housing Support Program (HSP) was established in 2014 to foster housing stability for families experiencing, or at risk of, homelessness in the CalWORKs program. HSP offers housing-related financial assistance – such as rental assistance, security deposits, utility payments, moving costs, and hotel/motel vouchers – alongside wraparound supportive services, which may include housing navigation, case management, referrals for legal services, and credit repair. As of Fiscal Year (FY) 2024-25, fifty-six (56) counties operate HSP and each program is tailored to meet the needs of the local community. More information about participating HSP grantees is available in County Fiscal Letter (CFL) 24/25-11. Eligibility/For Whom HSP assists families in the CalWORKs program that are experiencing homelessness or are at risk of homelessness, including famili",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Must be a family receiving CalWORKs. Apply through your county welfare office; counties prioritize families who are currently homeless."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/calworks-housing-support-program",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/calworks-housing-support-program",
+      "phone": "(916) 651-5155",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "cfap-c30103d9cd",
+      "name": "CFAP",
+      "organization": "California Department of Social Services benefits",
+      "category": "food",
+      "description": "CDSS Programs CalFresh CFAP California Food Assistance Program What Is CFAP Who is Eligible How to Apply CFAP Expansion CFAP Outreach Other Resources Partners CFAP News: Want to know more about CFAP? Sign up for our newsletter by emailing us at CFAP@dss.ca.gov! We’ll send you updates about the program, so you don’t miss out. Contact Us CalFresh Benefits Helpline 1-877-847-3663 Other Contact Numbers If you would like to receive CFAP expansion implementation updates, newsletters, or for program questions, please contact the California Food Assistance Program at: Email: CFAP@dss.ca.gov Quick Links All County Information Notices All County Letters CalFresh Outreach CalFresh Resource Center County Contact Numbers Eligibility and Issuance Requirements Nondiscrimination Statement Food and Nutrition Service Forms and Brochures Program Information USDA Regulations and Policy Guidance Women, Infan",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/calfresh/california-food-assistance-program",
+      "source_url": "https://www.cdss.ca.gov/inforesources/calfresh/california-food-assistance-program",
+      "phone": "1-877-847-3663",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "cfap-expansion-2b7735383d",
+      "name": "CFAP Expansion",
+      "organization": "California Department of Social Services benefits",
+      "category": "food",
+      "description": "CFAP Expansion New CFAP Eligibility Requirements Assembly Bill 135, the Fiscal Year (FY) 2021-2022 Human Services Omnibus Trailer Bill, initiated the expansion of CFAP to additional noncitizens who are excluded from CalFresh based solely on their immigration status. In 2022, the Governor and the Legislature passed a budget that included funding to expand CFAP to all Californians, age 55 years or older, who are income-eligible, regardless of their immigration status (Assembly Bill 178, Budget Act of 2022). Additionally, Senate Bill 187, (2022), does not require CFAP applicants to provide a social security number, if they do not have one, or comply with CalFresh work requirements once the expansion is implemented. Important! This benefit is not available yet. To prepare for the implementation of this expansion, CDSS, County Welfare Departments (CWDs), County Welfare Directors Association o",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/CalFresh/Contacts",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/calfresh/cfap/cfap-expansion",
+      "phone": "1-877-847-3663",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "children-and-family-services-3a43cfba6d",
+      "name": "Children and Family Services",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "family_support",
+      "description": "Healthy, thriving children, youth and families. Adoptions and Foster: Open your hearts and homes to a child We protect the welfare of children; improve the lifelong stability of children and youth; and improve the health and strength of families. We help families understand and solve the issues that lead to child neglect, abuse or exploitation. In those cases when a child must be removed from the home for safety reasons, we help families resolve their issues as soon as possible so that the child can be returned to a safe and loving home. When a child cannot be reunited with the biological family, we help identify a suitable adoptive home or other safe and permanent living arrangement. If you need help, contact us today. We are here to help you. Child Abuse Hotline: 650-595-7922 or 1-800-632-4615 San Mateo County 24-hour Parental Stress Warmline: 1-888-220-7575 Leave Your Baby in Safe Arm",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/children-and-family-services",
+      "source_url": "https://www.smcgov.org/hsa/children-and-family-services",
+      "phone": "650-595-7922",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "community-living-services-ca-department-of-rehabilitation-adb15ebced",
+      "name": "Community Living Services - CA Department of Rehabilitation",
+      "organization": "California rehabilitation, independent living and assistive technology",
+      "category": "disability",
+      "description": "Community Living Services DOR's Community Living Services network is dedicated to the idea that communities become fully accessible and integrated to all persons with disabilities so they can live, shop, and play where they choose. Our Community Living Services network serves California’s people, businesses and public entities by providing education, advocacy and partnerships that transform the lives of people with disabilities in a variety of ways. Which Community Living Services are you looking for: Assistive Technology Disability Access Services Independent Living Traumatic Brain Injury",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://dor.ca.gov/Home/CommunityLivingServices",
+      "source_url": "https://dor.ca.gov/Home/CommunityLivingServices",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "community-based-adult-services-medicare-services-1d12b4426c",
+      "name": "Community-Based Adult Services - Medicare Services",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "CBAS (Community-Based Adult Services) is a community-based day health program that provides services to older adults and adults with chronic medical, cognitive, or behavioral health conditions and/or disabilities that make them at risk of needing institutional care. The CBAS Program is an alternative to institutional care for Medi-Cal beneficiaries who can live at home with the aid of appropriate health, rehabilitative, personal care, and social services. The Program stresses partnership with the participant, the family and/or caregiver, the primary care physician, and the community in working toward maintaining personal independence. Each CBAS center has health professionals who assess each potential participant to identify and plan services needed to meet the individual's specific health and social needs. Services provided at the center include: Professional nursing services Physical, ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Medicare_Counseling/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "connectivity-resources-ceef2aeacf",
+      "name": "Connectivity Resources",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Connectivity Resources Older Adults benefit from two types of connectivity for home and community-based services: Broadband via Wi-Fi: Internet connection provided through router at a physical location such as a home, community center or place of business. Broadband via 5G: Internet connection provided through a cell tower by a specific cellular provider that generally allows for better mobility in a community as long the cellular provider services the associated area. Resources Free or low-cost resources. Some resources may limit or have special conditions for those who qualify (ex: only for low-income, limited by geographic area, requires a subscription, etc.) CDA Digital Connections Program, Home and community-based programs to help bridge the digital divide for older adults including purchasing digital devices, service plans, and training. Contact your local AAA, CBAS, MSSP, or PACE ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/Connectivity_Resources/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/Connectivity_Resources/",
+      "phone": "1-800-510-2020",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "conservatorships-2f25af795a",
+      "name": "Conservatorships",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Conservatorships | Legal and social service resources PRINT EMAIL TEXT Legal help and resources Court Self-Help Centers Each court has a Self-Help Center that offers free legal information. Some offer help with conservatorships. If they don't they may know local programs that do. Find out from your local court what type of services they offer. LawHelpCA Offers a lookup tool to help find legal aid offices, lawyer referral services, and other free and low-cost services in your county. County Law Library Law librarians offer legal resources for people who don't have a lawyer. Many libraries offer free self-help programs. You can also ask a law library a question in Live Chat. Lawyer Referral Service Directory of lawyer referral services throughout California Government services Department of Developmental Services Oversees the coordination and deliver of services to California living with d",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Must be an Adult Protective Services client or in APS intake."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/conservatorships-legal-and-social-service-resources",
+      "source_url": "https://selfhelp.courts.ca.gov/conservatorships-legal-and-social-service-resources",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "county-of-san-mateo-veteran-service-providers-contacts-19ddacf2c5",
+      "name": "County of San Mateo Veteran Service Providers Contacts",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "veteran_support",
+      "description": "Veteran Service Provider Data Base County Veteran Service Providers Address Book 07.28.2026 .pdf Join the Network Are you an organization or service provider that supports veterans and their families? Join our network database and be notified of community events and become more visible to our community veterans. Fill out the form and email is to: aayag@smcgov.org CVSO Community Network Form",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "requires_veteran": true
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/county-san-mateo-veteran-service-providers-contacts",
+      "source_url": "https://www.smcgov.org/hsa/county-san-mateo-veteran-service-providers-contacts",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "court-based-self-help-services-c83658241a",
+      "name": "Court-based self-help services",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Court-based self-help services Every superior court in California has free legal help available in family law and in small claims cases. Several superior courts can also help you with other legal issues, but it varies between courts. PRINT EMAIL TEXT Help from your court Self-help programs are free. Anyone who does not have their own lawyer can get help from these programs. It does not matter how much money you make. Any lawyer you speak with is not your lawyer. They work for the court. What you say to the lawyers or staff is not confidential. There is no attorney-client privilege. Both sides of a case can use these programs. Court-based programs Self-Help Center All courts in California have a Self-Help Center that can provide free legal help to people who do not have a lawyer. Self-Help Center staff can: Tell you about your case Help you with the forms you need Explain your legal optio",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/court-based-self-help-services",
+      "source_url": "https://selfhelp.courts.ca.gov/court-based-self-help-services",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "covid-19-mental-health-san-mateo-county-health-53ad7adf02",
+      "name": "covid-19-mental health - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "mental_health",
+      "description": "covid-19-mental health Overview July 24, 2020 COVID-19 Mental Health Resources The coronavirus (COVID-19) pandemic is changing everyday life for us all. For many, this means adapting to unexpected changes in our daily routines, such as school, work, social or family life, and for others, it can be even more challenging when it involves having to let go of an important event, dealing with financial pressures or facing the loss of a loved one. Adjusting to these new realities and the uncertainties of the future, can bring about strong emotions in both adults and children that can feel overwhelming at times. Nearly half of adults today in the United States, are experiencing increased distress. Taking care of your mental health – as well your physical health – is an important aspect in maintaining your overall health and wellbeing. Read more Post July 24, 2020 Look After Your Mental Health T",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/covid-19-mental-health",
+      "source_url": "https://www.smchealth.org/covid-19-mental-health",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "das-ca-department-of-rehabilitation-c818ed8050",
+      "name": "DAS - CA Department of Rehabilitation",
+      "organization": "California rehabilitation, independent living and assistive technology",
+      "category": "disability",
+      "description": "Disability Access Services The Department of Rehabilitation (DOR) was designated by the Office of the Governor to serve as the lead state agency in California's efforts to implement the Americans with Disabilities Act (ADA) in state government and established Disability Access Services (DAS) in 1992 to promote disability rights in state government and DOR partnerships in the community. Serves as a resource on accessibility. Provides public information, training, consultation, and technical assistance to remove employment barriers for people with disabilities. Guides public organizations to meet the accessibility requirements of people with disabilities. Provides physical, digital, and communication accessibility expertise. Resources Accessible Hybrid Meetings Job Accommodation Network (JAN) Disability Laws and Regulations Emergency Services Employer Assistance and Resource Network (EARN)",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dor.ca.gov/Home/DAS",
+      "source_url": "https://www.dor.ca.gov/Home/DAS",
+      "phone": "1-916-558-5755",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "digital-inclusion-730bdf3a23",
+      "name": "Digital Inclusion",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Digital Inclusion Impact on Older Adults is life changing. A participant with disabilities is unable to drive and has not seen his wife in over a year as she was institutionalized with severe dementia 45 minutes away. Thanks to his Multipurpose Supportive Services Program’s participation in Digital Inclusion, his new iPad will bridge the gap and he will be able to finally reconnect with her. He can also use this technology to attend appointments and research his interests. How To Find Services In My Area The California Department of Aging contracts with and oversees the local Area Agencies on Aging (AAA) and other CDA programs and partners that coordinate a variety of technology devices and services. You can locate the AAA in your area by selecting your county on the Find Services in My County Page of this website. What Resources Are Available Device Resources Acquire a technology device",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/",
+      "phone": "1-800-510-2020",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "dignity-at-home-fall-prevention-program-consumer-940ceed641",
+      "name": "Dignity At Home Fall Prevention Program - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "The mission of the Dignity At Home Fall Prevention Program is to reduce the number of debilitating falls suffered by older adults and persons with disabilities. Each year, millions of older adults fall, about one out of four. Research has shown that one out of five falls result in serious injury such as a broken bone, a head injury or even death. In addition, medical costs for falls cost more than 50 billion dollars each year. Research shows that many falls are preventable. There are a number of risk factors that contribute to falling such as lower body weakness, poor vision, medications, foot pain and environmental trip hazards. Services are either provided by the local Area Agency on Aging (AAA) or through contracted service providers. Services may include: Fall prevention information and education Referrals and provision of fall and injury prevention resources In-home environmental as",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Dignity_At_Home_Fall_Prevention_Program/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Dignity_At_Home_Fall_Prevention_Program/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "disability-insurance-benefits-af2a3ac97e",
+      "name": "Disability Insurance Benefits",
+      "organization": "California jobs, unemployment and disability benefits",
+      "category": "disability",
+      "description": "Disability Insurance Benefits The support you need, when you need it most. Español Mailing something to EDD? USPS now postmarks mail when it’s processed, not when it’s dropped off. To avoid delays, mail early or use myEDD whenever possible. Submitting online is the fastest and most secure way to send documents to us. Disability benefits provide short-term wage replacement to people who need to take time off work due to illness or injury, pregnancy, childbirth, surgery, or alcohol or drug rehabilitation. You can apply now if you have your information ready. Apply Now Otherwise, go to Step 1 and get your information in order. What are Disability Benefits? Disability provides short-term benefit payments when you can’t work and lose wages due to a non-work-related: Illness or injury (either physical or mental) Pregnancy, childbirth, or other related conditions Surgery (including elective) Al",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://edd.ca.gov/en/disability/disability_insurance/",
+      "source_url": "https://edd.ca.gov/en/disability/disability_insurance/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "division-behavioral-health-and-recovery-services-san-mateo-county-health-7e2c8ed765",
+      "name": "Division: Behavioral Health and Recovery Services - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "substance_use",
+      "description": "Division: Behavioral Health and Recovery Services Overview June 3, 2025 Behavioral Health and Recovery Services San Mateo County Behavioral Health and Recovery Services (BHRS) provides services for residents who are on Medi-Cal or are uninsured including children, youth, families, adults and older adults, for the prevention, early intervention and treatment of mental illness and/or substance use conditions. We are committed to supporting treatment of the whole person to achieve wellness and recovery, and promoting the physical and behavioral health of individuals, families and communities we serve. We strive to provide Integrated and culturally sensitive services by mental health clinicians, psychiatrists, alcohol and drug counselors, peers, family partners and other professionals through county clinics, community agencies and a private provider network. We offer outpatient, inpatient, r",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/bhrs",
+      "source_url": "https://www.smchealth.org/bhrs",
+      "phone": "(800) 686-0101",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "dmv-for-veterans-3fcd83b181",
+      "name": "DMV for Veterans",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "veteran_support",
+      "description": "Veteran Designation on California Driver's License To get a \"Veteran\" designation on your California driver's license, a veteran must follow these steps: Obtain a Veteran Status Verification Form (VSD-001): Visit a County Veteran Service Office (CVSO), such as the San Mateo County Veterans Services Office, or a California Department of Veterans Affairs (CalVet) office to obtain this form. Bring your military discharge papers (DD-214) showing a discharge rating of at least General Discharge. Verification of Veteran Status: The CVSO will verify your veteran status and sign the VSD-001 form. Submit the Form to the DMV: Once you have the signed VSD-001 form, take it to your local Department of Motor Vehicles (DMV) office. Complete the standard driver's license or identification card application process. Pay the applicable fee (there may be a small additional fee for adding the veteran design",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/dmv-veterans",
+      "source_url": "https://www.smcgov.org/hsa/dmv-veterans",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "education-programs-sacred-heart-community-service-dace442723",
+      "name": "Education Programs — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "family_support",
+      "description": "Education Preschoolers & Early Childhood Education Parents with young children 1-3 years old meet with volunteers four days per week for nine months to improve English skills, improve parenting skills, and provide a mutual support environment for each other’s families. Simultaneously, our children attend pre-kinder classes in the classroom next door to prepare them for emotional and developmental success in the American public school system. By the time families graduate from the program, our children are prepared for kindergarten, have increased reading at home, and we have helped our children identify good and bad touch. Parents are invited to be trained as Promotoras to support future participants in the coming year. For more information, please call (408) 278-2193 or email us. Email us Parenting Support Mothers within this mutual support program serve each other as leaders in a commu",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.sacredheartcs.org/programs-education",
+      "source_url": "https://www.sacredheartcs.org/programs-education",
+      "phone": "(408) 278-2193",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "employment-services-for-people-with-disabilities-e18487f896",
+      "name": "Employment Services for People with Disabilities",
+      "organization": "California jobs, unemployment and disability benefits",
+      "category": "disability",
+      "description": "Employment Services for People with Disabilities Español We help people with disabilities get jobs. Through the America’s Job Center of CaliforniaSM (AJCC), we make sure everyone can use our services. What We Offer: If you need extra help to find a job, we provide: Job openings and training information. Career coaching. Workshops and job search help. Testing to assess job skills. Connections to community support services. Job and Training Resources: We have many no-cost resources, including: Toolbox for Job Seekers: A list of job and training options. Youth Leadership Forum: A program for high school juniors and seniors with disabilities to build leadership skills and prepare for jobs. Deaf and Hard of Hearing (DHH) Program: DHH Workforce Services locations and the AJCC help people who are deaf or hard of hearing find jobs and provides support. For More Information California Committee o",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://edd.ca.gov/en/jobs_and_training/Services_for_People_with_Disabilities/",
+      "source_url": "https://edd.ca.gov/en/jobs_and_training/Services_for_People_with_Disabilities/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "energy-service-sacred-heart-community-service-27b8f6a4a7",
+      "name": "Energy Service — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "utility",
+      "description": "Sacred Heart Energy Service Sacred Heart offers income-eligible Santa Clara County households with two energy assistance programs to help you stay warm in the winter and cool in the summer: The Home Energy Assistance Program (HEAP) is a non-emergency federally-funded program that assists low-income households with paying home energy bills once a year. CARE (California Alternate Rate for Energy) is a PG&E discount rate program that helps eligible customers with their energy bills. Please contact 1-877-278-6455 or email us at heap@sacredheartcs.org if you have any questions. Request Application By Mail Energy Service Information HEAP Application Forms All applications are in PDF format. Please see the attached instructions for additional information and requirements. HEAP Application in English HEAP Application in Spanish HEAP Application in Vietnamese HEAP Application in Chinese HEAP Appl",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page. Must be a resident of Santa Clara County."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.sacredheartcs.org/energy-service",
+      "source_url": "https://www.sacredheartcs.org/energy-service",
+      "phone": "1-877-278-6455",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "family-caregiver-services-consumer-69380bcfaa",
+      "name": "Family Caregiver Services - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "family_support",
+      "description": "Are you providing care for an elderly relative? Are you balancing the needs of your parent and your children? Then you know how stressful it can be. The demands on your time, energy, health, and finances may be significantly increased. Often, this puts a strain on your other relationships—marriage, family, and career. Fortunately, senior caregiving options are available that can help lighten your load and make it easier for you to provide the best possible care for your loved ones. The Family Caregiver Services program addresses the unique needs of family members who provide care to a relative. The available services include: Arranging for respite care, temporary in-home or out-of-home relief, so that you can have time to yourself to attend to other responsibilities or just to rejuvenate and recharge Providing training to you and other family members who are responsible for frail, older ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Family_Caregiver_Services/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Family_Caregiver_Services/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "finding-a-job-sacred-heart-community-service-9f9016055e",
+      "name": "Finding a Job — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "employment",
+      "description": "Employment Services Employment Services Program Employment Services Program provides employment assistance and financial coaching to connect job seekers to mutual support networks, skills development, and resources to achieve (and maintain) long-term employment. We can help with resumes, preparing for interviews, finding employment opportunities, and more. A new-member orientation is required to review the multitude of resources available at your fingertips upon joining the network. El Programa de Servicios de Empleo ofrece asistencia laboral y asesoría financiera para conectar a las personas que buscan trabajo con redes de apoyo mutuo, desarrollo de habilidades y recursos para lograr (y mantener) un empleo a largo plazo. Podemos ayudar con la elaboración de currículums, la preparación para entrevistas, la búsqueda de oportunidades laborales y más. Se requiere una orientación para nuevos",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.sacredheartcs.org/programs-finding-a-job",
+      "source_url": "https://www.sacredheartcs.org/programs-finding-a-job",
+      "phone": "(408) 278-2172",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "food-assistance-8284381cab",
+      "name": "Food Assistance",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "food",
+      "description": "About CalFresh CalFresh provides nutrition assistance to people with low income. It can help buy nutritious foods for a better diet. If approved, a monthly dollar amount is placed on a debit-like card to help you add to your monthly food budget. Learn More CalFresh Fact Sheet CalFresh Fact Sheet 08.2026 CalFresh Fact Sheet 08.2026 - español C-335 Standards of Assistance Chart 9.2026 Learn More Apply For CalFresh Already Have CalFresh? Food Resources Restaurant Meals Program Mobile Office Community Resources Minimum Requirements to Apply for CalFresh Public Service Announcement Videos Notice to All CalFresh Recipients College Students San Mateo County CalFresh College Student FAQs.pdf San Mateo County College Student FAQs for LPIE .pdf CalFresh Reporting Reminders CF Reporting Reminders 2026 English & Spanish.pdf Replace CalFresh lost or damaged food If food that you bought with CalFresh ",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/apply-calfresh",
+      "source_url": "https://www.smcgov.org/hsa/food-assistance",
+      "phone": "1 800-223-8383",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "food-services-samaritan-house-e19bba4058",
+      "name": "Food Services - Samaritan House",
+      "organization": "Samaritan House food, housing, health and financial assistance",
+      "category": "food",
+      "description": "OUR SERVICES Food Services Have you been affected by the government shutdown or SNAP disruptions? We’re here to help. Were you affected by the recent government shutdown or SNAP disruptions? We’re here to help. Please reach out to our Samaritan House team at (650) 347-3648. Samaritan House is the largest truck-to-table food distributor in San Mateo County. In FY2025, our food pantries alone saved over 7,000 families an average of nearly $3,000, each. Our kitchen, pantry, and dining services fill a gap between the need for food and the ability to obtain the meals and groceries needed to thrive. More than 13,000 households relied on Samaritan House this year for the food they need. If you need help, please call our Samaritan House team at (650) 347-3648 to get help. Meals are supplied during the week through the Dining Room in the City of San Mateo, our Pantry, and our Mobile Meals program",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://samaritanhousesanmateo.org/service/food-services/",
+      "source_url": "https://samaritanhousesanmateo.org/service/food-services/",
+      "phone": "+16503414081",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "from-service-to-success-e731b28e27",
+      "name": "From Service to Success",
+      "organization": "California jobs, unemployment and disability benefits",
+      "category": "veteran_support",
+      "description": "From Service to Success Español We honor all military veterans for their service. Veterans gain valuable skills and experience in the military, and we're here to help them make the most of those skills. We offer resources, training, and support to help veterans transition to civilian careers. Veterans, service members, and spouses get priority for jobs and services. Learn how we help veterans reach their career goals. Job Seekers Priority of Service Get priority for job referrals and training. Receive extra support if you have a disability. Learn more about Veterans Employment Services (PDF) Veterans Service Navigator Use a Veterans Service Navigator to check your eligibility for services. Access job help through self-service, group sessions, or one-on-one support. Learn more about Veterans Employment Services (PDF) Dedicated Specialists Work with the Disabled Veteran Outreach Program an",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://edd.ca.gov/en/jobs_and_training/services_for_veterans/",
+      "source_url": "https://edd.ca.gov/en/jobs_and_training/services_for_veterans/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "get-free-or-low-cost-legal-help-78de83c3ab",
+      "name": "Get free or low-cost legal help",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "get free or low-cost legal help in non-criminal cases from a legal services program. This will depend on your income and type of legal problem. Use LawHelpCalifornia.org to find legal aid offices in your area and find out what areas of law they cover. Public interest organizations Non-profit public interest organizations, like groups concerned with civil liberties or housing discrimination, may be able to help you. These groups sometimes have staff lawyers who might be able to handle your case. Others provide legal help only to groups of people rather than to individuals. Use LawHelpCa.org to find nonprofit groups in your area. Government agencies There are several government agencies that can offer legal help. For example: The Department of Child Support Services can get or enforce a child support order. If you look up information on this website by legal topic, you will find informatio",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/get-free-or-low-cost-legal-help",
+      "source_url": "https://selfhelp.courts.ca.gov/get-free-or-low-cost-legal-help",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "get-help-with-food-housing-and-basic-needs-7640694390",
+      "name": "Get Help with Food, Housing, and Basic Needs",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "rental_assistance",
+      "description": "Core Service Agencies across the County of San Mateo can help you access food, housing assistance, crisis support, and other key resources. We can help with: Food and groceries Emergency housing and shelter Utility bill assistance Referrals to additional services Video en español Start here: Contact a Core Service Agency If you are experiencing homelessness or are at risk of losing housing, your local agency can help. Find your area below and contact them to get started. Core Service Agency Address Phone Number Hours of Operation Areas Served Coastside Hope 248 Main St., Suite 200, Half Moon Bay, CA 94019 (650) 726-9071 Monday, Tuesday, Thursday, and Friday: 8:30 AM – 12 PM and 1 PM – 5 PM Wednesday: 1 PM – 5 PM El Granada, Half Moon Bay, Montara, Moss Beach Daly City Partnership 350 - 90th St., Daly City (650) 301-3300 Monday through Friday: 9 AM – 5 PM Broadmoor, Colma, Daly City Fair ",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Contact the Core Service Agency for your city: Samaritan House (650) 347-3648 for Belmont, Burlingame, Foster City, Hillsborough, Millbrae, San Carlos, San Mateo; Samaritan House South (650) 294-4312 for East Palo Alto and Menlo Park; Fair Oaks Community Center (650) 780-7500 for Redwood City, Atherton, North Fair Oaks, Portola Valley, Woodside; Daly City Partnership (650) 301-3300 for Daly City, Colma, Broadmoor; YMCA Community Resource Center (650) 271-3850 for South San Francisco, Brisbane, San Bruno; Pacifica Resource Center (650) 738-7470; Coastside Hope (650) 726-9071 for Half Moon Bay and the coast; Puente (650) 879-1691 for Pescadero and the south coast."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/core-service-agencies-emergency-safety-net-assistance",
+      "source_url": "https://www.smcgov.org/hsa/core-service-agencies-emergency-safety-net-assistance",
+      "phone": "(650) 726-9071",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "health-dental-samaritan-house-6388b937a4",
+      "name": "Health & Dental - Samaritan House",
+      "organization": "Samaritan House food, housing, health and financial assistance",
+      "category": "health",
+      "description": "OUR SERVICES Health & Dental An innovative volunteer-based model of service supports our free clinics. Samaritan House’s two highly respected free clinics provide a medical home to low-income and uninsured individuals residing in San Mateo County. This enables them to access the health care they need without accumulating the disabling debt often associated with healthcare expenses. The clinics offer comprehensive, integrated services, including primary and specialty medical, dental, vision, and mental health care. We take a holistic, person-centered approach to healthcare. A patient starts by meeting with either a Case Manager or Clinic Manager to assess social, financial, housing, and other needs. Our team of physicians, dentists, and staff then helps patients get the care they need. Who is Treated? Patients of our clinics are residents in the neighborhood. They are typically employed a",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://samaritanhousesanmateo.org/service/health-dental/",
+      "source_url": "https://samaritanhousesanmateo.org/service/health-dental/",
+      "phone": "+16505780400",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "health-care-services-san-mateo-county-health-7442177252",
+      "name": "Health Care Services - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "health",
+      "description": "Health Care Services Overview May 24, 2016 Health Care Services Read more General Health Overview February 10, 2016 General Health Where to get health care and how to get and stay healthy. Read more More Health Coverage Overview February 4, 2016 Health Coverage We Can Help You Get Covered San Mateo County Health’s Health Coverage Unit (HCU) helps residents get access to health care. Our enrollment counselors guide you through the process, explain your options and help you apply. This service is free. Call us at 650-616-2002 or email info-hcu@smcgov.org. One call connects you to the program that best fits your needs. Make an appointment for a free health coverage screening, even if you think you won’t qualify or already have private insurance that’s not from a job. Who Qualifies Eligibility for health coverage depends on: Income – Programs have income limits based on the Federal Poverty L",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/health-care-services",
+      "source_url": "https://www.smchealth.org/health-care-services",
+      "phone": "650-616-2002",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "home-community-services-consumer-dc02aa6b3d",
+      "name": "Home & Community Services - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Home & Community Services enables older adults to access services that support healthy living and promote independence. Together, these services promote older adults’ ability to maintain the highest possible levels of function, participation, and dignity in the community. A variety of services are available and vary by area. Services are either provided directly by AAA or partnerships with service providers. Services may include: Caregiver assistance and help at home Adult Day Health Care/Adult Day Care/Respite care Assisted transportation Transportation Legal assistance Telephone support Care management Information and Assistance Who Can Get These Services Persons 60 years of age or older regardless of income level Program Data For past and current program data visit the Data and Reports sections of the website.",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Home_and_Community_Services/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Home_and_Community_Services/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "home-safe-program-9425afb8ef",
+      "name": "Home Safe Program",
+      "organization": "California Department of Social Services benefits",
+      "category": "rental_assistance",
+      "description": "Home Safe Program The Home Safe Program was established in 2018 to prevent or address homelessness to support the safety and housing stability of individuals involved in Adult Protective Services (APS), individuals in the APS intake process, or who may be served by a Tribal social services agency and who are experiencing or at risk of homelessness. Home Safe offers a range of strategies to address and prevent homelessness and support ongoing housing stability for APS clients, including housing-related intensive case management, housing-related financial assistance, deep cleaning to maintain safe housing, eviction prevention, landlord mediation, and more. Fifty-eight (58) counties operate a Home Safe program, and each program is tailored to meet the needs of the local community. Twenty-three tribal grantees operate a Home Safe program. For more information about county funding, refer to C",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Must be an Adult Protective Services client or in APS intake (older adults or dependent adults experiencing abuse, neglect, or financial exploitation). Administered by each county APS office."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/home-safe-program",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/home-safe-program",
+      "phone": "(916) 651-5155",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "housing-shelter-samaritan-house-35b75232b5",
+      "name": "Housing & Shelter - Samaritan House",
+      "organization": "Samaritan House food, housing, health and financial assistance",
+      "category": "rental_assistance",
+      "description": "OUR SERVICES Housing & Shelter Housing assistance, emergency rent / utility assistance and eviction avoidance Homelessness Prevention Samaritan House helps families avoid homelessness with emergency rent and assistance with utility bills. Rental assistance continues to be one of the most important and common needs of our clients as it allows families to avoid eviction and remain in their homes. This is one of the least costly and most effective services we provide to meet the housing need of our clients. Housing Placement and Stabilization Case managers work with clients to explore what contributed to their housing instability and address those issues. They provide support with housing applications, qualification for housing programs, and work closely with landlords to create more housing opportunities for our clients. Coordinated Entry System (CES) Samaritan House administers San Mateo ",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "San Mateo County residents. Emergency rent and utility help, eviction avoidance, and three shelters (Safe Harbor in South San Francisco, Pacific Emergency in Redwood City, El Camino House in San Mateo). Call (650) 347-3648 or apply online at apply.samaritanhousesanmateo.org."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://samaritanhousesanmateo.org/service/housing-services/",
+      "source_url": "https://samaritanhousesanmateo.org/service/housing-services/",
+      "phone": "(650) 347-3648",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "housing-and-disability-advocacy-program-cbecae5deb",
+      "name": "Housing and Disability Advocacy Program",
+      "organization": "California Department of Social Services benefits",
+      "category": "disability",
+      "description": "Housing and Disability Advocacy Program The Housing and Disability Advocacy Program (HDAP) was established in 2016 to assist people experiencing or at risk of homelessness who are likely eligible for disability benefits by providing advocacy for disability benefits as well as housing supports. HDAP has four core requirements: outreach, case management, disability benefits advocacy, and housing assistance. Housing-related financial assistance and wraparound supportive services provided by HDAP include but are not limited to: interim shelter assistance, rental assistance, housing navigation, case management, security deposits, utility payments, moving costs, legal services, and credit repair. As of Fiscal Year (FY) 2023-24, fifty-six (56) counties and 17 tribal agencies participating in HDAP and each program is tailored to meet the needs of the local community. More information about parti",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ]
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/housing-and-disability-advocacy-program",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/housing-and-disability-advocacy-program",
+      "phone": "(916) 651-5155",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "housing-assistance-sacred-heart-community-service-8816984a82",
+      "name": "Housing Assistance — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "rental_assistance",
+      "description": "Rental Assistance More Info Deposit Assistance More Info Frequently Asked Questions (FAQ) More Info Program Information Sacred Heart Community Service has funding for low-income, Santa Clara County residents who need emergency financial assistance. We assist with: Past-due rent Emergency security deposit Mortgage Other financial assistance tied to housing stability One must be a resident of Santa Clara County for at least thirty days before applying. All financial assistance goes directly to the landlord, not to the member applying. SHCS serves the following zip codes for Housing Assistance: 95008, 95110, 95111, 95112 (South of Santa Clara Street), 95113, 95116, 95117, 95118, 95120, 95123, 95124, 95125, 95126, 95128, 95136 note: Assistance from the HPS program is NOT restricted to these zip codes If you do not see your zip code listed, CLICK HERE to find the agency that serves your zip c",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Low-income Santa Clara County residents who have lived in the county at least 30 days. Covers past-due rent, emergency security deposits, and mortgage help. Payment goes directly to the landlord. Limited to the ZIP codes listed on the page."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.sacredheartcs.org/housing-assistance",
+      "source_url": "https://www.sacredheartcs.org/housing-assistance",
+      "phone": "(408) 709-2364",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "immigration-resources-legal-help-9cbca1e816",
+      "name": "Immigration resources: Legal help",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Immigration resources: Legal help PRINT EMAIL TEXT Hire a lawyer or get free legal help Before you start Immigration law is very complex. You can hire a licensed lawyer or accredited representative to help with an immigration case. Use these sites to find out if a lawyer is licensed in the state of California or if an immigration representative is accredited: State Bar attorney search Find an immigration lawyer The resource listed below, provided by the California State Bar, can help you find an immigration lawyer. You can also look for others online or ask organizations you trust in your area for help. The California courts do not provide referrals to specific lawyers or recommend or endorse any of the organizations listed. Information about Lawyer Referral Services | California State Bar Free and low-cost legal help Help for low-income immigrants | ImmigrationLawHelp Pro Bono (No-cost)",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/immigration/legal-resources",
+      "source_url": "https://selfhelp.courts.ca.gov/immigration/legal-resources",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "impact-on-older-adults-cf382039ed",
+      "name": "Impact on Older Adults",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Impact on Older Adults Older and other at-risk adults are staying home to save lives during the COVID-19 pandemic. Technology has become an increasingly important tool for us to stay connected to each other and to the goods, services, and supports we need to stay healthy and thrive. What is the Digital Divide? Success Stories of Digital Inclusion A Wonderful Gift of Communication Zhennan C. says receiving an iPad was unexpected, but it is \"a wonderful gift of communication.\" Zhennan can access the internet, read books, watch videos, and stay connected with family and friends – all in his native Chinese. \"I am already using it to help me communicate more with my social worker in English and make things easier,\" he adds. He said the iPad has made a significant impact on his life and he is very grateful for the program’s generosity and kindness. No Matter What Language, the iPad Program is ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/Impact_Older_Adults/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Digital_Inclusion/Impact_Older_Adults/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "individuals-families-ca-department-of-developmental-services-3bda8e5926",
+      "name": "Individuals & Families : CA Department of Developmental Services",
+      "organization": "California developmental disability and family support",
+      "category": "disability",
+      "description": "Individuals & Families The Department supports over 450,000 individuals who have intellectual and developmental disabilities including cerebral palsy, intellectual disability, autism, epilepsy and related conditions. The programs and resources here are designed to support individuals who have developmental disabilities and help support the families, advocates and professionals who help them achieve their goals. Family Fee Programs Regional Center Eligibility & Services Regional Center Lookup Self-Determination Program (SDP) Emergency Preparedness Lanterman Act Lived Experience Advisory Group (LEAG) Consumer-Friendly Publications Information & Resources Competitive Integrated Employment (CIE) Individual Program Planning (IPP) Information Packet for Consumers & Families DDS Wellness Toolkit Consumer Rights, Appeal & Complaints Lanterman Ombudsperson Office of the Ombudsperson California Ac",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dds.ca.gov/individuals-and-families/",
+      "source_url": "https://www.dds.ca.gov/individuals-and-families/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "legal-services-consumer-d4f7dcfa92",
+      "name": "Legal Services - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "legal",
+      "description": "Legal Services are available to assist older adults and adults with disabilities with a variety of legal problems concerning housing, consumer fraud, elder abuse, Social Security, Supplemental Security Income (SSI), Medicare, Medi-Cal, age discrimination, pensions, nursing homes, protective services, conservatorships, and other matters. California Bar Foundation - Legal Issues & Resources for Seniors This Guide provides California specific answers to frequently asked questions related to financial, housing, employment, health care, estate planning and many other important issues. Who Can Get These Services Persons 60 years of age or older regardless of income level",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Legal_Services/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Legal_Services/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "low-income-home-energy-assistance-program-f802146034",
+      "name": "Low Income Home Energy Assistance Program",
+      "organization": "California energy bills, weatherization and community assistance",
+      "category": "utility",
+      "description": "Low Income Home Energy Assistance Program (LIHEAP) provides assistance to eligible low-income households with the goal of managing and meeting their immediate home heating and/or cooling needs. ​ ​​​​​Number of Households Served in 2024 ​​​​ ​​​​​​​Incomes Served by Federal Poverty Level in 2024 ​What is LIHEAP and what services are available? LIHEAP is a federally funded program aimed at assisting low-income households that pay a high portion of their income to meet their energy needs. LIHEAP is funded by the U.S. Department of Health and Human Services, Administration for Children and Families, Office of Community Services. There are several portions of the program that help accomplish this goal, such as: The Home Energy Assistance Program (HEAP) provides one-time financial assistance to help balance an eligible household's utility bill. The Energy Crisis Intervention Program (ECIP) pr",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.csd.ca.gov/Pages/LIHEAPProgram.aspx",
+      "source_url": "https://www.csd.ca.gov/Pages/LIHEAPProgram.aspx",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "meal-programs-consumer-f1c9fd7d5f",
+      "name": "Meal Programs - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Meal Programs Nutritious Meals for Older Californians For over 50 years, the Older Californians Nutrition Program (OCNP), also known as the Senior Nutrition Program, has been helping older adults stay healthy, independent, and connected. Through two Older Americans Act meal programs, the OCNP ensures that older adults receive nutritious meals and social interaction: Congregate Meals Program – Enjoy healthy meals in a friendly group setting, either in person or virtually. Home-Delivered Meals Program – For those unable to attend in person, meals are brought right to their door. Both programs also provide: Nutrition education to promote healthy eating habits Nutrition screening to identify nutrition risk factors Personalized nutrition counseling (not offered in all areas) Participants of the meal programs are given the opportunity to voluntarily contribute toward the cost of meals, however",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Meal_Programs/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Meal_Programs/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "medi-cal-services-consumer-5a65c2761c",
+      "name": "Medi-Cal Services - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "health",
+      "description": "Medi-Cal Services The California Department of Aging (CDA) contracts with 38 agencies that operate the Multipurpose Senior Services Program through the Medi-Cal home and community-based waiver for older adults. CDA also certifies approximately 242 Adult Day Health Care Centers for participation in the Medi-Cal Community Based Adult Services (CBAS) Program. Click here to verify your Med-Cal Eligibility Community-Based Adult Services (CBAS) Multipurpose Senior Services Program (MSSP)",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dhcs.ca.gov/individuals/Pages/Steps-to-Medi-Cal.aspx",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Medi-Cal_Services/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "medicare-counseling-hicap-consumer-eaa1e63ca6",
+      "name": "Medicare Counseling (HICAP) - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "Wondering how to sign up for Medicare now that you are almost 65? Confused about all the different parts to Medicare—do you need A, B, C, D? Have questions on prescription drug coverage, co-pays, or eligibility rules? Need help filing an appeal or challenging a denial? Considering long-term care insurance? Need a speaker for a community education event? HICAP (Health Insurance Counseling and Advocacy Program) provides free, confidential one-on-one counseling, education, and assistance to individuals and their families on Medicare, Long-Term Care insurance, other health insurance related issues, and planning ahead for Long-Term Care needs. HICAP also provides legal assistance or legal referrals in dealing with Medicare or Long-Term Care insurance related issues. HICAP counselors are trained in Medi-Cal and Medicare and can help you understand the complex insurance options to find the best",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Medicare_Counseling/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Medicare_Counseling/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "mental-health-services-san-mateo-county-health-d331d3a748",
+      "name": "Mental Health Services - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "mental_health",
+      "description": "Mental Health Services Overview February 11, 2025 Behavioral Health Programs and Services Guide Check out the Behavioral Health Programs and Services Guide: BHRS Programs and Services Guide! This is a comprehensive, one stop resource for BHRS services and offerings in San Mateo County. It includes behavioral health services and program descriptions, contact information and how to request services. The directory will be updated annually. The last update was February 2026. To request an edit, please contact HS_BHRS_Communications@smcgov.org. Read more General information February 4, 2016 Behavioral Health Services & Resources If you or a loved one is struggling from a mental health problem, you are not alone. We’re here to help. Call our Access Call Center 24/7 for assistance Toll Free: (800) 686-0101 TTY for the hearing impaired - please call 711 STEP 1: To get help for yourself or a love",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/mental-health-services",
+      "source_url": "https://www.smchealth.org/mental-health-services",
+      "phone": "(800) 686-0101",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "multipurpose-senior-services-program-medicare-services-3e363af167",
+      "name": "Multipurpose Senior Services Program - Medicare Services",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "The Multipurpose Senior Services Program (MSSP) provides both social and health care management services to assist individuals remain in their own homes and communities. While most of the program participants also receive In-Home Supportive Services, MSSP provides on-going care coordination, links participants to other needed community services and resources, coordinates with health care providers, and purchases some needed services that are not otherwise available to prevent or delay institutionalization. The total annual combined cost of care management and other services must be lower than the cost of receiving care in a skilled nursing facility. A team of health and social service professionals provides each MSSP participant with a complete health and psychosocial assessment to determine needed services. The team then works with the MSSP participant, their physician, family, and othe",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Medicare_Counseling/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Multipurpose_Senior_Services_Program/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "project-roomkey-6eb1148893",
+      "name": "Project Roomkey",
+      "organization": "California Department of Social Services benefits",
+      "category": "rental_assistance",
+      "description": "Project Roomkey/Housing and Homelessness COVID Response Project Roomkey was established in March 2020 as part of the state response to the COVID-19 pandemic. The purpose of Project Roomkey and Rehousing Strategy was to provide non-congregate shelter options, such as hotels and motels, for people experiencing homelessness, to protect human life, and to minimize strain on health care system capacity. As the response to the pandemic evolved, so did Project Roomkey. In November 2020, a new phase of Project Roomkey began, called Project Roomkey and Rehousing Strategy. This new phase of the program built on existing emergency shelter efforts while also supporting permanent transitions to safe and stable housing to ensure homelessness is non-recurring. Project Roomkey and Rehousing Strategy gives people who are experiencing homelessness and recovering from COVID-19, or have been exposed to COVI",
+      "service_area": [
+        "California"
+      ],
+      "active": false,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused"
+        ],
+        "notes": "COVID-era hotel shelter program that is winding down; site closures vary by county. Not a program people can apply to directly."
+      },
+      "eligibility_verified": true,
+      "required_documents": [],
+      "application_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/project-roomkey",
+      "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/project-roomkey",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "protecting-older-and-dependent-adults-7cbb064d03",
+      "name": "Protecting Older and Dependent Adults",
+      "organization": "San Mateo County Health",
+      "category": "older_adult_support",
+      "description": "Aging and Disability Services: Protection Overview February 2, 2016 Protection Services All seniors and adults with disabilities have the right to live their lives in a healthy and safe environment and to conduct their lives without emotional, physical, or sexual abuse, neglect, self-neglect, isolation, abandonment, financial abuse, or the fear of abuse. Read more Post February 2, 2016 Protection Adult Protective Services Forms for mandated reporters: Report Suspected Dependent/Elder Abuse by filling out SOC 341* form below: SOC 341 Report suspected Dependent/Elder FINANCIAL abuse by filling out SOC 342 below. For use ONLY by Financial Institutions: Click here Read more Post December 18, 2020 Scam Resources Stop Telemarketers Some solicitation calls are more a nuisance than an attempted theft or scam. Here are some ways to stop junk calls. (Note: Many scams are conducted via telephone co",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Must be an Adult Protective Services client or in APS intake."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/aging-and-disability-services-protection",
+      "source_url": "https://www.smchealth.org/aging-and-disability-services-protection",
+      "phone": "1-844-868-0938",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "rental-assistance-sacred-heart-community-service-fb4e61cbd2",
+      "name": "Rental Assistance — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "rental_assistance",
+      "description": "Rental Assistance In addition to the Homelessness Prevention System, Sacred Heart Community Service (SHCS) has other sources of funding for emergency rental assistance for past due rent for those who are low-income and live in Santa Clara County. Assistance Eligibility To see if you're eligible for HPS rental assistance, click HERE. Currently these are the basic requirements to book an appointment: 1.A Santa Clara County Resident 2. Income: Be low income or below the Area Median Income (see table below). For example, a household of 1 person should be making less than $82,450 or less a year. 3. Lease: Have a lease or ability to obtain a lease (we also have templates). 4. Zip code: Must be currently living in the following zip codes: (95008, 95110, 95111, 95112 (S. of Santa Clara St.,) 95113, 95116 San Jose 95117 San Jose 95118 San Jose 95120 San Jose 95123 San Jose 95124 San Jose 95125 Sa",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "housed_at_risk",
+          "eviction_notice"
+        ],
+        "notes": "Santa Clara County resident. Low income (the page gives $82,450/yr for a 1-person household; see their table for larger households). Must have past-due rent and a lease or the ability to obtain one. Serves ZIP codes 95008, 95110, 95111, 95112 (south of Santa Clara St), 95113, 95116, 95117, 95118, 95120, 95123, 95124, 95125, 95126, 95128, 95136; other ZIPs are referred to the agency for that area. Immigration status is not asked."
+      },
+      "eligibility_verified": true,
+      "required_documents": [
+        "Lease or rental agreement",
+        "Landlord ledger or notice showing past-due rent",
+        "Proof of income"
+      ],
+      "application_url": "https://www.sacredheartcs.org/rental-assistance",
+      "source_url": "https://www.sacredheartcs.org/rental-assistance",
+      "phone": "(408) 709-2364",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "resources-for-child-support-5e2ab0b08e",
+      "name": "Resources for child support",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Resources for child support ️ Links below open in a new tab. PRINT EMAIL TEXT Legal help and information Court's family law facilitator or self-help center ️ Free legal information from your court. Court staff with experience in family law and child support can answer questions about child support and help you with your court forms. Guideline Child Support Calculator The California Child Support Guideline Calculator is based on the same child support legal guidelines used in California courts. You can use it to estimate the amount of child support that may be ordered in your case. LawHelp A lookup to help find legal aid offices and lawyer referral services in your area. County law library Librarians can recommend self-help books and help with legal research. Many libraries also offer free self-help programs, like \"Lawyers in the Library,\" and Live Chat. Government child support programs ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://childsupport.ca.gov/apply-for-child-support/",
+      "source_url": "https://selfhelp.courts.ca.gov/child-support/resources",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "resources-for-debt-lawsuits-43f3e4a5da",
+      "name": "Resources for debt lawsuits",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Resources for debt lawsuits ️ Links to resources below open in a new tab. PRINT EMAIL TEXT Legal help and resources Court self-help centers Each court has a self-help center that offers free legal information. Find out from your local court what type of services they in debt collection cases. LawHelpCA Offers a lookup tool to help find legal aid offices, lawyer referral services, and other free and low-cost services in your county or nearby county. County law library Law librarians can recommend legal self-help books and help you with legal research. Many libraries also offer free self-help programs. You can also ask a law library a question in Live Chat. Lawyer referral service Directory of lawyer referral services throughout California Federal and State consumer protection resources California Department of Justice Consumer Protection Statewide resources for consumers. Includes informa",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/debt-lawsuits/resources",
+      "source_url": "https://selfhelp.courts.ca.gov/debt-lawsuits/resources",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "resources-for-small-claims-cases-99122b5bbe",
+      "name": "Resources for small claims cases",
+      "organization": "California Courts free legal help and self-help services",
+      "category": "legal",
+      "description": "Resources for small claims cases PRINT EMAIL TEXT Legal help and resources Small claims advisors and court self-help centers Most courts have a small claims advisor or self-help center that offers free help with small claims cases. LawHelpCA Offers a lookup tool to help find legal aid offices, lawyer referral services, and other free and low-cost services in your county or nearby. County Law Library Librarians can recommend self-help books and help with legal research. Many libraries also offer free self-help programs, like \"Lawyers in the Library\" and services like \"Chat with a Librarian.\" Lawyer Referral Service Directory of lawyer referral services throughout California California law Most of the laws related to small claims court are in the \"Code of Civil Procedure\". State consumer protection resources California Contractor's State Licensing Board (CSLB) Provides information to help ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://selfhelp.courts.ca.gov/resources-small-claims-cases",
+      "source_url": "https://selfhelp.courts.ca.gov/resources-small-claims-cases",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "senior-employment-training-consumer-5092db0756",
+      "name": "Senior Employment Training - Consumer",
+      "organization": "California older adult, caregiver and disability services",
+      "category": "older_adult_support",
+      "description": "The Senior Community Service Employment Program (SCSEP) is a community service and work-based job training program for low-income, unemployed older adults. SCSEP participants gain work experience in a variety of community service activities at non-profit and government agencies. Participants work an average of 20 hours a week, and are paid the highest of federal, state or local minimum wages. This training serves as a bridge to unsubsidized employment opportunities for participants. Who Can Get These Services Participants must be at least 55 years of age or older, unemployed, and have a family income of no more than 125% of the federal poverty level. Enrollment priority is given to individuals who are/have: Veterans and qualified spouses Over age 65 Disabled Limited English proficiency or low literacy skills Residing in a rural area Homeless or at risk of homelessness Low employment pros",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {
+        "max_fpl_percent": 125,
+        "housing_status_any_of": [
+          "housed_at_risk",
+          "eviction_notice"
+        ]
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.aging.ca.gov/Programs_and_Services/Senior_Employment_and_Training/",
+      "source_url": "https://www.aging.ca.gov/Programs_and_Services/Senior_Employment_and_Training/",
+      "phone": "1-800-677-1116",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-aging-and-disability-san-mateo-county-health-c340ebf37d",
+      "name": "Services: Aging and Disability - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "older_adult_support",
+      "description": "Services: Aging and Disability Overview February 10, 2016 Aging and Disability Services Services for older and dependent adults, including abuse prevention, public guardian and authority, in-home care, nutritious meals and more. Read more Protection Overview February 2, 2016 Protection Services All seniors and adults with disabilities have the right to live their lives in a healthy and safe environment and to conduct their lives without emotional, physical, or sexual abuse, neglect, self-neglect, isolation, abandonment, financial abuse, or the fear of abuse. Read more More Support Overview February 2, 2016 Support Services A wide range of support services are available for older adults and adults with disabilities in San Mateo County. To apply for In-Home Supportive Services (IHSS) fill out the form. Read more More Prevention Overview February 2, 2016 Prevention Programs for Older Adults",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/services-aging-and-disability",
+      "source_url": "https://www.smchealth.org/services-aging-and-disability",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-general-health-san-mateo-county-health-9d053aaad6",
+      "name": "Services: General Health - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "health",
+      "description": "Services: General Health Overview February 10, 2016 General Health Where to get health care and how to get and stay healthy. Read more Where to Get Care Overview April 23, 2016 Where to Get Care San Mateo Medical Center, the Health System’s mobile clinic, and other hospitals serving San Mateo County Read more More Disease & Prevention Overview April 23, 2016 Disease & Prevention Vaccines (including the flu shot), STD/HIV testing, tuberculosis and hepatitis services, and diseases carried by mosquitoes and ticks. Read more More Vaccines Overview April 23, 2016 Vaccines Immunizations, also known as vaccines or shots, are one of the most important public health efforts to control disease spread in the world. Read more More Dental Services Overview August 12, 2022 Dental Services in San Mateo County Read more More Lab Services Overview February 5, 2016 Public Health Laboratory Public Health L",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/services-general-health",
+      "source_url": "https://www.smchealth.org/services-general-health",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-mental-health-substance-use-san-mateo-county-health-aa4699a495",
+      "name": "Services: Mental Health & Substance Use - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "substance_use",
+      "description": "Services: Mental Health & Substance Use Overview February 10, 2016 Mental Health and Substance Use About Behavioral Health & Recovery Services Services Services are provided by mental health clinicians, psychiatrists, psychologists, alcohol and drug counselors, peers, and others, through seven regional county behavioral health clinics (located in Daly City, San Mateo, Half Moon Bay, Redwood City, and East Palo Alto) and a network of contracted community and private providers located throughout the county Specialty programs for specific populations, such as infants and their mothers, youth transitioning to adults, foster youth, older adults, and for various levels of care are also available. At Behavioral Health and Recovery Services, we care for the whole person with compassion and respect for your cultural values. Our goal is to help you achieve and maintain long term health, wellness a",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/bhrsservices",
+      "source_url": "https://www.smchealth.org/bhrsservices",
+      "phone": "1 (800) 686-0101",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-parenting-support-classes-san-mateo-county-health-9bb82ccf2a",
+      "name": "Services: Parenting Support & Classes - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "family_support",
+      "description": "Services: Parenting Support & Classes Overview May 4, 2016 Parenting Support & Classes Get support building positive parent-child relationships and creating a healthy family environment with these free classes. Read more",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/services-parenting-support-classes",
+      "source_url": "https://www.smchealth.org/services-parenting-support-classes",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-pregnancy-children-families-san-mateo-county-health-69f5ab8dac",
+      "name": "Services: Pregnancy, Children, & Families - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "family_support",
+      "description": "Services: Pregnancy, Children, & Families Overview April 26, 2016 Pregnancy, Children & Families Do you and your family want to learn more about how to live healthily and get connected to local resources? We’re here to help! Check out the resources below or call us at (650) 573-2501. We provide services in homes, local clinics, offices and schools. Services are free for adults, children and families on Medi-Cal, and on a sliding fee scale for other San Mateo County residents. We provide services in your native language. Read more Pregnant Women & New Parents Overview May 4, 2016 Pregnant Women & New Parents Read more More Women, Infants & Children (WIC) Program Overview May 4, 2016 Women, Infants & Children (WIC) Program Are you pregnant, have kids under 5? Then, WIC may be for you! WIC can be of support during difficult times. We offer, nutrition information, breastfeeding support and e",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/services-pregnancy-children-families",
+      "source_url": "https://www.smchealth.org/services-pregnancy-children-families",
+      "phone": "(650) 573-2501",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-where-to-get-care-san-mateo-county-health-8b22f5e434",
+      "name": "Services: Where to Get Care - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "health",
+      "description": "Services: Where to Get Care Overview April 23, 2016 Where to Get Care San Mateo Medical Center, the Health System’s mobile clinic, and other hospitals serving San Mateo County Read more General information April 23, 2016 San Mateo Medical Center San Mateo Medical Center provides emergency care for people of all ages 24 hours a day, every day. Hospital emergency services are located at 222 West 39th Avenue, San Mateo, CA 94403 Read more General information February 5, 2016 Mobile Clinic The Mobile Clinic offers walk-in care for San Mateo County residents 18 and older who don’t have another way to get care, including people experiencing homelessness, farmworkers and their families, and people who are uninsured. Residents who have insurance or a primary care provider, should contact their health plan or care provider about their need for care. With services limited to underserved communitie",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused"
+        ]
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/services-where-get-care",
+      "source_url": "https://www.smchealth.org/services-where-get-care",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "services-women-infants-children-wic-program-san-mateo-county-health-eeb00151b8",
+      "name": "Services: Women, Infants & Children (WIC) Program - San Mateo County Health",
+      "organization": "San Mateo County Health",
+      "category": "food",
+      "description": "Services: Women, Infants & Children (WIC) Program Overview May 4, 2016 Women, Infants & Children (WIC) Program Are you pregnant, have kids under 5? Then, WIC may be for you! WIC can be of support during difficult times. We offer, nutrition information, breastfeeding support and education, link you to other services AND, offer healthy foods for you and your family every month! WIC is also for foster families or guardians raising children 0-5 years of age. Participating in WIC is easier than ever! Services WIC helps you learn how to eat healthy, supports breastfeeding and helps you afford . To learn more about WIC’s services, check out the videos below. WIC: Supporting Parents & Families for 45 Years WIC: Supporting You On Your Breastfeeding Goals Who is Eligible Families with limited income, according to guidelines from the California Department of Public Health may qualify for WIC. WIC i",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/wic",
+      "source_url": "https://www.smchealth.org/wic",
+      "phone": "(650) 573-2168",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "support-for-older-and-dependent-adults-d2364894b8",
+      "name": "Support for Older and Dependent Adults",
+      "organization": "San Mateo County Health",
+      "category": "older_adult_support",
+      "description": "Aging and Disability Services: Support Overview February 2, 2016 Support Services A wide range of support services are available for older adults and adults with disabilities in San Mateo County. To apply for In-Home Supportive Services (IHSS) fill out the form. Read more General information May 11, 2016 Where Older Adults Can Go for Nutritious Meals San Mateo County’s Nutrition Programs for Older Adults provide nutritious meals at group dining sites, such as senior centers, and through home delivery to people who are homebound. There are a number of group dining sites throughout the County, and current sites are listed below. Older Americans Act (OAA) funded sites are indicated with an asterisk (*). Read more Post March 28, 2018 In-Home Supportive Services The In-Home Supportive Services (IHSS) program provides homecare services to Medi-Cal eligible aged, blind or individuals with disab",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smchealth.org/aging-and-disability-services-support",
+      "source_url": "https://www.smchealth.org/aging-and-disability-services-support",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "supported-employment-program-ca-department-of-rehabilitation-da3d231c03",
+      "name": "Supported Employment Program - CA Department of Rehabilitation",
+      "organization": "California rehabilitation, independent living and assistive technology",
+      "category": "disability",
+      "description": "Supported Employment Program The Supported Employment Program provides activities and services, including ongoing support services, needed to support and maintain an individual with a most significant disability, including youth with most significant disabilities, in an integrated employment setting for the term of employment. FREQUENTLY ASKED QUESTIONS What If I Want to Work But I Need Help to Learn and Do My Job? The Department has a Supported Employment Program that can provide a job coach to help you learn your job, do well at your job, and keep working. How Does the SEP Work? The DOR partners with Community Rehabilitation Programs, which provide a range of vocational rehabilitation services directly to DOR consumers. How Will a Job Coach Help Me? A job coach supports an individual in learning and performing their job duties. Job coaching can be provided individually or in a group. I",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dor.ca.gov/Home/SupportedEmploymentProgram",
+      "source_url": "https://www.dor.ca.gov/Home/SupportedEmploymentProgram",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "unemployment-benefits-ee6514d15c",
+      "name": "Unemployment Benefits",
+      "organization": "California jobs, unemployment and disability benefits",
+      "category": "employment",
+      "description": "Unemployment Benefits The support you need, when you need it most. Español Losing your job or having your hours reduced can be difficult. Unemployment benefits are here to help support you and your family while you find a new job and develop your career. You can apply now if you have your information ready. Apply Now Otherwise, go to Step 1 and get your information in order. What are Unemployment Benefits? Unemployment benefits are temporary income for eligible workers who lost their job (or had hours reduced) through no fault of their own. You get from $40 to $450 each week, depending on how much you earned in the past 18 months. Our Unemployment Benefit Calculator helps estimate your benefit amount. It takes about three weeks to process your benefit application and make the first payment. To avoid confusion, please carefully read all emails and mail communications we send you. Contact ",
+      "service_area": [
+        "California"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://myedd.edd.ca.gov/s/login/?language=en_US&ec=302&startURL=%2Fs%2F",
+      "source_url": "https://edd.ca.gov/en/unemployment/",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "utility-assistance-sacred-heart-community-service-8c8ea63e44",
+      "name": "Utility Assistance — Sacred Heart Community Service",
+      "organization": "Sacred Heart Community Service assistance programs",
+      "category": "utility",
+      "description": "Get Help with your Energy & Water Bills SPECIAL NOTICE FOR HEAP APPLICANTS Due to limited funding and a high demand for HEAP, a Priority Plan is in effect. Income-eligible households may be denied for HEAP assistance. To avoid disconnection, we advise you to contact your utility provider to make payment arrangements. Thank you for your patience as we work to process your application. You will receive a letter from us in the mail within 8 weeks as to the status of your application. We encourage you to apply but cannot guarantee assistance. Thank you Sacred Heart Community Service Energy Assistance Help with Utilities Home Energy Assistance Program (LIHEAP) The Home Energy Assistance Program (HEAP) is a non-emergency federally-funded program that assists low-income households with paying home energy bills once a year. HEAP can offer income-eligible residents of Santa Clara County a credit ",
+      "service_area": [
+        "Santa Clara County, CA"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.sacredheartcs.org/energy-service",
+      "source_url": "https://www.sacredheartcs.org/utility-assistance",
+      "phone": "(866) 675-6623",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "veteran-benefits-programs-24280d7260",
+      "name": "Veteran Benefits & Programs",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "veteran_support",
+      "description": "Veteran Benefits WWII & Korean War Veterans Gulf War Veterans Vietnam War Veterans Veteran Resources for Women Other Veteran Resources Recently Discharged Veterans Prior Service Enlisted Reserve Opportunities",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/veteran-benefits-programs",
+      "source_url": "https://www.smcgov.org/hsa/veteran-benefits-programs",
+      "last_verified": "2026-09-22"
+    },
+    {
+      "id": "veteran-housing-resources-d6971afac1",
+      "name": "Veteran Housing Resources",
+      "organization": "San Mateo County Human Services Agency",
+      "category": "veteran_support",
+      "description": "San Mateo County Core Agencies Life Moves Veteran Services Nation's Finest- Homeless Services Swords to Plowshares- Bay Area CORA- Safe Housing from Relationship Abuse VA Homeless Programs HUD-VASH Willow Housing CalVet Veterans Homes Life Moves- HUD VASH Vouchers Learn More",
+      "service_area": [
+        "San Mateo County, CA"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.smcgov.org/hsa/veteran-housing-resources",
+      "source_url": "https://www.smcgov.org/hsa/veteran-housing-resources",
+      "last_verified": "2026-09-22"
+    }
+  ]
+}

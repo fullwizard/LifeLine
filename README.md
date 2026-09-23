@@ -53,6 +53,29 @@ app/                    Next.js App Router UI (server actions in app/actions.ts)
   income under the 1-person limit is `met`, over the 8-person limit is
   excluded, and anything between is `unverified`.
 
+## Data pipeline
+
+```
+npm run crawl:california      # scripts/crawl-california-resources.mjs → data/crawl-output/ (raw, gitignored)
+npm run normalize:california  # → data/crawl-output/california-resource-candidates.json (deduped, eligibility extracted, unverified)
+# review: edit data/reviewed/eligibility-overrides.json for records you have checked against the source
+npm run promote:resources     # validates + applies overrides → data/resources.json (the ONLY file the app loads)
+```
+
+- `data/resources.json` is committed and must be regenerated after a crawl or a
+  review. Promotion fails loudly on any malformed record, so a bad crawl can
+  never reach the app.
+- `extractEligibility()` in the normalizer captures rules the page states in
+  recognisable words (AMI %, FPL %, annual caps, veteran/children requirements,
+  housing status, CalWORKs/APS prerequisites, residency, ZIP lists). Everything
+  it produces is `eligibility_verified: false` and shown as "needs verification".
+- An override in `eligibility-overrides.json` replaces the record's eligibility
+  wholesale, marks it verified, and can also fix `active`, `phone`,
+  `required_documents`, and `response_time_days`. Only add what you have read
+  on the source page.
+- `lib/data/ami.ts` holds HUD FY2026 Area Median Income by county. Refresh it
+  each spring.
+
 ## Swapping in real services
 
 - **Supabase:** replace the body of `getResources()` in `lib/data/resources.ts`.

@@ -8,6 +8,7 @@
     "start": "next start",
     "crawl:california": "node scripts/crawl-california-resources.mjs",
     "normalize:california": "node scripts/normalize-california-resources.mjs",
+    "promote:resources": "node scripts/promote-resources.mjs",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",

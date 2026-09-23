@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeCrawl } from "./normalize-california-resources.mjs";
+import { extractEligibility, normalizeCrawl } from "./normalize-california-resources.mjs";
 
 const page = (overrides = {}) => ({
   url: "https://example.ca.gov/food",
@@ -216,5 +216,41 @@ describe("normalizeCrawl", () => {
       page({ url: "https://example.ca.gov/cfap", title: "CFAP", description: "A real food assistance program with application details.", contentHash: "real-program" }),
     ] }] });
     expect(result.candidates.map((candidate) => candidate.name)).toEqual(["CFAP"]);
+  });
+});
+
+describe("extractEligibility", () => {
+  it("captures stated income rules as structured fields", () => {
+    expect(extractEligibility({ text: "Households at or below 80% of Area Median Income may apply." })).toMatchObject({ max_ami_percent: 80 });
+    expect(extractEligibility({ text: "Income must be under 200% of the federal poverty level." })).toMatchObject({ max_fpl_percent: 200 });
+    expect(extractEligibility({ text: "Income limit: 60% of state median income." }).notes).toContain("60% of state median income");
+    expect(extractEligibility({ text: "A household of 1 should be earning less than $82,450 a year." })).toMatchObject({ max_annual_income: 82_450 });
+  });
+
+  it("turns soft income language into a note instead of a number", () => {
+    const e = extractEligibility({ text: "Funding for low-income Santa Clara County residents." });
+    expect(e.max_ami_percent).toBeUndefined();
+    expect(e.notes).toContain("Income limits apply");
+  });
+
+  it("captures housing status, program prerequisites, residency, and ZIP lists", () => {
+    const e = extractEligibility({
+      text: "Helps families in the CalWORKs program experiencing homelessness or at risk of homelessness. One must be a resident of Santa Clara County for at least thirty days. Serves zip codes: 95008, 95110, 95111.",
+    });
+    expect(e.housing_status_any_of).toEqual(["unhoused", "housed_at_risk", "eviction_notice"]);
+    expect(e.requires_children).toBe(true);
+    expect(e.notes).toContain("CalWORKs");
+    expect(e.notes).toContain("resident of Santa Clara County for at least thirty days");
+    expect(e.notes).toContain("95008, 95110, 95111");
+  });
+
+  it("distinguishes homeless-only from at-risk-only programs", () => {
+    expect(extractEligibility({ text: "Overnight beds for adults experiencing homelessness." }).housing_status_any_of).toEqual(["unhoused"]);
+    expect(extractEligibility({ text: "Emergency rent for tenants with past due rent to avoid eviction." }).housing_status_any_of).toEqual(["housed_at_risk", "eviction_notice"]);
+  });
+
+  it("does not invent rules from generic text", () => {
+    expect(extractEligibility({ text: "Apply for food help and eligibility information." })).toEqual({});
+    expect(extractEligibility({ text: "We honor all military veterans for their service." }).requires_veteran).toBeUndefined();
   });
 });

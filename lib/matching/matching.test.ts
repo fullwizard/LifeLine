@@ -161,6 +161,12 @@ describe("scoring: unverified eligibility is flagged, not assumed", () => {
     expect(evaluateIncome({ max_ami_percent: 80 }, { monthlyIncome: 20_000 }, 160_000).status).toBe("unmet");
   });
 
+  it("never claims 'no income limit' when the notes say income limits apply", () => {
+    const verdict = evaluateIncome({ notes: "Low income Santa Clara County residents." }, { monthlyIncome: 2_000 }, 200_000, true);
+    expect(verdict.status).toBe("unverified");
+    expect(evaluateIncome({ notes: "Must have a lease." }, { monthlyIncome: 2_000 }, 200_000, true).status).toBe("none");
+  });
+
   it("marks free-text eligibility notes as unverified", () => {
     const notes = makeResource({ id: "notes", eligibility: { notes: "Must have lived in the unit 90 days" } });
     const scored = scoreResource(notes, seattleSituation);
@@ -228,7 +234,7 @@ describe("ranking", () => {
     ]);
   });
 
-  it("does not show unrelated categories when a need is explicit", () => {
+  it("keeps the main list to the categories asked for, and drops unrelated ones", () => {
     const result = matchResources(
       [
         makeResource({ id: "energy", category: "utility" }),
@@ -237,6 +243,31 @@ describe("ranking", () => {
       { ...seattleSituation, needs: ["utility"] },
     );
     expect(result.ranked.map((r) => r.resource.id)).toEqual(["energy"]);
+    expect(result.related).toEqual([]); // food is not related to utilities
+  });
+
+  it("surfaces closely related categories separately, ranked and capped", () => {
+    const pool = [
+      makeResource({ id: "rent", category: "rental_assistance" }),
+      makeResource({ id: "legal-fast", category: "legal", response_time_days: 1 }),
+      makeResource({ id: "legal-slow", category: "legal", response_time_days: 30 }),
+      makeResource({ id: "shelter", category: "shelter", eligibility: { housing_status_any_of: ["unhoused"] } }),
+      makeResource({ id: "jobs", category: "employment" }),
+    ];
+    const result = matchResources(pool, { ...seattleSituation, needs: ["rental_assistance"] });
+    expect(result.ranked.map((r) => r.resource.id)).toEqual(["rent"]);
+    // legal is related to rent help; the faster one ranks first. Shelter is gated out; jobs are unrelated.
+    expect(result.related.map((r) => r.resource.id)).toEqual(["legal-fast", "legal-slow"]);
+    expect(result.excluded.map((e) => e.resource.id)).toEqual(["shelter"]);
+  });
+
+  it("shows everything with no related list when no need was stated", () => {
+    const result = matchResources(
+      [makeResource({ id: "a", category: "utility" }), makeResource({ id: "b", category: "food" })],
+      { ...seattleSituation, needs: undefined },
+    );
+    expect(result.ranked).toHaveLength(2);
+    expect(result.related).toEqual([]);
   });
 
   it("promotes the income-limited resource once income is confirmed", () => {

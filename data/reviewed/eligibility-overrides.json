@@ -1,0 +1,95 @@
+{
+  "$schema": "./eligibility-overrides.schema.json",
+  "description": "Human-reviewed corrections applied on top of the crawl output by scripts/promote-resources.mjs. Keyed by resource id. Only include fields you have verified against the source page; anything you set here is shown to users as confirmed program rules.",
+  "overrides": {
+    "rental-assistance-sacred-heart-community-service-fb4e61cbd2": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "housing_status_any_of": ["housed_at_risk", "eviction_notice"],
+        "notes": "Santa Clara County resident. Low income (the page gives $82,450/yr for a 1-person household; see their table for larger households). Must have past-due rent and a lease or the ability to obtain one. Serves ZIP codes 95008, 95110, 95111, 95112 (south of Santa Clara St), 95113, 95116, 95117, 95118, 95120, 95123, 95124, 95125, 95126, 95128, 95136; other ZIPs are referred to the agency for that area. Immigration status is not asked."
+      },
+      "eligibility_verified": true,
+      "required_documents": ["Lease or rental agreement", "Landlord ledger or notice showing past-due rent", "Proof of income"],
+      "phone": "(408) 709-2364"
+    },
+    "housing-assistance-sacred-heart-community-service-8816984a82": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "housing_status_any_of": ["housed_at_risk", "eviction_notice"],
+        "notes": "Low-income Santa Clara County residents who have lived in the county at least 30 days. Covers past-due rent, emergency security deposits, and mortgage help. Payment goes directly to the landlord. Limited to the ZIP codes listed on the page."
+      },
+      "eligibility_verified": true,
+      "phone": "(408) 709-2364"
+    },
+    "calworks-housing-support-program-90723f9adf": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "Must be a family receiving CalWORKs. Apply through your county welfare office; counties prioritize families who are currently homeless."
+      },
+      "eligibility_verified": true
+    },
+    "calworks-homeless-assistance-4d40222943": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "For CalWORKs recipients or apparently eligible applicants. Temporary shelter payments for up to 16 days once every 12 months, plus help with a security deposit or last month's rent."
+      },
+      "eligibility_verified": true
+    },
+    "bringing-families-home-program-ee933260c9": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "requires_children": true,
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "Family must be involved with the child welfare system. Administered by each county; contact your county child welfare agency."
+      },
+      "eligibility_verified": true
+    },
+    "home-safe-program-9425afb8ef": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "Must be an Adult Protective Services client or in APS intake (older adults or dependent adults experiencing abuse, neglect, or financial exploitation). Administered by each county APS office."
+      },
+      "eligibility_verified": true
+    },
+    "project-roomkey-6eb1148893": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "active": false,
+      "eligibility": {
+        "housing_status_any_of": ["unhoused"],
+        "notes": "COVID-era hotel shelter program that is winding down; site closures vary by county. Not a program people can apply to directly."
+      },
+      "eligibility_verified": true
+    },
+    "get-help-with-food-housing-and-basic-needs-7640694390": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "Contact the Core Service Agency for your city: Samaritan House (650) 347-3648 for Belmont, Burlingame, Foster City, Hillsborough, Millbrae, San Carlos, San Mateo; Samaritan House South (650) 294-4312 for East Palo Alto and Menlo Park; Fair Oaks Community Center (650) 780-7500 for Redwood City, Atherton, North Fair Oaks, Portola Valley, Woodside; Daly City Partnership (650) 301-3300 for Daly City, Colma, Broadmoor; YMCA Community Resource Center (650) 271-3850 for South San Francisco, Brisbane, San Bruno; Pacifica Resource Center (650) 738-7470; Coastside Hope (650) 726-9071 for Half Moon Bay and the coast; Puente (650) 879-1691 for Pescadero and the south coast."
+      },
+      "eligibility_verified": true
+    },
+    "housing-shelter-samaritan-house-35b75232b5": {
+      "reviewed_at": "2026-09-22",
+      "reviewed_by": "LifeLine team",
+      "eligibility": {
+        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "notes": "San Mateo County residents. Emergency rent and utility help, eviction avoidance, and three shelters (Safe Harbor in South San Francisco, Pacific Emergency in Redwood City, El Camino House in San Mateo). Call (650) 347-3648 or apply online at apply.samaritanhousesanmateo.org."
+      },
+      "eligibility_verified": true,
+      "phone": "(650) 347-3648"
+    }
+  }
+}

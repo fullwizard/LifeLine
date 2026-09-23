@@ -1,50 +1,60 @@
-/** Resource access layer backed by the reviewed California crawl output. */
+/**
+ * Resource access layer. Reads data/resources.json, which is produced by
+ * `npm run promote:resources` from the crawl output plus human-reviewed
+ * overrides. The crawl output itself is never imported by the app.
+ *
+ * Swap the body of getResources() for a Supabase query later; nothing else
+ * needs to change.
+ */
 import type { Resource, ResourceCategory } from "../types";
-import candidates from "../../data/crawl-output/california-resource-candidates.json";
+import { RESOURCE_CATEGORIES } from "../types";
+import promoted from "../../data/resources.json";
 import { PLACES } from "./places";
 
-type CandidateRecord = (typeof candidates.candidates)[number];
+type PromotedRecord = (typeof promoted.resources)[number];
 
+/** Coordinates for the most specific place named in the service area. */
 function coordinatesForServiceArea(serviceArea: string[]): { lat: number; lng: number } | undefined {
   for (const entry of serviceArea) {
     const placeName = entry.split(",")[0].trim().toLowerCase();
     const city = PLACES.find((place) => place.city.toLowerCase() === placeName);
     if (city) return { lat: city.lat, lng: city.lng };
-    const county = PLACES.find((place) => {
-      const countyName = place.county.toLowerCase().replace(/ county$/, "");
-      return placeName.includes(countyName);
-    });
+    const county = PLACES.find((place) => placeName.includes(place.county.toLowerCase().replace(/ county$/, "")));
     if (county) return { lat: county.lat, lng: county.lng };
   }
   return undefined;
 }
 
-function toResource(candidate: CandidateRecord): Resource | undefined {
-  if (!candidate.category) return undefined;
-  const coordinates = coordinatesForServiceArea(candidate.service_area);
+function toResource(record: PromotedRecord): Resource {
+  if (!RESOURCE_CATEGORIES.includes(record.category as ResourceCategory)) {
+    throw new Error(`data/resources.json: "${record.id}" has unknown category "${record.category}". Re-run npm run promote:resources.`);
+  }
   return {
-    id: candidate.id,
-    name: candidate.name,
-    organization: candidate.organization,
-    category: candidate.category as ResourceCategory,
-    description: candidate.description,
-    service_area: candidate.service_area,
-    active: candidate.active,
-    eligibility: candidate.eligibility,
-    ...(candidate.eligibility_verified !== undefined ? { eligibility_verified: candidate.eligibility_verified } : {}),
-    required_documents: candidate.required_documents,
-    application_url: candidate.application_url,
-    source_url: candidate.source_url,
-    ...(candidate.phone ? { phone: candidate.phone } : {}),
-    ...(coordinates ?? {}),
-    last_verified: candidate.last_verified,
+    id: record.id,
+    name: record.name,
+    organization: record.organization,
+    category: record.category as ResourceCategory,
+    description: record.description,
+    service_area: record.service_area,
+    active: record.active,
+    eligibility: record.eligibility as Resource["eligibility"],
+    eligibility_verified: record.eligibility_verified,
+    required_documents: record.required_documents,
+    application_url: record.application_url,
+    source_url: record.source_url,
+    ...("phone" in record && record.phone ? { phone: record.phone } : {}),
+    ...("response_time_days" in record && typeof record.response_time_days === "number" ? { response_time_days: record.response_time_days } : {}),
+    ...(coordinatesForServiceArea(record.service_area) ?? {}),
+    last_verified: record.last_verified,
   };
 }
 
-const CALIFORNIA_RESOURCES: Resource[] = candidates.candidates
-  .map(toResource)
-  .filter((resource): resource is Resource => resource !== undefined);
+if (!Array.isArray(promoted.resources) || promoted.resources.length === 0) {
+  throw new Error("data/resources.json has no resources. Run npm run promote:resources.");
+}
+
+const RESOURCES: Resource[] = promoted.resources.map(toResource);
 
 export async function getResources(): Promise<Resource[]> {
-  return CALIFORNIA_RESOURCES;
+  return RESOURCES;
 }
