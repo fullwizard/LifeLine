@@ -1,11 +1,22 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { useMemo, useState } from "react";
+import { buildPlanMapData } from "@/lib/map/planMapData";
 import type { Plan } from "@/lib/types";
 import { UnderstoodFacts } from "./FollowUpStep";
 import { ResourceCard } from "./ResourceCard";
 
+const ResourceMap = dynamic(() => import("./ResourceMap").then((m) => m.ResourceMap), {
+  ssr: false,
+  loading: () => <div className="h-[380px] w-full animate-pulse rounded-none bg-neutral-50" aria-hidden />,
+});
+
 export function PlanView({ plan, onReset }: { plan: Plan; onReset: () => void }) {
   const confirmed = plan.ranked.filter((r) => !r.needsVerification).length;
+  const [showMap, setShowMap] = useState(true);
+  const mapData = useMemo(() => buildPlanMapData(plan.ranked, plan.related, plan.situation), [plan]);
+  const mappable = mapData.areas.length > 0 || mapData.pins.length > 0;
   return (
     <div className="space-y-6">
       <UnderstoodFacts situation={plan.situation} />
@@ -37,6 +48,23 @@ export function PlanView({ plan, onReset }: { plan: Plan; onReset: () => void })
           </p>
         </div>
         <Legend />
+        {mappable && (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => setShowMap((v) => !v)}
+              aria-expanded={showMap}
+              className="text-sm font-medium text-accent-700 underline-offset-4 hover:underline"
+            >
+              {showMap ? "Hide map" : "Show map"}
+            </button>
+            {showMap && (
+              <div className="mt-3">
+                <ResourceMap data={mapData} />
+              </div>
+            )}
+          </div>
+        )}
         {plan.ranked.length === 0 ? (
           <p className="mt-4 rounded-none bg-paper p-4 text-sm text-neutral-600">
             No resources matched. Try adding your city or county.

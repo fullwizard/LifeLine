@@ -41,7 +41,7 @@ export function ResourceCard({ rank, scored, note }: { rank: number; scored: Sco
   const unverified = breakdown.filter((b) => b.status === "unverified");
 
   return (
-    <article className="rounded-none bg-paper p-5 sm:p-7">
+    <article id={`resource-${resource.id}`} className="rounded-none bg-paper p-5 sm:p-7 scroll-mt-24 target:ring-2 target:ring-accent-600">
       <div className="flex items-start gap-4">
         <span className="shrink-0 font-sans font-semibold text-4xl leading-none text-accent-700">
           {rank}
