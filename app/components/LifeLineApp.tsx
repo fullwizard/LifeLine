@@ -129,10 +129,10 @@ function situationOf(step: Step) {
 
 function StepIndicator({ current }: { current: Step["kind"] }) {
   const labels = {
-    input: "Step 1: Tell us about your situation.",
+    input: "Tell us what is going on.",
     crisis: "Support is available right now.",
-    followup: "Step 2: A little more about you.",
-    plan: "Step 3: Your next steps.",
+    followup: "A little more about you.",
+    plan: "Your next steps.",
   };
   return <h2 className="text-xl sm:text-2xl font-medium text-accent-700" aria-live="polite">{labels[current]}</h2>;
 }
