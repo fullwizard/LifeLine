@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Resource, ScoredResource } from "../types";
-import { buildPlanMapData, countiesForArea } from "./planMapData";
+import { buildPlanMapData, countiesForArea, countyCentroid, spread } from "./planMapData";
 
 function scored(overrides: Partial<Resource> & { id: string }): ScoredResource {
   const resource: Resource = {
@@ -52,6 +52,60 @@ describe("buildPlanMapData", () => {
     expect(data.pins.map((p) => p.id)).toEqual(["d"]);
     expect(data.unmapped).toEqual([]);
     expect(data.user).toEqual({ lat: 37.38, lng: -122.11, label: "Los Altos" });
+  });
+
+  it("gives every resource a dot, spread so none overlap, and labels how it was placed", () => {
+    const ranked = [
+      scored({ id: "sm1", service_area: ["San Mateo County, CA"] }),
+      scored({ id: "sm2", service_area: ["San Mateo County, CA"] }),
+      scored({ id: "sm3", service_area: ["San Mateo County, CA"] }),
+      scored({ id: "sc", service_area: ["Santa Clara County, CA"], address: "1 Main St", lat: 37.33, lng: -121.89 }),
+      scored({ id: "both", service_area: ["Santa Clara and San Mateo counties, CA"] }),
+      scored({ id: "ca", service_area: ["California"] }),
+    ];
+    const data = buildPlanMapData(ranked, [], { location: { city: "Redwood City", county: "San Mateo County", lat: 37.48, lng: -122.24 } });
+    expect(data.dots.map((d) => [d.id, d.placement])).toEqual([
+      ["sc", "address"],
+      ["sm1", "county"],
+      ["sm2", "county"],
+      ["sm3", "county"],
+      ["both", "county"], // drawn in the person's county
+      ["ca", "near_you"],
+    ]);
+    const keys = new Set(data.dots.map((d) => `${d.lat.toFixed(4)},${d.lng.toFixed(4)}`));
+    expect(keys.size).toBe(data.dots.length);
+    const sm = countyCentroid("San Mateo")!;
+    for (const d of data.dots.filter((x) => x.placement === "county")) {
+      expect(Math.abs(d.lat - sm.lat)).toBeLessThan(0.1);
+      expect(Math.abs(d.lng - sm.lng)).toBeLessThan(0.1);
+    }
+    const near = data.dots.find((d) => d.id === "ca")!;
+    expect(Math.abs(near.lat - 37.48)).toBeLessThan(0.02);
+  });
+
+  it("does not draw statewide programs when the person has no coordinates", () => {
+    const data = buildPlanMapData([scored({ id: "ca", service_area: ["California"] })], [], { location: { county: "Santa Clara County" } });
+    expect(data.dots).toEqual([]);
+    expect(data.statewide.map((r) => r.id)).toEqual(["ca"]);
+  });
+
+  it("county centroids land inside the Bay Area", () => {
+    for (const name of ["Santa Clara", "San Mateo", "San Francisco", "Alameda"]) {
+      const c = countyCentroid(name)!;
+      expect(c.lat).toBeGreaterThan(36.9);
+      expect(c.lat).toBeLessThan(38.2);
+      expect(c.lng).toBeGreaterThan(-122.7);
+      expect(c.lng).toBeLessThan(-121.2);
+    }
+  });
+
+  it("spread is deterministic and grows with index", () => {
+    const c = { lat: 37.5, lng: -122.2 };
+    expect(spread(c, 0)).toEqual(c);
+    expect(spread(c, 3)).toEqual(spread(c, 3));
+    const d1 = spread(c, 1);
+    const d9 = spread(c, 9);
+    expect(Math.hypot(d9.lat - c.lat, d9.lng - c.lng)).toBeGreaterThan(Math.hypot(d1.lat - c.lat, d1.lng - c.lng));
   });
 
   it("omits the user marker when the location has no coordinates", () => {
