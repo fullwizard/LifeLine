@@ -33,7 +33,7 @@ export function ResourceMap({ data }: { data: PlanMapData }) {
               <GeoJSON
                 key={feature.properties.name}
                 data={feature as CountyFeature}
-                style={{ color: "#b52a16", weight: 1, fillColor: "#fbd95b", fillOpacity: 0.18 }}
+                style={{ color: "#b52a16", weight: 1.5, fillColor: "#fbd95b", fillOpacity: 0.42 }}
               >
                 <Popup maxWidth={320}>
                   <AreaPopup area={area} />
