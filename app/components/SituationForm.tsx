@@ -87,12 +87,11 @@ export function SituationForm({
         if (canSubmit) onSubmit(text);
       }}
     >
-      <h2 className="mb-4 text-center text-xl sm:text-2xl font-medium text-accent-700">Step 1: Tell us about your situation.</h2>
       <div className="rounded-none space-y-5 bg-sunflower p-5 sm:p-8">
         <label htmlFor="situation" className="block font-sans font-semibold text-2xl text-neutral-900">
-          What is going on?
+          Tell us what is going on.
         </label>
-        <p id="situation-guidance" className="sr-only">{GUIDANCE}</p>
+        <p id="situation-guidance" className="-mt-2 text-base leading-relaxed text-neutral-800">{GUIDANCE}</p>
         <div className="rounded-none bg-paper focus-within:ring-2 focus-within:ring-accent-600">
           <textarea
             ref={textareaRef}
