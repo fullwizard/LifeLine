@@ -53,7 +53,7 @@ function buildPrompt(situation: Situation, ranked: ScoredResource[]): string {
     breakdown: r.breakdown.map((b) => ({ status: b.status, detail: b.detail })),
   }));
   return [
-    "You are writing a calm, plain-language action plan for someone facing housing instability.",
+    "You are writing a calm, plain-language action plan for someone going through a hard time. Their situation may involve housing, food, bills, legal trouble, health, work, or family; take your cue from what they said and the resources listed.",
     "The resources below were ALREADY selected and ranked by a deterministic system. Do not add, remove, reorder, or rename resources.",
     "Never say the person 'qualifies' or 'is eligible'. Facts marked 'met' match what they told us; facts marked 'unverified' must be confirmed with the organization; say so explicitly.",
     "Write at an 8th-grade reading level. Be warm but concrete.",

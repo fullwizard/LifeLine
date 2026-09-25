@@ -44,7 +44,7 @@ const SCHEMA = {
 
 function buildPrompt(text: string): string {
   return [
-    "You extract structured facts from a person's description of a housing crisis.",
+    "You extract structured facts from a person's description of a hard situation: housing, money, food, bills, legal trouble, health, work, or family.",
     "Return ONLY facts that are explicitly stated or unambiguously implied. Use null for anything not stated.",
     "Never guess income, household size, or location.",
     "housingStatus: housed_stable (no threat), housed_at_risk (behind on rent / worried), eviction_notice (formal notice or court filing), unhoused (no housing).",

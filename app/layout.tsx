@@ -8,9 +8,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "LifeLine — Housing help, explained",
+  title: "LifeLine — Help, explained",
   description:
-    "Describe your housing situation and get a prioritized, explained plan of local assistance resources.",
+    "Describe what you are facing and get a prioritized, explained plan of local assistance programs: housing, food, bills, legal, health, and more.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

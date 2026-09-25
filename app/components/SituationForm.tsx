@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const GUIDANCE = "Where you live, who lives with you, what you are facing, and roughly what your household earns. Anything you leave out, we may ask about.";
+const GUIDANCE = "Where you live, who lives with you, what you are facing, and roughly what your household earns. Housing, food, bills, legal trouble, health, work: anything counts. Anything you leave out, we may ask about.";
 const EXAMPLES = [
   "I live in San Jose with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
   "Veteran in Redwood City. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
-  "Family of 4 in Santa Clara, behind on rent, no eviction notice yet. Income around $3,800 a month.",
+  "I'm 71 in Daly City, living alone on $1,500 a month from Social Security. My PG&E bill is overdue and I'm skipping meals to cover it.",
+  "Single mom in Mountain View. My hours got cut and I can't afford groceries this month. No eviction notice, just stretched thin.",
 ];
 export function SituationForm({
   initialText,
@@ -89,7 +90,7 @@ export function SituationForm({
       <h2 className="mb-4 text-center text-xl sm:text-2xl font-medium text-accent-700">Step 1: Tell us about your situation.</h2>
       <div className="rounded-none space-y-5 bg-sunflower p-5 sm:p-8">
         <label htmlFor="situation" className="block font-sans font-semibold text-2xl text-neutral-900">
-          What is happening with your housing?
+          What is going on?
         </label>
         <p id="situation-guidance" className="sr-only">{GUIDANCE}</p>
         <div className="rounded-none bg-paper focus-within:ring-2 focus-within:ring-accent-600">

@@ -22,18 +22,21 @@ export default function MissionPage() {
 
         <section className="space-y-4 leading-relaxed text-neutral-800">
           <p>
-            Housing insecurity is not a rare problem. In the Bay Area, where we live, a single missed paycheck or
-            an unexpected bill can put a family a few weeks away from an eviction notice. The programs designed to
-            catch people in that moment exist, but finding the right one means knowing what to search for,
-            decoding eligibility rules, and calling around while the clock runs.
+            Hard moments are not rare. In the Bay Area, where we live, a single missed paycheck or an
+            unexpected bill can put a family a few weeks away from an eviction notice, an empty fridge, or a
+            shut-off. The programs designed to catch people in those moments exist, but finding the right one
+            means knowing what to search for, decoding eligibility rules, and calling around while the clock
+            runs.
           </p>
           <p>
             We are Caleb Suh and Lior Balan, two juniors at Los Altos High School. We care about the decisions
-            people make under pressure, and we noticed that the people facing the hardest one, how to keep a roof
-            overhead, were getting the least help making it. Our mission is to give anyone facing housing
-            instability a plan they can act on in minutes: the right programs, in the right order, with the
-            reasoning laid out plainly. We started in the Bay Area because it is home, and we are building toward
-            verified, up-to-date listings that can serve more communities over time.
+            people make under pressure, and we noticed that the people facing the hardest ones were getting the
+            least help making them. Our mission is to give anyone in a tough spot a plan they can act on in
+            minutes: the right programs, in the right order, with the reasoning laid out plainly. Housing was
+            our starting point because it is where the stakes are highest, and the same approach now covers food,
+            utilities, legal help, health care, benefits, and support for families, veterans, and older adults.
+            We started in the Bay Area because it is home, and we are building toward verified, up-to-date
+            listings that can serve more communities over time.
           </p>
         </section>
 
