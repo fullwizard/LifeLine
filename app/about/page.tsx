@@ -16,8 +16,10 @@ export default function AboutPage() {
         <header>
           <h1 className="headline-georgia text-3xl sm:text-4xl text-accent-700">About LifeLine</h1>
           <p className="mt-3 text-lg leading-relaxed text-neutral-700">
-            LifeLine turns a few sentences about your housing situation into a clear, ordered plan of local
-            programs that may be able to help, with an honest account of why each one is on the list.
+            LifeLine turns a few sentences about what you are facing into a clear, ordered plan of local
+            programs that may be able to help, with an honest account of why each one is on the list. Rent,
+            food, utility bills, legal trouble, health care, work: if there is a program for it, we want you to
+            find it in minutes, not days.
           </p>
         </header>
 
@@ -25,14 +27,16 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold text-neutral-900">Who we are</h2>
           <p className="leading-relaxed text-neutral-800">
             We are <strong>Caleb Suh</strong> and <strong>Lior Balan</strong>, juniors at Los Altos High School. We
-            are drawn to the moments when people have to make a decision and a lot rides on getting it right. Few
-            decisions are heavier than what to do when you might lose your home.
+            are drawn to the moments when people have to make a decision and a lot rides on getting it right:
+            a rent payment you cannot make, a shut-off notice, a job that disappeared, a parent who suddenly
+            needs care.
           </p>
           <p className="leading-relaxed text-neutral-800">
-            We grew up in Los Altos, where the cost of housing is among the highest in the country. Watching
-            families around us stretch to stay put made one thing obvious: the help that exists is scattered across
+            We grew up in Los Altos, where the cost of living is among the highest in the country. Watching
+            families around us stretch to get by made one thing obvious: the help that exists is scattered across
             dozens of websites, hotlines, and PDFs, and the people who need it most have the least time to hunt for
-            it. LifeLine is our attempt to close that gap.
+            it. We started with housing because it is where the clock runs fastest, and built outward from there.
+            LifeLine is our attempt to close that gap.
           </p>
         </section>
 

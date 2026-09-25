@@ -6,6 +6,31 @@ import { humanCategory } from "../../matching/score";
 import type { ScoredResource, Situation } from "../../types";
 import type { Explanation, PlanExplainer } from "../types";
 
+const NEED_PHRASE: Record<string, string> = {
+  rental_assistance: "rent",
+  food: "food",
+  utility: "utility bills",
+  shelter: "a place to stay",
+  employment: "work",
+  legal: "legal help",
+  health: "health care",
+  benefits: "benefits",
+  family_support: "support for your family",
+  veteran_support: "veteran services",
+  older_adult_support: "support for an older adult",
+  disability: "disability services",
+  mental_health: "mental health support",
+  substance_use: "recovery support",
+  condition_support: "support for a health condition",
+};
+
+function describeNeeds(s: Situation): string {
+  const needs = (s.needs ?? []).map((n) => NEED_PHRASE[n]).filter(Boolean);
+  if (needs.length === 0) return "you are looking for help";
+  if (needs.length === 1) return `you are looking for help with ${needs[0]}`;
+  return `you are looking for help with ${needs.slice(0, -1).join(", ")} and ${needs[needs.length - 1]}`;
+}
+
 function statusPhrase(s: Situation): string {
   switch (s.housingStatus) {
     case "eviction_notice":
@@ -17,14 +42,14 @@ function statusPhrase(s: Situation): string {
     case "housed_stable":
       return "you are housed but need support";
     default:
-      return "you are dealing with housing instability";
+      return describeNeeds(s);
   }
 }
 
 export function explainByTemplate(situation: Situation, ranked: ScoredResource[]): Explanation {
   if (ranked.length === 0) {
     return {
-      summary: "We could not find any resources that match what you told us. Try adding your city or county, or call 211 for a referral.",
+      summary: "We could not find any programs that match what you told us. Try adding your city or county, or call 211 for a referral to local help.",
       steps: ["Call 211 (free, 24/7) and describe your situation.", "Add more detail above and try again."],
       resourceNotes: {},
       provider: "fallback",

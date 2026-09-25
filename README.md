@@ -1,7 +1,8 @@
 # LifeLine
 
-An MVP web app that helps people facing housing instability get a prioritized,
-explained plan of local assistance resources.
+An MVP web app that helps people in a hard spot get a prioritized, explained
+plan of local assistance programs: housing, food, utilities, legal help, health
+care, benefits, and support for families, veterans, and older adults.
 
 Describe your situation in plain language → answer a few focused follow-up
 questions → get a ranked list of resources, each with a structured "why"
