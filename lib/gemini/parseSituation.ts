@@ -21,9 +21,13 @@ interface GeminiSituation {
   locationText?: string | null;
   householdSize?: number | null;
   monthlyIncome?: number | null;
+  incomeSource?: string | null;
+  monthlyHousingCost?: number | null;
+  age?: number | null;
   housingStatus?: string | null;
   hasChildren?: boolean | null;
   isVeteran?: boolean | null;
+  isPregnant?: boolean | null;
   needs?: string[] | null;
   conditions?: string[] | null;
 }
@@ -34,9 +38,13 @@ const SCHEMA = {
     locationText: { type: "string", nullable: true, description: "City, county, or ZIP mentioned, verbatim" },
     householdSize: { type: "integer", nullable: true },
     monthlyIncome: { type: "number", nullable: true, description: "Gross household income per month in USD" },
+    incomeSource: { type: "string", nullable: true, enum: ["earned", "unearned", "mixed"], description: "earned = wages/self-employment; unearned = SSI, Social Security, unemployment, pension, child support; mixed = both" },
+    monthlyHousingCost: { type: "number", nullable: true, description: "Monthly rent or mortgage in USD (not back rent owed)" },
+    age: { type: "integer", nullable: true, description: "Age of the person writing, if stated" },
     housingStatus: { type: "string", nullable: true, enum: [...HOUSING_STATUSES] },
     hasChildren: { type: "boolean", nullable: true },
     isVeteran: { type: "boolean", nullable: true },
+    isPregnant: { type: "boolean", nullable: true, description: "true only if someone in the household is stated to be pregnant" },
     needs: { type: "array", nullable: true, items: { type: "string", enum: [...RESOURCE_CATEGORIES] } },
     conditions: { type: "array", nullable: true, items: { type: "string", enum: [...REPORTED_CONDITIONS] } },
   },
@@ -45,7 +53,9 @@ const SCHEMA = {
 function buildPrompt(text: string): string {
   return [
     "You extract structured facts from a person's description of a hard situation: housing, money, food, bills, legal trouble, health, work, or family.",
+    "The description may be in any language (often English or Spanish, sometimes Vietnamese, Chinese, or Tagalog) and may use slang, typos, or text-message shorthand. Read it the way a caring caseworker would.",
     "Return ONLY facts that are explicitly stated or unambiguously implied. Use null for anything not stated.",
+    "Lacking something is a need: \"no food\" means food, \"no insurance\" means health, \"lost my job\" means employment. Only a clear denial (\"I don't need food\") removes a need.",
     "Never guess income, household size, or location.",
     "housingStatus: housed_stable (no threat), housed_at_risk (behind on rent / worried), eviction_notice (formal notice or court filing), unhoused (no housing).",
     "needs: the kinds of help they are asking for, from: " + RESOURCE_CATEGORIES.join(", ") + ".",
@@ -64,11 +74,15 @@ function toSituation(text: string, g: GeminiSituation): Situation {
   }
   if (typeof g.householdSize === "number" && g.householdSize >= 1) s.householdSize = Math.round(g.householdSize);
   if (typeof g.monthlyIncome === "number" && g.monthlyIncome >= 0) s.monthlyIncome = Math.round(g.monthlyIncome);
+  if (g.incomeSource === "earned" || g.incomeSource === "unearned" || g.incomeSource === "mixed") s.incomeSource = g.incomeSource;
+  if (typeof g.monthlyHousingCost === "number" && g.monthlyHousingCost > 0) s.monthlyHousingCost = Math.round(g.monthlyHousingCost);
+  if (typeof g.age === "number" && g.age >= 14 && g.age <= 110) s.age = Math.round(g.age);
   if (g.housingStatus && HOUSING_STATUSES.includes(g.housingStatus as HousingStatus)) {
     s.housingStatus = g.housingStatus as HousingStatus;
   }
   if (typeof g.hasChildren === "boolean") s.hasChildren = g.hasChildren;
   if (typeof g.isVeteran === "boolean") s.isVeteran = g.isVeteran;
+  if (g.isPregnant === true) s.isPregnant = true;
   if (Array.isArray(g.needs)) {
     const needs = g.needs.filter((n): n is ResourceCategory => RESOURCE_CATEGORIES.includes(n as ResourceCategory));
     if (needs.length) s.needs = needs;

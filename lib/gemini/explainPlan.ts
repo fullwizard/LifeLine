@@ -3,6 +3,7 @@
  * into readable prose. It receives ONLY the ranked list and their breakdowns,
  * and any resource id it returns that we did not send is discarded.
  */
+import { LANG_NAMES, type Lang } from "../i18n";
 import type { ScoredResource, Situation } from "../types";
 import { generateJson, geminiEnabled } from "./client";
 import { explainByTemplate, templateExplainer } from "./fallback/templateExplainer";
@@ -31,7 +32,7 @@ const SCHEMA = {
   required: ["summary", "steps", "resourceNotes"],
 };
 
-function buildPrompt(situation: Situation, ranked: ScoredResource[]): string {
+function buildPrompt(situation: Situation, ranked: ScoredResource[], lang: Lang): string {
   const facts = {
     location: situation.location,
     householdSize: situation.householdSize,
@@ -57,6 +58,7 @@ function buildPrompt(situation: Situation, ranked: ScoredResource[]): string {
     "The resources below were ALREADY selected and ranked by a deterministic system. Do not add, remove, reorder, or rename resources.",
     "Never say the person 'qualifies' or 'is eligible'. Facts marked 'met' match what they told us; facts marked 'unverified' must be confirmed with the organization; say so explicitly.",
     "Write at an 8th-grade reading level. Be warm but concrete.",
+    `Write everything in ${LANG_NAMES[lang]}. Keep program and organization names, phone numbers, and program acronyms (CalFresh, Medi-Cal, WIC, PG&E) exactly as given.`,
     "",
     "Return JSON with:",
     "- summary: 2-3 sentences describing the plan overall.",
@@ -72,16 +74,16 @@ function buildPrompt(situation: Situation, ranked: ScoredResource[]): string {
 }
 
 export const geminiExplainer: PlanExplainer = {
-  async explain(situation, ranked): Promise<Explanation> {
-    const g = await generateJson<GeminiExplanation>(buildPrompt(situation, ranked), SCHEMA);
+  async explain(situation, ranked, lang = "en"): Promise<Explanation> {
+    const g = await generateJson<GeminiExplanation>(buildPrompt(situation, ranked, lang), SCHEMA);
     const allowed = new Set(ranked.map((r) => r.resource.id));
-    const fallback = explainByTemplate(situation, ranked);
+    const fallback = explainByTemplate(situation, ranked, lang);
     const resourceNotes: Record<string, string> = {};
     for (const n of g.resourceNotes ?? []) {
       if (allowed.has(n.id) && typeof n.note === "string" && n.note.trim()) resourceNotes[n.id] = n.note.trim();
     }
     // Fill any resource Gemini skipped from the template so nothing goes blank.
-    for (const id of allowed) if (!resourceNotes[id]) resourceNotes[id] = fallback.resourceNotes[id];
+    for (const id of allowed) if (!resourceNotes[id] && fallback.resourceNotes[id]) resourceNotes[id] = fallback.resourceNotes[id];
     return {
       summary: g.summary?.trim() || fallback.summary,
       steps: Array.isArray(g.steps) && g.steps.length ? g.steps.map(String) : fallback.steps,
@@ -92,13 +94,13 @@ export const geminiExplainer: PlanExplainer = {
 };
 
 /** Default entry point: Gemini if configured, else template fallback. */
-export async function explainPlan(situation: Situation, ranked: ScoredResource[]): Promise<Explanation> {
+export async function explainPlan(situation: Situation, ranked: ScoredResource[], lang: Lang = "en"): Promise<Explanation> {
   if (geminiEnabled()) {
     try {
-      return await geminiExplainer.explain(situation, ranked);
+      return await geminiExplainer.explain(situation, ranked, lang);
     } catch (err) {
       console.warn("[LifeLine] Gemini explain failed, using template fallback:", err);
     }
   }
-  return templateExplainer.explain(situation, ranked);
+  return templateExplainer.explain(situation, ranked, lang);
 }
