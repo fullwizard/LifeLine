@@ -7,6 +7,7 @@ import { getResources } from "../data/resources";
 import { nextQuestion } from "../followup/nextQuestion";
 import { explainPlan } from "../gemini/explainPlan";
 import { matchResources } from "../matching";
+import type { Lang } from "../i18n";
 import type { MatchContext, Plan, Question, Situation } from "../types";
 
 export const DISCLAIMER =
@@ -24,11 +25,11 @@ export async function findNextQuestion(situation: Situation): Promise<{ question
   return { question: nextQuestion(situation, candidates, context), candidateCount: candidates.length };
 }
 
-export async function buildPlan(situation: Situation, parsedBy: Plan["parsedBy"]): Promise<Plan> {
+export async function buildPlan(situation: Situation, parsedBy: Plan["parsedBy"], lang: Lang = "en"): Promise<Plan> {
   const resources = await getResources();
   const context = contextFor(situation);
   const { ranked, related, excluded } = matchResources(resources, situation, context);
-  const explanation = await explainPlan(situation, ranked);
+  const explanation = await explainPlan(situation, ranked, lang);
   return {
     situation,
     ranked,
@@ -40,5 +41,6 @@ export async function buildPlan(situation: Situation, parsedBy: Plan["parsedBy"]
     generatedBy: explanation.provider,
     parsedBy,
     disclaimer: DISCLAIMER,
+    lang,
   };
 }

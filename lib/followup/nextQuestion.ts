@@ -153,6 +153,8 @@ function isHighValueField(field: AskableField, resources: Resource[]): boolean {
       return resources.some((r) => r.eligibility.requires_children || r.category === "family_support");
     case "isVeteran":
       return resources.some((r) => r.eligibility.requires_veteran || r.category === "veteran_support");
+    case "monthlyHousingCost":
+      return false;
   }
 }
 
@@ -287,5 +289,9 @@ export function applyAnswer(
       return { ...situation, hasChildren: value === "true" };
     case "isVeteran":
       return { ...situation, isVeteran: value === "true" };
+    case "monthlyHousingCost": {
+      const n = Number(value.replace(/[^0-9.]/g, ""));
+      return Number.isFinite(n) && n >= 0 ? { ...situation, monthlyHousingCost: Math.round(n) } : situation;
+    }
   }
 }

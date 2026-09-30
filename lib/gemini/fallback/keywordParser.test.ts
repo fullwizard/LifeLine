@@ -231,3 +231,94 @@ describe("keyword parser: cases from the crawl review", () => {
     expect(s.conditions).toEqual(expect.arrayContaining(["mental_health_condition", "substance_use_disorder"]));
   });
 });
+
+describe("keyword parser: lacking something is a need", () => {
+  it("reads 'no X' and 'not enough X' as needs, but 'don't need X' as a denial", () => {
+    expect(parse("I have no food").needs).toEqual(["food"]);
+    expect(parse("i am starving").needs).toEqual(["food"]);
+    expect(parse("not enough food for my kids").needs).toContain("food");
+    expect(parse("I don't have a job and have no food").needs).toEqual(expect.arrayContaining(["employment", "food"]));
+    expect(parse("I don't need food, just rent help").needs).toEqual(["rental_assistance"]);
+    expect(parse("i'm not homeless yet but behind on rent").needs).toEqual(["rental_assistance"]);
+  });
+
+  it("recognises everyday phrasings the rules used to miss", () => {
+    expect(parse("our house is overcrowded, we need a cheaper place").needs).toContain("rental_assistance");
+    expect(parse("we're looking for affordable housing").needs).toContain("rental_assistance");
+    expect(parse("i need money").needs).toContain("benefits");
+    expect(parse("can't afford my medicine").needs).toContain("health");
+    expect(parse("my ex is abusing me and i need to get out").needs).toContain("family_support");
+    expect(parse("I just got out of jail and need help").needs).toEqual(expect.arrayContaining(["legal", "employment"]));
+    expect(parse("my boss isn't paying me").needs).toContain("legal");
+    expect(parse("can't afford internet for my kids school").needs).toContain("utility");
+    expect(parse("my son is autistic and I need support").needs).toContain("disability");
+    expect(parse("i need a ride to my doctors appointment").needs).toContain("health");
+  });
+});
+
+describe("keyword parser: income and household fixes", () => {
+  it("does not read 'broke down' as having no income", () => {
+    expect(parse("my car broke down and i cant get to work").monthlyIncome).toBeUndefined();
+  });
+
+  it("reads benefit income named after the amount", () => {
+    const s = parse("i'm 72 and live alone on 1200 social security");
+    expect(s.monthlyIncome).toBe(1200);
+    expect(s.incomeSource).toBe("unearned");
+    expect(s.age).toBe(72);
+  });
+
+  it("does not count a partner who left", () => {
+    expect(parse("my husband left and I have two kids, I only make 1800 a month").householdSize).toBe(3);
+    expect(parse("we're separated, it's me and my 2 kids").householdSize).toBe(3);
+  });
+
+  it("reads 'mother of 3'", () => {
+    expect(parse("single mother of 3 in san jose").householdSize).toBe(4);
+  });
+
+  it("captures monthly rent separately from back rent", () => {
+    expect(parse("rent is $2,100 a month and I make $2,600").monthlyHousingCost).toBe(2100);
+    expect(parse("we pay 1800 for rent, income 3200 combined").monthlyHousingCost).toBe(1800);
+    expect(parse("I'm behind $3000 on rent, our rent is 2400").monthlyHousingCost).toBe(2400);
+    expect(parse("I owe $4,000 in back rent").monthlyHousingCost).toBeUndefined();
+  });
+
+  it("labels earned versus benefit income", () => {
+    expect(parse("I make $20 an hour").incomeSource).toBe("earned");
+    expect(parse("I get $900 in SSI").incomeSource).toBe("unearned");
+  });
+
+  it("understands text-message shorthand", () => {
+    expect(parse("lights r getting shut off tmrw").needs).toContain("utility");
+    expect(parse("i need help w groceries n rent").needs).toEqual(expect.arrayContaining(["food", "rental_assistance"]));
+  });
+});
+
+describe("keyword parser: Spanish", () => {
+  it("handles a full Spanish description", () => {
+    const s = parse("Vivo en San José con mi esposo y dos hijos. Me dieron un aviso de desalojo y gano 2000 dólares al mes.");
+    expect(s.location?.city).toBe("San Jose");
+    expect(s.housingStatus).toBe("eviction_notice");
+    expect(s.householdSize).toBe(4);
+    expect(s.monthlyIncome).toBe(2000);
+    expect(s.needs).toEqual(expect.arrayContaining(["rental_assistance", "legal"]));
+  });
+
+  it("reads Spanish needs, household, and housing status", () => {
+    expect(parse("Necesito ayuda con la renta y comida. Somos una familia de 5.")).toMatchObject({ householdSize: 5, needs: ["rental_assistance", "food"] });
+    expect(parse("No tengo trabajo y nos van a cortar la luz").needs).toEqual(expect.arrayContaining(["employment", "utility"]));
+    expect(parse("vivo en mi carro, no tengo donde dormir").housingStatus).toBe("unhoused");
+    const senior = parse("Tengo 70 años, vivo sola y recibo 1100 del seguro social");
+    expect(senior).toMatchObject({ monthlyIncome: 1100, incomeSource: "unearned", householdSize: 1 });
+  });
+
+  it("reads Spanish rent amounts", () => {
+    expect(parse("Gano 2400 dólares al mes y la renta es 2100.").monthlyHousingCost).toBe(2100);
+    expect(parse("Pago 1800 de renta y gano 3000 al mes").monthlyHousingCost).toBe(1800);
+  });
+
+  it("leaves English text alone", () => {
+    expect(parse("I live in San Jose with my son, rent is due").location?.city).toBe("San Jose");
+  });
+});

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { LanguageProvider } from "./components/LanguageProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-paper text-neutral-900">{children}</body>
+      <body className="min-h-full flex flex-col bg-paper text-neutral-900">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }
