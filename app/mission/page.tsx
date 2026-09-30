@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function MissionPage() {
   return (
-    <main className="flex-1 w-full max-w-6xl mx-auto px-5 pb-16 sm:px-10">
+    <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-16 sm:px-8">
       <SiteHeader current="mission" />
 
       <article className="mx-auto max-w-3xl space-y-8">
         <header>
-          <h1 className="headline-georgia text-3xl sm:text-4xl text-accent-700">Our mission</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Our mission</h1>
           <p className="mt-3 text-xl leading-relaxed text-neutral-800">
             When the stakes are high, everyone deserves a clear next step.
           </p>
@@ -41,7 +41,7 @@ export default function MissionPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-neutral-900">What we promise</h2>
+          <h2 className="text-lg font-semibold text-neutral-900">What we promise</h2>
           <ul className="list-disc space-y-3 pl-6 text-neutral-800 leading-relaxed marker:text-accent-700">
             <li>
               Clarity over cleverness. Resources are chosen by transparent rules, not by a black

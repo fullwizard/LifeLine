@@ -200,6 +200,9 @@ function buildSteps(plan: Plan, benefits: BenefitSummary, calls: CallScript[], t
   const needs = s.needs ?? [];
 
   if (s.crisisIndicators?.length) steps.push({ when: "now", text: t("step.crisis"), phone: "988" });
+  if (needs.includes("family_support") && /\b(?:abus|hits? me|beat|violen|unsafe)/i.test(s.rawText ?? "")) {
+    steps.push({ when: "now", text: t("step.dv"), phone: "1-800-799-7233" });
+  }
   if (s.housingStatus === "eviction_notice") {
     steps.push({
       when: "today",
@@ -209,9 +212,8 @@ function buildSteps(plan: Plan, benefits: BenefitSummary, calls: CallScript[], t
     });
   }
   if (s.housingStatus === "unhoused") steps.push({ when: "today", text: t("step.unhoused"), phone: "211" });
-  if (needs.includes("family_support") && /\b(?:abus|hits? me|beat|violen|unsafe)/i.test(s.rawText ?? "")) {
-    steps.push({ when: "now", text: t("step.dv"), phone: "1-800-799-7233" });
-  }
+  // Everything above is a safety or legal-deadline step; the top program call goes right after.
+  const afterUrgent = steps.length;
   if (needs.includes("utility")) {
     steps.push({ when: "today", text: t("step.utility"), detail: t("step.utility.detail"), phone: LINKS.care.phone });
   }
@@ -231,14 +233,24 @@ function buildSteps(plan: Plan, benefits: BenefitSummary, calls: CallScript[], t
   }
   if (has("wic")) steps.push({ when: "week", text: t("step.wic"), phone: LINKS.wic.phone });
 
-  calls.forEach((c, i) => {
-    steps.push({
-      when: i === 0 && steps.every((x) => x.when !== "today") ? "today" : "week",
-      text: t(c.phone ? "step.call" : "step.visit", { name: c.name }),
-      phone: c.phone,
-      link: c.phone ? undefined : { label: t("step.visit.link"), url: c.url },
-    });
+  const callStep = (c: CallScript, when: StepWhen): PacketStep => ({
+    when,
+    text: t(c.phone ? "step.call" : "step.visit", { name: c.name }),
+    phone: c.phone,
+    link: c.phone ? undefined : { label: t("step.visit.link"), url: c.url },
   });
+  // Housing is the most time-sensitive need: when it's at risk, the top
+  // program call happens today, right after any crisis or legal-deadline step.
+  const housingUrgent = s.housingStatus === "housed_at_risk" || s.housingStatus === "eviction_notice" || s.housingStatus === "unhoused";
+  const [first, ...rest] = calls;
+  if (first) {
+    if (housingUrgent) {
+      steps.splice(afterUrgent, 0, callStep(first, "today"));
+    } else {
+      steps.push(callStep(first, steps.some((x) => x.when === "today") ? "week" : "today"));
+    }
+  }
+  for (const c of rest) steps.push(callStep(c, "week"));
   steps.push({ when: "next", text: t("step.folder") });
   return steps;
 }

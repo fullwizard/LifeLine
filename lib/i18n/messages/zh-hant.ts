@@ -1,12 +1,8 @@
 import type { MessageKey } from "./en";
 
-export const zh: Partial<Record<MessageKey, string>> = {
+export const zhHant: Partial<Record<MessageKey, string>> = {
   // App shell
-  "app.headline": "為您量身打造的援助計劃，隨時在手。",
-  "app.step.input": "請告訴我們您的情況。",
-  "app.step.crisis": "現在就可以得到支援。",
-  "app.step.followup": "請再多告訴我們一些您的情況。",
-  "app.step.plan": "您的下一步。",
+  "app.headline": "找到您可以獲得的幫助，以及取得幫助的計劃。",
   "app.error": "出了點問題，請再試一次。",
   "lang.label": "語言",
 
@@ -112,17 +108,11 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "plan.noMatch": "沒有找到符合的計劃。請試著加上您的城市或縣。",
   "plan.related.title": "也值得了解",
   "plan.related.sub": "這些是相關類別的計劃，在類似您的情況下常常能提供幫助。規則和檢查方式相同。",
-  "plan.startOver": "← 重新開始",
   "plan.disclaimer": "LifeLine 不決定誰符合資格。標示「已確認」的項目與您告訴我們的資料相符；標示「需要核實」的項目必須向相關機構確認。計劃內容可能會改變，請在依賴之前先確認。",
   "plan.englishNote": "計劃詳情來自官方英文資料。",
-  "map.show": "顯示地圖",
-  "map.hide": "隱藏地圖",
   "legend.met": "根據您提供的資料已確認",
   "legend.unverified": "需要向機構核實",
   "legend.unmet": "尚未符合",
-  "nav.benefits": "金錢",
-  "nav.ready": "準備",
-  "nav.programs": "計劃",
 
   // Benefits section
   "benefits.title": "您可能錯過的補助和優惠",
@@ -132,7 +122,6 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "benefits.plus": "另外還有以下的折扣和保險",
   "benefits.likely": "很可能",
   "benefits.possible": "有可能",
-  "benefits.why": "原因",
   "benefits.assumptions": "我們的假設",
   "benefits.apply": "申請",
   "benefits.call": "撥打 {phone}",
@@ -195,7 +184,6 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "benefit.assume.taxes": "您需要申報州稅才能拿到。可以獲得免費報稅協助（VITA）。",
 
   // Get-ready packet
-  "packet.title": "準備",
   "packet.sub": "先做什麼、要帶什麼，以及打電話時要說什麼。",
   "packet.steps": "您的步驟（按順序）",
   "packet.docs": "一份清單，全部搞定",
@@ -326,7 +314,6 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "category.condition_support": "疾病支援",
 
   // Trust
-  "trust.title": "我們如何核對資料",
   "trust.body": "您計劃中的 {total} 個計劃裡，有 {checked} 個已由我們的團隊對照官方網頁核對過。每張卡片都會顯示核對日期。我們無法確認的項目都標示為「需要核實」。",
 
   // Template explainer
@@ -349,4 +336,47 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "explain.needs.none": "您正在尋求幫助",
   "explain.needs.some": "您正在尋求{list}方面的幫助",
   "explain.and": "和",
+  "app.eyebrow": "免費 · 保密 · 無需註冊",
+  "app.sub": "告訴我們您的情況。LifeLine 會為您配對本地計劃、估算您可能符合資格的福利，並清楚告訴您第一步該做什麼。",
+  "stepper.label": "進度",
+  "stepper.describe": "描述",
+  "stepper.details": "詳情",
+  "stepper.plan": "您的計劃",
+  "how.1.title": "用您自己的話告訴我們",
+  "how.1.body": "任何語言都可以。幾句話就夠了，重要的遺漏我們會再問您。",
+  "how.2.title": "我們核對規定",
+  "how.2.body": "計劃是按照固定、公開的資格規定配對的。AI 絕不會選擇或捏造計劃。",
+  "how.3.title": "取得可以照著做的計劃",
+  "how.3.body": "估算的福利、按順序的步驟、一份文件清單，以及打電話時該說什麼。",
+  "plan.edit": "修改我的回答",
+  "tab.steps": "下一步",
+  "tab.benefits": "福利",
+  "tab.programs": "計劃",
+  "stat.benefits": "估計食物補助",
+  "stat.perMonth": "/月",
+  "stat.benefits.hint": "另有折扣和醫療保險",
+  "stat.benefits.count": "您可能符合資格的福利",
+  "stat.today": "今天要做",
+  "stat.today.hint": "不能等的步驟",
+  "stat.programs": "符合的計劃",
+  "stat.programs.hint": "{total} 個中有 {checked} 個經我們團隊核實",
+  "map.title": "符合計劃的地圖",
+  "map.details": "查看詳情",
+  "map.you": "{place}（您）",
+  "map.legend.ranked": "您的配對結果",
+  "map.legend.related": "其他值得了解的",
+  "map.legend.approx": "{n} 個大約位置（服務該地區）",
+  "map.legend.exact": "{n} 個確切地址",
+  "map.legend.you": "您",
+  "map.legend.notDrawn": "{n} 個全州或網上計劃未在地圖顯示",
+  "map.popup.count": "{n} 個計劃服務 {county}",
+  "map.popup.more": "…「計劃」分頁中還有 {n} 個。",
+  "report.download": "下載 report.pdf",
+  "report.working": "正在製作 PDF…",
+  "report.error": "無法製作 PDF，請改用列印。",
+  "report.title": "我的援助計劃",
+  "report.generated": "製作日期：{date}",
+  "report.programs": "符合的計劃",
+  "report.footer": "LifeLine · 請向各計劃確認詳情。",
+  "packet.share": "傳給自己",
 };

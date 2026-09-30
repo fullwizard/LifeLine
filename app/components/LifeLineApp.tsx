@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import type { MessageKey } from "@/lib/i18n";
 import type { AskableField, Plan, ResourceCategory } from "@/lib/types";
 import { hasImmediateSafetyConcern } from "@/lib/safety";
@@ -24,6 +24,7 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
   const [pickedNeeds, setPickedNeeds] = useState<ResourceCategory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const recount = useRef(0);
 
   function run(task: () => Promise<void>) {
     setError(null);
@@ -73,12 +74,25 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
     });
   }
 
-  /** The person corrected which needs we picked up; recount before asking more. */
+  /**
+   * The person corrected which needs we picked up. Apply it immediately so the
+   * chip responds on tap, then refresh the program count in the background;
+   * only the latest request is allowed to land.
+   */
   function changeNeeds(parsed: ParseResponse, needs: ResourceCategory[]) {
-    run(async () => {
-      const { situation, candidateCount } = await updateNeeds(parsed.situation, needs);
-      setStep({ kind: "followup", parsed: { ...parsed, situation, candidateCount } });
-    });
+    const optimistic = { ...parsed, situation: { ...parsed.situation, needs } };
+    setStep({ kind: "followup", parsed: optimistic });
+    const id = ++recount.current;
+    updateNeeds(parsed.situation, needs)
+      .then(({ candidateCount }) => {
+        if (id !== recount.current) return;
+        setStep((current) =>
+          current.kind === "followup" ? { kind: "followup", parsed: { ...current.parsed, candidateCount } } : current,
+        );
+      })
+      .catch(() => {
+        // The count is informational; keep the previous one on failure.
+      });
   }
 
   /** Rebuild the plan after the person adds a detail from the plan page. */
@@ -93,29 +107,41 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
     setStep({ kind: "input" });
   }
 
+  const stage = step.kind === "input" ? 0 : step.kind === "plan" ? 2 : 1;
+
   return (
-    <div className="space-y-6">
-      {step.kind === "input" && (
-        <h1 className="headline-georgia mx-auto max-w-4xl text-center text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-balance">
-          {t("app.headline")}
-        </h1>
+    <div>
+      {step.kind === "input" ? (
+        <div className="mx-auto max-w-2xl pt-6 pb-4 sm:pt-12">
+          <p className="text-sm font-medium text-accent-700">{t("app.eyebrow")}</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900 text-balance sm:text-4xl">{t("app.headline")}</h1>
+          <p className="mt-3 text-base leading-relaxed text-neutral-600 sm:text-lg">{t("app.sub")}</p>
+        </div>
+      ) : (
+        <Stepper stage={stage} />
       )}
-      {step.kind !== "input" && (
-        <h2 className="text-xl sm:text-2xl font-medium text-accent-700 no-print" aria-live="polite">
-          {t(`app.step.${step.kind}` as MessageKey)}
-        </h2>
-      )}
+
       {error && (
-        <div role="alert" className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div role="alert" className="mx-auto mb-4 max-w-2xl rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </div>
       )}
+
       {step.kind === "input" && (
-        <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
+        <div className="mx-auto max-w-2xl">
+          <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
+          <HowItWorks />
+        </div>
       )}
-      {(step.kind === "followup" || step.kind === "plan") && hasImmediateSafetyConcern(situationOf(step)) && <CrisisBanner />}
+      {(step.kind === "followup" || step.kind === "plan") && hasImmediateSafetyConcern(situationOf(step)) && (
+        <div className="mb-6">
+          <CrisisBanner />
+        </div>
+      )}
       {step.kind === "crisis" && (
-        <CrisisSupport pending={pending} onContinue={() => continueFromCrisis(step.parsed)} onEdit={reset} />
+        <div className="mx-auto max-w-2xl">
+          <CrisisSupport pending={pending} onContinue={() => continueFromCrisis(step.parsed)} onEdit={reset} />
+        </div>
       )}
       {step.kind === "followup" && (
         <FollowUpStep
@@ -131,6 +157,50 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
         <PlanView plan={step.plan} pending={pending} onRefine={(a) => refinePlan(step.plan, a)} onReset={reset} />
       )}
     </div>
+  );
+}
+
+/** Where the person is in the three-part flow. */
+function Stepper({ stage }: { stage: number }) {
+  const { t } = useLanguage();
+  const labels: MessageKey[] = ["stepper.describe", "stepper.details", "stepper.plan"];
+  return (
+    <ol className="mb-6 flex items-center gap-2 text-sm no-print" aria-label={t("stepper.label")}>
+      {labels.map((key, i) => (
+        <li key={key} className="flex items-center gap-2" aria-current={i === stage ? "step" : undefined}>
+          {i > 0 && <span className="h-px w-6 bg-neutral-300 sm:w-10" aria-hidden />}
+          <span
+            className={
+              "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold " +
+              (i < stage ? "bg-neutral-900 text-white" : i === stage ? "bg-accent-700 text-white" : "bg-neutral-200 text-neutral-500")
+            }
+          >
+            {i < stage ? "✓" : i + 1}
+          </span>
+          <span className={i === stage ? "font-medium text-neutral-900" : "text-neutral-500"}>{t(key)}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function HowItWorks() {
+  const { t } = useLanguage();
+  const items: [MessageKey, MessageKey][] = [
+    ["how.1.title", "how.1.body"],
+    ["how.2.title", "how.2.body"],
+    ["how.3.title", "how.3.body"],
+  ];
+  return (
+    <ol className="mt-10 grid gap-6 border-t border-neutral-200 pt-8 sm:grid-cols-3">
+      {items.map(([title, body], i) => (
+        <li key={title}>
+          <p className="text-xs font-semibold text-neutral-400 tabular-nums">0{i + 1}</p>
+          <p className="mt-1 text-sm font-semibold text-neutral-900">{t(title)}</p>
+          <p className="mt-1 text-sm leading-relaxed text-neutral-500">{t(body)}</p>
+        </li>
+      ))}
+    </ol>
   );
 }
 

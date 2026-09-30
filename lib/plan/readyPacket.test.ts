@@ -77,6 +77,11 @@ describe("ready packet", () => {
     expect(packet.steps.at(-1)?.when).toBe("next");
   });
 
+  it("calls the top housing program today, right after the legal deadline", () => {
+    expect(packet.steps[1]).toMatchObject({ when: "today", phone: "(408) 555-0100" });
+    expect(packet.steps[1].text).toContain("Rent Help Program");
+  });
+
   it("merges documents across programs without duplicates", () => {
     const keys = packet.documents.map((d) => d.key);
     expect(keys[0]).toBe("notice");
