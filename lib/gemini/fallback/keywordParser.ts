@@ -17,6 +17,7 @@ import {
   type Situation,
 } from "../../types";
 import type { ParseResult, SituationParser } from "../types";
+import { looksSpanish, spanishToEnglish } from "./spanish";
 
 // ---------------------------------------------------------------------------
 // Text normalisation
@@ -53,8 +54,9 @@ function normalizeNumbers(text: string): string {
 }
 
 function normalize(text: string): string {
+  const base = looksSpanish(text) ? spanishToEnglish(text) : text;
   return normalizeNumbers(
-    text
+    base
       .replace(/[’‘]/g, "'")
       .replace(/[“”]/g, '"')
       .replace(/\bim\b/gi, "i'm")
@@ -63,6 +65,19 @@ function normalize(text: string): string {
       .replace(/\bwont\b/gi, "won't")
       .replace(/\bhavent\b/gi, "haven't")
       .replace(/\bdidnt\b/gi, "didn't")
+      .replace(/\bisnt\b/gi, "isn't")
+      .replace(/\bwasnt\b/gi, "wasn't")
+      .replace(/\bdoesnt\b/gi, "doesn't")
+      .replace(/\bcouldnt\b/gi, "couldn't")
+      .replace(/\bw\/o\b/gi, "without")
+      .replace(/\bw\/\s?/gi, "with ")
+      .replace(/\b(?:bc|b\/c|cuz|cause)\b/gi, "because")
+      .replace(/\btmrw\b|\btmr\b/gi, "tomorrow")
+      .replace(/\bu\b/gi, "you")
+      .replace(/\br\b/gi, "are")
+      .replace(/\bn\b/gi, "and")
+      .replace(/\bppl\b/gi, "people")
+      .replace(/\bmo\b/gi, "month")
       .replace(/\s+/g, " ")
       .trim(),
   );
@@ -148,7 +163,7 @@ function detectHousingStatus(t: string): HousingStatus | undefined {
 
 const KID_WORD = "(?:kids?|children|child|sons?|daughters?|boys?|girls?|bab(?:y|ies)|toddlers?|infants?|teenagers?|teens?|little ones?|newborn)";
 const KID_COUNT = new RegExp(`\\b(\\d+|${W}|a|an)\\s+(?:young |small |little |school[- ]age |minor )?${KID_WORD}\\b`, "gi");
-const KID_MENTION = new RegExp(`\\b(?:my|our) (?:\\d+[- ]year[- ]old|${KID_WORD})\\b|\\b${KID_WORD}\\b|\\bsingle (?:mom|mother|dad|father|parent)\\b|\\b(?:child ?care|daycare|day care)\\b`, "i");
+const KID_MENTION = new RegExp(`\\b(?:my|our) (?:\\d+[- ]year[- ]old|${KID_WORD})\\b|\\b${KID_WORD}\\b|\\bsingle (?:mom|mother|dad|father|parent)\\b|\\b(?:mom|mother|dad|father|parent) of (?:\\d+|${W})\\b|\\b(?:child ?care|daycare|day care)\\b`, "i");
 const KIDS_GROWN = /\b(?:grown|adult) (?:kids|children|son|daughter)|kids are (?:grown|adults)|children are (?:grown|adults)\b/i;
 const NO_KIDS = /\b(?:no|without|don't have(?: any)?|do not have(?: any)?)\s+(?:kids|children|dependents)\b|\bchildless\b/i;
 
@@ -171,6 +186,11 @@ function countKids(t: string): number | undefined {
       found = true;
     }
   }
+  const parentOf = new RegExp(`\\b(?:single )?(?:mom|mother|mama|dad|father|parent) of (\\d+|${W})\\b`, "i").exec(t);
+  if (parentOf) {
+    const n = toInt(parentOf[1]);
+    if (Number.isFinite(n) && n > 0 && n < 15) return found ? Math.max(total, n) : n;
+  }
   if (found) return total;
   // "my daughter", "our baby" → one child. "my kids" → unknown count.
   if (new RegExp(`\\b(?:my|our) (?:\\d+[- ]year[- ]old|son|daughter|baby|toddler|infant|newborn|little one)\\b`, "i").test(t)) return 1;
@@ -179,6 +199,9 @@ function countKids(t: string): number | undefined {
 
 const PARTNER = /\b(?:my|our|with my|and my|me and my) (?:wife|husband|partner|spouse|boyfriend|girlfriend|fianc[ée]e?|bf|gf)\b/i;
 const SINGLE_PARENT = /\bsingle (?:mom|mother|dad|father|parent)\b/i;
+/** "my husband left", "we're separated", "my wife passed away": no partner in the home. */
+const PARTNER_GONE =
+  /\b(?:wife|husband|partner|spouse|boyfriend|girlfriend|bf|gf)\b[^.!?;]{0,25}\b(?:left|leaving|passed|died|moved out|walked out|kicked (?:me|us) out|is gone|in jail|in prison|deported)\b|\b(?:divorced|separated|widow(?:ed|er)?|getting a divorce)\b/i;
 const ALONE = /\b(?:live alone|living alone|just me|by myself|on my own|only me|it's just me|no one else)\b/i;
 
 function detectHouseholdSize(t: string): number | undefined {
@@ -197,7 +220,7 @@ function detectHouseholdSize(t: string): number | undefined {
   if (adultsKids) return toInt(adultsKids[1]) + toInt(adultsKids[2]);
 
   const kids = countKids(t);
-  const partner = !SINGLE_PARENT.test(t) && has(t, PARTNER);
+  const partner = !SINGLE_PARENT.test(t) && !PARTNER_GONE.test(t) && has(t, PARTNER);
   const withParents = /\b(?:live|living|stay|staying|moved back) (?:in )?with my (?:parents|mom and dad)\b/i.test(t) ? 2
     : /\b(?:live|living|stay|staying|moved back) (?:in )?with my (?:mom|mother|dad|father)\b/i.test(t) ? 1 : 0;
   const RELATIVE = "(?:mom|mother|dad|father|grandma|grandmother|grandpa|grandfather|aunt|uncle|sister|brother|cousin|roommate|friend|nephew|niece)";
@@ -247,7 +270,7 @@ function detectAge(t: string): number | undefined {
 
 const EXPENSE_CUE = /\b(?:rent|lease|bill|bills|owe|owed|owing|deposit|behind|back rent|late fee|mortgage|cost|costs|costing|charging|charges|spend|spending|debt|utilities|pg&e|pge)\b/i;
 const INCOME_CUE = /\b(?:make|makes|making|made|earn|earns|earning|earned|income|bring(?:s|ing)? (?:home|in)|take(?:s)? home|paid|paycheck|salary|wage|wages|get paid|gets paid|receive|receives|receiving|getting|get|gets|on (?:social security|ssi|ssdi|disability|unemployment|a pension|pension|retirement)|from (?:social security|ssi|ssdi|disability|unemployment|work|my job|a pension|retirement)|social security|pension|unemployment|combined|together|total|budget|living on|live on|support us on)\b/i;
-const NO_INCOME = /\b(?:no|zero|without any|don't have any|not making any|no longer have any) (?:income|money|money coming in|paycheck|earnings)\b|\bnot working (?:right now|at all|anymore)\b|\bnot earning anything\b|\bbroke\b/i;
+const NO_INCOME = /\b(?:no|zero|without any|don't have any|not making any|no longer have any) (?:income|money|money coming in|paycheck|earnings)\b|\bnot working (?:right now|at all|anymore)\b|\bnot earning anything\b|\bbroke\b(?! down)/i;
 
 const PERIOD = "(?:per|a|an|each|every|/)\\s*(month|mo|monthly|mth|week|wk|weekly|year|yr|annually|annual|hour|hr|hourly|paycheck|2 weeks|two weeks|biweekly|bi-weekly|fortnight)";
 const MONEY = new RegExp(`(\\$\\s?)?(\\d[\\d,]*(?:\\.\\d+)?)(?:\\s*(?:dollars|bucks))?(?:\\s*${PERIOD})?`, "gi");
@@ -292,7 +315,7 @@ function detectIncome(t: string): number | undefined {
     const lastIncome = lastIndex(before, INCOME_CUE);
     let kind: "income" | "expense" | "unknown" = "unknown";
     if (lastExpense >= 0 || lastIncome >= 0) kind = lastIncome > lastExpense ? "income" : "expense";
-    if (kind === "unknown" && /^\s*(?:from|in (?:benefits|income)|income|combined|total|take[- ]home|after tax(?:es)?|a month from|from my job)\b/i.test(after)) kind = "income";
+    if (kind === "unknown" && /^\s*(?:from|in (?:benefits|income|ssi|ssdi|social security)|income|combined|total|take[- ]home|after tax(?:es)?|a month from|from my job|(?:of |in )?(?:social security|ssi|ssdi|disability|unemployment|pension|retirement|calworks|child support|alimony))\b/i.test(after)) kind = "income";
     const hourly = /^(?:hour|hr)/i.test(unit ?? "");
     if (kind === "expense" && !hourly) continue;
 
@@ -321,6 +344,40 @@ function detectIncome(t: string): number | undefined {
   return total;
 }
 
+/**
+ * Monthly rent or mortgage, when stated: "rent is $2,100", "paying 1800 for
+ * rent". Back rent and amounts owed are debts, not the monthly cost.
+ */
+function detectHousingCost(t: string): number | undefined {
+  const re = new RegExp(
+    `\\b(?:rent|mortgage)\\b(?: payment)?(?: is| was| of| costs?| runs?)?(?: about| around| like| roughly)?\\s*(\\$\\s?)?(\\d[\\d,]*)(?:\\s*${PERIOD})?|(?:pay|paying|spend|spending)(?: about| around| like)?\\s*(\\$\\s?)?(\\d[\\d,]*)(?:\\s*${PERIOD})?\\s*(?:a month\\s*)?(?:for|in|on) (?:my |our |the )?(?:rent|mortgage)\\b`,
+    "gi",
+  );
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(t))) {
+    const before = t.slice(Math.max(0, m.index - 12), m.index);
+    if (/\b(?:back|owe|owed|behind)\s*$/i.test(before)) continue;
+    const num = Number((m[2] ?? m[5]).replace(/,/g, ""));
+    const unit = m[3] ?? m[6];
+    if (!(num >= 200 && num <= 20_000)) continue;
+    return Math.round(periodToMonthly(num, unit, 40));
+  }
+  return undefined;
+}
+
+const UNEARNED_CUE = /\b(?:social security|ssi|ssdi|disability (?:check|benefits|payments?|income)|on disability|from disability|unemployment|edd|pension|retirement|calworks|cash aid|child support|alimony|general assistance|va (?:benefits|disability))\b/i;
+const EARNED_CUE = /\b(?:make|makes|making|made|earn|earns|earning|paycheck|salary|wages?|hourly|an hour|per hour|\/hr|at work|my job|part[- ]time|full[- ]time|shifts?|self[- ]employed|gig|uber|lyft|doordash|instacart|tips)\b/i;
+
+/** Whether the stated income comes from work, benefits, or both. */
+function detectIncomeSource(t: string): Situation["incomeSource"] {
+  const unearned = positiveMatch(t, UNEARNED_CUE) !== null;
+  const earned = positiveMatch(t, EARNED_CUE) !== null && !/\b(?:lost|no|without) (?:my |a )?(?:job|work)\b|\blaid off\b|\bunemployed\b/i.test(t);
+  if (earned && unearned) return "mixed";
+  if (unearned) return "unearned";
+  if (earned) return "earned";
+  return undefined;
+}
+
 function lastIndex(s: string, re: RegExp): number {
   const g = new RegExp(re.source, "gi");
   let last = -1;
@@ -338,27 +395,27 @@ function lastIndex(s: string, re: RegExp): number {
 
 const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
   rental_assistance:
-    /\b(?:rent|rental|landlord|lease|deposit|move[- ]in|back rent|behind on|eviction|evicted|housing (?:help|assistance|costs?)|keep (?:my|our) (?:apartment|place|housing|home))\b/i,
-  food: /\b(?:food|grocer(?:y|ies)|hungry|nothing to eat|enough to eat|meals?|calfresh|snap|ebt|food stamps|food bank|pantry|wic|formula|diapers)\b/i,
+    /\b(?:rent|rental|landlord|lease|deposit|move[- ]in|back rent|behind on|eviction|evicted|housing (?:help|assistance|costs?)|keep (?:my|our) (?:apartment|place|housing|home)|(?:cheaper|affordable|low[- ]income|subsidized) (?:place|apartment|housing|home|unit)|(?:need|find|finding|looking for|search(?:ing)? for) (?:an? |new |another |cheaper )?(?:apartment|place to (?:rent|live)|housing)|overcrowded|section 8|housing voucher|mortgage|foreclos\w*)\b/i,
+  food: /\b(?:food|grocer(?:y|ies)|hungry|hunger|starv\w*|nothing to eat|enough to eat|anything to eat|haven't eaten|skipping meals|meals?|feed (?:my|our|the) (?:kids|family|children|baby|son|daughter)|calfresh|snap|ebt|food stamps|food bank|pantry|wic|formula|diapers)\b/i,
   utility:
-    /\b(?:utilit(?:y|ies)|pg ?& ?e|pge|electric(?:ity)?|power (?:bill|got|was|is|shut|cut|off)|lights (?:got |were |are )?(?:shut|cut|turned) off|gas bill|heat(?:ing)?|water bill|shut[- ]?off|disconnect(?:ed|ion|ing)?|energy bill|internet bill|phone bill|liheap)\b/i,
+    /\b(?:utilit(?:y|ies)|pg ?& ?e|pge|electric(?:ity)?|power (?:bill|got|was|is|shut|cut|off)|lights (?:got |were |are )?(?:shut|cut|turned) off|gas bill|heat(?:ing)?|water bill|shut[- ]?off|disconnect(?:ed|ion|ing)?|energy bill|internet|wi-?fi|phone (?:bill|service)|cell (?:phone )?bill|propane|trash bill|sewer bill|liheap)\b/i,
   shelter:
     /\b(?:shelter|(?:place|somewhere|anywhere) to (?:sleep|stay|live)|nowhere to|no ?where to|homeless|unhoused|roof over|housing tonight|bed tonight)\b/i,
   employment:
-    /\b(?:jobs?|(?:find|finding|looking for|need|get|got|lost|losing) (?:a |my |some )?(?:work|job)|employment|unemployed|laid off|let go|fired|out of work|hours (?:got |were |have been )?(?:cut|reduced|dropped)|hiring|resume|job training|worksource|worknet)\b/i,
+    /\b(?:jobs?|(?:find|finding|looking for|need|get|got|lost|losing) (?:a |my |some )?(?:work|job)|employment|unemployed|laid off|let go|fired|out of work|hours (?:got |were |have been )?(?:cut|reduced|dropped)|hiring|resume|job training|worksource|worknet|can't find (?:a )?(?:job|work)|need (?:more )?hours|job search|(?:got )?out of (?:jail|prison)|reentry|re-entry|get to work)\b/i,
   legal:
-    /\b(?:court|lawyer|attorney|legal|lawsuit|sued|suing|summons|unlawful detainer|eviction defense|tenant rights|my rights|restraining order|immigration)\b/i,
+    /\b(?:court|lawyer|attorney|legal|lawsuit|sued|suing|summons|unlawful detainer|eviction defense|tenant rights|my rights|restraining order|immigration|wage theft|unpaid wages|(?:boss|employer|job|company) (?:isn't|is not|won't|didn't|hasn't|never|stopped) pay\w*|(?:criminal )?record|expunge\w*|parole|probation|(?:got )?out of (?:jail|prison)|debt collectors?|garnish\w*|divorce|custody|deport\w*)\b/i,
   health:
-    /\b(?:health insurance|health care|healthcare|medical|doctor|clinic|hospital|medi[- ]?cal|medicaid|medicare|prescriptions?|medication|meds|dental|dentist|pregnan\w*|maternal|insurance lapsed|uninsured|covered california)\b/i,
+    /\b(?:health insurance|health care|healthcare|medical|doctors?|clinic|hospital|medi[- ]?cal|medicaid|medicare|prescriptions?|medication|meds|dental|dentist|pregnan\w*|maternal|insurance lapsed|uninsured|covered california|medicines?|insulin|inhaler|glasses|eye (?:exam|doctor)|urgent care|emergency room|sick|injur(?:y|ed)|surgery)\b/i,
   benefits:
-    /\b(?:benefits?|calworks|calfresh|ssi|ssdi|cash aid|cash assistance|general assistance|public assistance|financial (?:assistance|hardship|help)|finances? (?:are )?(?:starting to )?(?:slip|fall|falling apart)|apply for (?:aid|assistance)|food stamps|wic|unemployment(?: benefits| insurance| claim)?|edd|eitc|tax credit|social security)\b/i,
+    /\b(?:benefits?|calworks|calfresh|ssi|ssdi|cash aid|cash assistance|general assistance|public assistance|financial (?:assistance|hardship|help)|finances? (?:are )?(?:starting to )?(?:slip|fall|falling apart)|apply for (?:aid|assistance)|food stamps|wic|unemployment(?: benefits| insurance| claim)?|edd|eitc|tax credit|social security|need (?:some )?(?:money|cash)|money is tight|tight on money|(?:can't|cannot) make ends meet|paycheck to paycheck|struggling financially|out of money|ran out of money|no money|broke(?! down)|transportation|ride to|bus pass|car (?:broke down|repair)|clothes|clothing)\b/i,
   family_support:
-    /\b(?:child ?care|daycare|day care|domestic violence|abus(?:e|ive|ed)|pregnan\w*|foster|diapers|formula|parenting (?:help|class|support)|custody|newborn|head start)\b/i,
+    /\b(?:child ?care|daycare|day care|domestic violence|abus(?:e|ive|ed)|pregnan\w*|foster|diapers|formula|parenting (?:help|class|support)|custody|newborn|head start|abusing|abuser|(?:hits?|hitting|beats?|beating|threaten\w*|stalk\w*|chok\w*) me|unsafe at home|clothes for (?:my |our )?(?:kids|children|son|daughter|baby)|school supplies|car seat|crib)\b/i,
   veteran_support: /\b(?:veterans?|va (?:benefits|disability|claim)|calvet|military)\b/i,
   older_adult_support: /\b(?:seniors?|older adults?|aging|elderly|retired|retirement|in[- ]home care|caregiver|caregiving|alzheimer'?s|dementia|memory)\b/i,
-  disability: /\b(?:disabilit(?:y|ies)|disabled|ihss|developmental services|assistive|wheelchair|accessib\w+)\b/i,
+  disability: /\b(?:disabilit(?:y|ies)|disabled|ihss|developmental services|assistive|wheelchair|accessib\w+|autis\w+|special needs|regional center|blind|deaf|hard of hearing|down syndrome|cerebral palsy)\b/i,
   mental_health:
-    /\b(?:mental health|behavioral health|depress(?:ed|ion)|anxiety|ptsd|counsel(?:ing|or)|therap(?:y|ist)|suicid\w*|self[- ]?harm(?:ing)?|(?:hurt|harm|kill)(?:ing)? myself|end(?:ing)? my life|bipolar|schizophreni\w*|panic attacks?|crisis line)\b/i,
+    /\b(?:mental health|behavioral health|depress(?:ed|ion)|anxiety|ptsd|counsel(?:ing|or)|therap(?:y|ist)|suicid\w*|self[- ]?harm(?:ing)?|(?:hurt|harm|kill)(?:ing)? myself|end(?:ing)? my life|bipolar|schizophreni\w*|panic attacks?|crisis line|psychiatrist|overwhelmed|(?:can't|cannot) cope|hopeless|trauma|grie(?:f|ving)|mental breakdown)\b/i,
   substance_use:
     /\b(?:substance (?:use|abuse)|addict(?:ed|ion)|(?:in )?recovery|relaps(?:e|ed|ing)|(?:recently )?off the wagon|rehab|detox|opioids?|fentanyl|meth(?:amphetamine)?|heroin|cocaine|sober|sobriety|drinking problem|alcoholi\w+|drug (?:use|problem))\b/i,
   condition_support:
@@ -366,7 +423,7 @@ const NEED_KEYWORDS: Record<ResourceCategory, RegExp> = {
 };
 
 const CONDITION_KEYWORDS: Record<ReportedCondition, RegExp> = {
-  disability: /\b(?:disabled|disability|developmental disability|intellectual disability|on ssdi)\b/i,
+  disability: /\b(?:disabled|disability|developmental disability|intellectual disability|on ssdi|autis\w+|down syndrome|cerebral palsy|blind|deaf)\b/i,
   mobility_impairment: /\b(?:wheelchair|mobility (?:impairment|issue|disability|problems?)|paraly[sz](?:ed|is)|amputee|walker|can't walk)\b/i,
   mental_health_condition: /\b(?:mental health|depression|depressed|anxiety|ptsd|bipolar|schizophreni\w*|self[- ]?harm(?:ing)?|suicid\w*|(?:hurt|harm|kill)(?:ing)? myself|end(?:ing)? my life)\b/i,
   substance_use_disorder: /\b(?:substance (?:use|abuse)|addict(?:ed|ion)|alcohol use disorder|drug use disorder|in recovery|relaps(?:e|ed|ing)|off the wagon|meth(?:amphetamine)?|fentanyl|cocaine|heroin|alcoholi\w+)\b/i,
@@ -383,11 +440,42 @@ function detectConditions(t: string): ReportedCondition[] {
   return REPORTED_CONDITIONS.filter((condition) => positiveMatch(t, CONDITION_KEYWORDS[condition]) !== null);
 }
 
+/**
+ * Denial of a need: "don't need food", "not homeless", "no eviction notice".
+ * Unlike NEGATION_BEFORE, "no food" / "don't have insurance" / "without a job"
+ * are needs, not denials: lacking something is exactly why people ask.
+ */
+const NEED_DENIAL_BEFORE =
+  /(?:\b(?:don't|do not|doesn't|does not|didn't|did not|won't|no longer) (?:need|want|require|care about)|\bno need (?:for|of)|\bnot (?:looking for|asking for|worried about|in need of|seeking|about)|\b(?:not(?! enough)|never)(?: (?:a|an|really|currently|yet|actually))?)\s*(?:a|an|any|the|my|our|more|even|really)?\s*(?:[\w-]+\s+)?$/i;
+/** Legal words where plain "no" is still a denial: "no eviction notice", "no court date". */
+const LEGAL_WORD = /^(?:evict\w*|court|notice|summons|lawyer|attorney|unlawful detainer)/i;
+
+function needNegatedAt(t: string, index: number, word: string): boolean {
+  const before = t.slice(Math.max(0, index - 40), index);
+  if (LEGAL_WORD.test(word)) return NEGATION_BEFORE.test(before) || /\b(?:no|not yet|haven't|hasn't|never)\b[^.!?;]{0,15}$/i.test(before);
+  return NEED_DENIAL_BEFORE.test(before);
+}
+
+function needMentioned(t: string, re: RegExp): boolean {
+  const g = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
+  let m: RegExpExecArray | null;
+  while ((m = g.exec(t))) {
+    if (!needNegatedAt(t, m.index, m[0])) return true;
+    if (m[0].length === 0) g.lastIndex++;
+  }
+  return false;
+}
+
 function detectNeeds(t: string, facts: { housingStatus?: HousingStatus; isVeteran?: boolean; age?: number; conditions: ReportedCondition[] }): ResourceCategory[] {
   const needs = new Set<ResourceCategory>();
   for (const [category, re] of Object.entries(NEED_KEYWORDS) as [ResourceCategory, RegExp][]) {
     if (category === "veteran_support") continue; // decided by veteran status below
-    if (has(t, re)) needs.add(category);
+    for (const c of clauses(t)) {
+      if (needMentioned(c, re)) {
+        needs.add(category);
+        break;
+      }
+    }
   }
 
   // Implied by housing status.
@@ -440,7 +528,7 @@ export function parseSituationByKeywords(text: string): Situation {
   const t = normalize(raw);
   const situation: Situation = { rawText: raw };
 
-  const location = resolvePlace(raw);
+  const location = resolvePlace(raw) ?? resolvePlace(raw.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
   if (location) situation.location = location;
 
   const housingStatus = detectHousingStatus(t);
@@ -452,8 +540,21 @@ export function parseSituationByKeywords(text: string): Situation {
   const isVeteran = detectVeteran(t);
   if (isVeteran !== undefined) situation.isVeteran = isVeteran;
 
+  if (positiveMatch(t, /\b(?:pregnan\w*|expecting (?:a baby|our first|my first)|baby (?:is )?due|due in (?:january|february|march|april|may|june|july|august|september|october|november|december|\w+ (?:weeks|months)))\b/i)) {
+    situation.isPregnant = true;
+  }
+
   const monthlyIncome = detectIncome(t);
   if (monthlyIncome !== undefined) situation.monthlyIncome = monthlyIncome;
+
+  const incomeSource = monthlyIncome !== undefined && monthlyIncome > 0 ? detectIncomeSource(t) : undefined;
+  if (incomeSource) situation.incomeSource = incomeSource;
+
+  const housingCost = detectHousingCost(t);
+  if (housingCost !== undefined) situation.monthlyHousingCost = housingCost;
+
+  const age = detectAge(t);
+  if (age !== undefined) situation.age = age;
 
   const householdSize = detectHouseholdSize(t);
   if (householdSize !== undefined) situation.householdSize = householdSize;
@@ -461,7 +562,7 @@ export function parseSituationByKeywords(text: string): Situation {
   const conditions = detectConditions(t);
   if (conditions.length) situation.conditions = conditions;
 
-  const needs = detectNeeds(t, { housingStatus, isVeteran, age: detectAge(t), conditions });
+  const needs = detectNeeds(t, { housingStatus, isVeteran, age, conditions });
   if (needs.length) situation.needs = needs;
 
   return situation;

@@ -1,29 +1,56 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { MessageKey } from "@/lib/i18n";
+import type { ResourceCategory } from "@/lib/types";
+import { useLanguage } from "./LanguageProvider";
 
-const GUIDANCE = "Where you live, who lives with you, what you are facing, and roughly what your household earns. Housing, food, bills, legal trouble, health, work: anything counts. Anything you leave out, we may ask about.";
-const EXAMPLES = [
-  "I live in San Jose with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
-  "Veteran in Redwood City. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
-  "I'm 71 in Daly City, living alone on $1,500 a month from Social Security. My PG&E bill is overdue and I'm skipping meals to cover it.",
-  "Single mom in Mountain View. My hours got cut and I can't afford groceries this month. No eviction notice, just stretched thin.",
+/** The common reasons people come; the rest are reachable by typing. */
+export const PICKABLE_NEEDS: ResourceCategory[] = [
+  "rental_assistance",
+  "food",
+  "utility",
+  "shelter",
+  "employment",
+  "health",
+  "legal",
+  "benefits",
+  "family_support",
+  "mental_health",
 ];
+
 export function SituationForm({
   initialText,
+  initialNeeds,
   pending,
+  aiEnabled,
   onSubmit,
 }: {
   initialText: string;
+  initialNeeds: ResourceCategory[];
   pending: boolean;
-  onSubmit: (text: string) => void;
+  aiEnabled: boolean;
+  onSubmit: (text: string, needs: ResourceCategory[]) => void;
 }) {
+  const { t } = useLanguage();
+  const GUIDANCE = t("form.guidance");
+  const EXAMPLES = useMemo(
+    () => (["form.example.1", "form.example.2", "form.example.3", "form.example.4"] as MessageKey[]).map((k) => t(k)),
+    [t],
+  );
   const [text, setText] = useState(initialText);
-  const [placeholderText, setPlaceholderText] = useState(GUIDANCE);
+  const [needs, setNeeds] = useState<ResourceCategory[]>(initialNeeds);
+  // Typed-out example while idle; null shows the guidance in the chosen language.
+  const [animated, setAnimated] = useState<string | null>(null);
+  const placeholderText = animated ?? GUIDANCE;
   const [focused, setFocused] = useState(false);
   const [exampleIndex, setExampleIndex] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const canSubmit = text.trim().length > 0 && !pending;
+  const canSubmit = (text.trim().length > 0 || needs.length > 0) && !pending;
+
+  function toggleNeed(need: ResourceCategory) {
+    setNeeds((current) => (current.includes(need) ? current.filter((n) => n !== need) : [...current, need]));
+  }
 
   function tryExample() {
     setText(EXAMPLES[exampleIndex]);
@@ -53,7 +80,7 @@ export function SituationForm({
 
       if (deleting) {
         characterIndex = Math.max(0, characterIndex - 1);
-        setPlaceholderText(sample.slice(0, characterIndex));
+        setAnimated(sample.slice(0, characterIndex));
 
         if (characterIndex === 0) {
           sampleIndex = (sampleIndex + 1) % EXAMPLES.length;
@@ -66,7 +93,7 @@ export function SituationForm({
       }
 
       characterIndex = Math.min(sample.length, characterIndex + 1);
-      setPlaceholderText(sample.slice(0, characterIndex));
+      setAnimated(sample.slice(0, characterIndex));
 
       if (characterIndex === sample.length) {
         deleting = true;
@@ -77,19 +104,19 @@ export function SituationForm({
     }
 
     return () => window.clearTimeout(timer);
-  }, [text, focused, pending]);
+  }, [text, focused, pending, EXAMPLES]);
 
   return (
     <form
       className="mx-auto w-full max-w-3xl"
       onSubmit={(e) => {
         e.preventDefault();
-        if (canSubmit) onSubmit(text);
+        if (canSubmit) onSubmit(text, needs);
       }}
     >
       <div className="rounded-none space-y-5 bg-sunflower p-5 sm:p-8">
         <label htmlFor="situation" className="block font-sans font-semibold text-2xl text-neutral-900">
-          Tell us what is going on.
+          {t("form.label")}
         </label>
         <p id="situation-guidance" className="-mt-2 text-base leading-relaxed text-neutral-800">{GUIDANCE}</p>
         <div className="rounded-none bg-paper focus-within:ring-2 focus-within:ring-accent-600">
@@ -100,11 +127,11 @@ export function SituationForm({
             value={text}
             onChange={(e) => {
               setText(e.target.value);
-              if (e.target.value.length === 0) setPlaceholderText(GUIDANCE);
+              if (e.target.value.length === 0) setAnimated(null);
             }}
             onFocus={() => {
               setFocused(true);
-              if (text.length === 0) setPlaceholderText(GUIDANCE);
+              if (text.length === 0) setAnimated(null);
             }}
             onBlur={() => setFocused(false)}
             aria-describedby="situation-guidance"
@@ -121,7 +148,7 @@ export function SituationForm({
               disabled={pending}
               className="inline-flex min-h-8 items-center gap-1.5 bg-transparent text-sm font-medium text-accent-700 underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-gray-500"
             >
-              Try an example
+              {t("form.example")}
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true" focusable="false">
                 <path d="M9 5 11.5 11.5 18 14 11.5 16.5 9 23 6.5 16.5 0 14 6.5 11.5Z" transform="translate(2 -2) scale(.9)" />
                 <path d="m18 2 1.2 3.8L23 7l-3.8 1.2L18 12l-1.2-3.8L13 7l3.8-1.2Z" />
@@ -129,22 +156,36 @@ export function SituationForm({
             </button>
           </div>
         </div>
+        <fieldset>
+          <legend className="text-sm font-medium text-neutral-800">{t("form.chips")}</legend>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {PICKABLE_NEEDS.map((need) => (
+              <button
+                key={need}
+                type="button"
+                aria-pressed={needs.includes(need)}
+                onClick={() => toggleNeed(need)}
+                disabled={pending}
+                className="need-chip rounded-none border border-neutral-300 bg-paper px-3 py-1.5 text-sm font-medium text-neutral-800 transition hover:border-accent-600"
+              >
+                {t(`need.${need}` as MessageKey)}
+              </button>
+            ))}
+          </div>
+        </fieldset>
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="submit"
             disabled={!canSubmit}
             className="rounded-none bg-accent-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-600"
           >
-            {pending ? "Reading your situation…" : "Find help"}
+            {pending ? t("form.submitting") : t("form.submit")}
           </button>
-          <span className="text-xs text-neutral-500">
-            Running fully offline with a keyword reader. Your data isn&apos;t going to a 3rd party.
-          </span>
+          <span className="text-xs text-neutral-500">{t(aiEnabled ? "form.ai" : "form.offline")}</span>
         </div>
       </div>
       <p className="mt-7 px-0 text-xs text-neutral-500 leading-relaxed sm:px-8">
-        Nothing you type is saved. LifeLine is an MVP running on California resource data for the
-        area. Always confirm program details with the organization.
+        {t("form.privacy")}
       </p>
     </form>
   );

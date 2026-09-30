@@ -6,18 +6,28 @@
       "reviewed_at": "2026-09-22",
       "reviewed_by": "LifeLine team",
       "eligibility": {
-        "housing_status_any_of": ["housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Santa Clara County resident. Low income (the page gives $82,450/yr for a 1-person household; see their table for larger households). Must have past-due rent and a lease or the ability to obtain one. Serves ZIP codes 95008, 95110, 95111, 95112 (south of Santa Clara St), 95113, 95116, 95117, 95118, 95120, 95123, 95124, 95125, 95126, 95128, 95136; other ZIPs are referred to the agency for that area. Immigration status is not asked."
       },
       "eligibility_verified": true,
-      "required_documents": ["Lease or rental agreement", "Landlord ledger or notice showing past-due rent", "Proof of income"],
+      "required_documents": [
+        "Lease or rental agreement",
+        "Landlord ledger or notice showing past-due rent",
+        "Proof of income"
+      ],
       "phone": "(408) 709-2364"
     },
     "housing-assistance-sacred-heart-community-service-8816984a82": {
       "reviewed_at": "2026-09-22",
       "reviewed_by": "LifeLine team",
       "eligibility": {
-        "housing_status_any_of": ["housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Low-income Santa Clara County residents who have lived in the county at least 30 days. Covers past-due rent, emergency security deposits, and mortgage help. Payment goes directly to the landlord. Limited to the ZIP codes listed on the page."
       },
       "eligibility_verified": true,
@@ -28,7 +38,11 @@
       "reviewed_by": "LifeLine team",
       "eligibility": {
         "requires_children": true,
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Must be a family receiving CalWORKs. Apply through your county welfare office; counties prioritize families who are currently homeless."
       },
       "eligibility_verified": true
@@ -38,7 +52,11 @@
       "reviewed_by": "LifeLine team",
       "eligibility": {
         "requires_children": true,
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "For CalWORKs recipients or apparently eligible applicants. Temporary shelter payments for up to 16 days once every 12 months, plus help with a security deposit or last month's rent."
       },
       "eligibility_verified": true
@@ -48,7 +66,11 @@
       "reviewed_by": "LifeLine team",
       "eligibility": {
         "requires_children": true,
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Family must be involved with the child welfare system. Administered by each county; contact your county child welfare agency."
       },
       "eligibility_verified": true
@@ -57,7 +79,11 @@
       "reviewed_at": "2026-09-22",
       "reviewed_by": "LifeLine team",
       "eligibility": {
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Must be an Adult Protective Services client or in APS intake (older adults or dependent adults experiencing abuse, neglect, or financial exploitation). Administered by each county APS office."
       },
       "eligibility_verified": true
@@ -67,7 +93,9 @@
       "reviewed_by": "LifeLine team",
       "active": false,
       "eligibility": {
-        "housing_status_any_of": ["unhoused"],
+        "housing_status_any_of": [
+          "unhoused"
+        ],
         "notes": "COVID-era hotel shelter program that is winding down; site closures vary by county. Not a program people can apply to directly."
       },
       "eligibility_verified": true
@@ -76,7 +104,11 @@
       "reviewed_at": "2026-09-22",
       "reviewed_by": "LifeLine team",
       "eligibility": {
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "Contact the Core Service Agency for your city: Samaritan House (650) 347-3648 for Belmont, Burlingame, Foster City, Hillsborough, Millbrae, San Carlos, San Mateo; Samaritan House South (650) 294-4312 for East Palo Alto and Menlo Park; Fair Oaks Community Center (650) 780-7500 for Redwood City, Atherton, North Fair Oaks, Portola Valley, Woodside; Daly City Partnership (650) 301-3300 for Daly City, Colma, Broadmoor; YMCA Community Resource Center (650) 271-3850 for South San Francisco, Brisbane, San Bruno; Pacifica Resource Center (650) 738-7470; Coastside Hope (650) 726-9071 for Half Moon Bay and the coast; Puente (650) 879-1691 for Pescadero and the south coast."
       },
       "eligibility_verified": true
@@ -85,11 +117,603 @@
       "reviewed_at": "2026-09-22",
       "reviewed_by": "LifeLine team",
       "eligibility": {
-        "housing_status_any_of": ["unhoused", "housed_at_risk", "eviction_notice"],
+        "housing_status_any_of": [
+          "unhoused",
+          "housed_at_risk",
+          "eviction_notice"
+        ],
         "notes": "San Mateo County residents. Emergency rent and utility help, eviction avoidance, and three shelters (Safe Harbor in South San Francisco, Pacific Emergency in Redwood City, El Camino House in San Mateo). Call (650) 347-3648 or apply online at apply.samaritanhousesanmateo.org."
       },
       "eligibility_verified": true,
       "phone": "(650) 347-3648"
+    },
+    "adult-protective-services-5ab041903d": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Each California county has Adult Protective Services to help adults 60 and older, and disabled adults 18-59, who are being abused, neglected, or exploited or can't meet their own needs. Services are free.",
+      "phone": "(833) 401-0832",
+      "eligibility": {
+        "notes": "For elders 60 or older, or dependent adults 18-59 with disabilities, who are believed to be victims of abuse, neglect or exploitation. No income limit and no cost. Call and enter your ZIP code to reach your county APS, 24/7."
+      }
+    },
+    "aging-and-adult-services-prevention-f037030595": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Source page removed; no replacement found (checked 2026-09-30). Old page covered the Fall Prevention Coalition and older-adult prevention programs. Checked full smchealth.org WP sitemap (783 URLs), Aging & Disability Service"
+    },
+    "aging-and-disability-resource-connection-consumer-f9a0e33c59": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Aging and Disability Resource Connections help people find and use long-term services at home. They offer referrals, one-on-one counseling, short-term help getting services, and help moving home from a hospital or nursing facility.",
+      "eligibility": {
+        "notes": "Open to anyone regardless of age, income, or disability. Services are through your local Area Agency on Aging."
+      },
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "phone": ""
+    },
+    "behind-on-your-energy-bills-liheap-may-be-able-to-help-610249020c": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "LIHEAP helps low-income households pay heating and cooling bills with a one-time payment. It may also offer weatherization to make homes safer and more energy efficient. Apply through your local LIHEAP agency.",
+      "application_url": "https://www.csd.ca.gov/Pages/FindServicesInYourArea.aspx?ct=Energy_Bill",
+      "eligibility": {
+        "notes": "Based on income, household size, where you live, and other factors. 2026 monthly income limits: $3,331.66 for 1 person, $4,356.83 for 2, $5,382.00 for 3, $6,407.16 for 4. Funding is limited and very vulnerable households get priority."
+      }
+    },
+    "calfresh-6604f187c8": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CalFresh (SNAP) gives monthly food benefits to people and families with low income. How much you get depends on household size, income, and costs like rent and utilities.",
+      "phone": "(877) 847-3663"
+    },
+    "calfresh-outreach-4b56288b4e": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CalFresh gives monthly food benefits to low-income seniors age 60 and older, including those on SSI/SSP who could not get CalFresh before 2019. Contact your local Area Agency on Aging to see if you qualify.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "California seniors at least 60 years old with low income, whether or not they get SSI or SSP. No specific income figure stated on the page."
+      },
+      "phone": ""
+    },
+    "california-earned-income-tax-credit-0205287d8e": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CalEITC is a state tax credit for working people with low income. It can give you cash back or lower the tax you owe. For tax year 2025, earned income must be $32,900 or less. You claim it by filing a California tax return.",
+      "required_documents": [
+        "California state tax return",
+        "Form FTB 3514 (include with your return)",
+        "Valid SSN or ITIN for you, your spouse/RDP, and any qualifying children"
+      ],
+      "eligibility": {
+        "max_annual_income": 32900,
+        "notes": "Must be at least 18 or have a qualifying child; earned income between $1 and $32,900 (tax year 2025); valid SSN or ITIN for everyone claimed; lived in California more than half the year; can't be claimed as a qualifying child of another taxpayer. Married filing separately has extra rules."
+      }
+    },
+    "california-training-benefits-a8e94f7785": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "California Training Benefits let you go to school or job training while you keep getting unemployment benefits. You don't have to look for work while in training. EDD does not pay for tuition, books, or other costs.",
+      "application_url": "https://forms.edd.ca.gov/forms",
+      "eligibility": {
+        "notes": "Must have a current, valid unemployment claim and be in an eligible training program. Contact EDD before the 16th week of benefit payments to qualify for a training extension."
+      }
+    },
+    "cfap-c30103d9cd": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CFAP gives state-funded food benefits to some noncitizens who can't get CalFresh only because of their immigration status. You use the same application as CalFresh, and the county decides which program you qualify for.",
+      "phone": "(877) 847-3663",
+      "application_url": "https://calfresh.dss.ca.gov/food/",
+      "eligibility": {
+        "notes": "Noncitizens who are ineligible for CalFresh solely because of immigration status, such as green card holders who haven't met the 5-year or 40-work-quarter rule, parolees, conditional entrants, and people who are battered or abused. No age or income figures stated."
+      }
+    },
+    "cfap-expansion-2b7735383d": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": false,
+      "description": "The CFAP expansion will give food benefits to Californians 55 and older who have low income, no matter their immigration status. It is not available yet; the page says it starts October 1, 2027.",
+      "phone": "(877) 847-3663",
+      "eligibility": {
+        "notes": "Will cover income-eligible Californians age 55 or older who are excluded from CalFresh only because of immigration status. A Social Security number is not required if you don't have one. Starts October 1, 2027."
+      }
+    },
+    "children-and-family-services-3a43cfba6d": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "San Mateo County Children and Family Services protects children from abuse and neglect and helps families stay healthy and stable. It also handles child protective services, foster care, and adoptions. Call the Child Abuse Hotline to report concerns.",
+      "phone": "(650) 595-7922"
+    },
+    "community-living-services-ca-department-of-rehabilitation-adb15ebced": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Navigation page with no program of its own (checked 2026-09-30)."
+    },
+    "community-based-adult-services-medicare-services-1d12b4426c": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CBAS is a day health program for adults with chronic medical, memory, or behavioral health conditions or disabilities who are on Medi-Cal. It offers nursing, therapy, meals, personal care, and rides to and from home.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "Age 18 or older, currently eligible for Medi-Cal, and meet specific medical necessity rules."
+      },
+      "phone": ""
+    },
+    "court-based-self-help-services-c83658241a": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Every California superior court has free self-help for people without a lawyer, mainly for family law and small claims. Staff can explain your case and help with forms, but they are not your lawyer and can't give legal advice.",
+      "application_url": "https://selfhelp.courts.ca.gov/self-help/find-self-help",
+      "eligibility": {
+        "notes": "Open to anyone who does not have their own lawyer; no income limit. Services are free. What you tell staff is not confidential."
+      }
+    },
+    "covid-19-mental-health-san-mateo-county-health-53ad7adf02": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Source page removed; no replacement found (checked 2026-09-30). Old 2020 COVID-19 mental health resources page. Sitemap has only one COVID page (https://smchealth.org/division/divisions/public-health-policy-and-planning/prog"
+    },
+    "das-ca-department-of-rehabilitation-c818ed8050": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Serves state agencies, not individuals (checked 2026-09-30)."
+    },
+    "digital-inclusion-730bdf3a23": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "California Department of Aging programs help older adults and people with disabilities get digital devices, internet service plans, and training. Call and say your county name to reach local help.",
+      "phone": "(800) 510-2020",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "For older adults and people with disabilities, through county programs. No age or income figures stated."
+      }
+    },
+    "dignity-at-home-fall-prevention-program-consumer-940ceed641": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Dignity At Home helps adults 60+ and people with disabilities avoid falls. It offers in-home safety checks, home changes, safety equipment, and fall prevention training. Contact your local Area Agency on Aging.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "max_ami_percent": 80,
+        "notes": "Age 60 or older or have a disability; has fallen or is at risk of falling or of needing institutional care; adjusted household income no more than 80% of area median income."
+      },
+      "phone": ""
+    },
+    "disability-insurance-benefits-af2a3ac97e": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Short-term payments for California workers who can't work and lose wages because of a non-work illness, injury, pregnancy, or surgery. Pays about $50 to $1,765 a week for up to 52 weeks.",
+      "application_url": "https://myedd.edd.ca.gov/s/login/?language=en_US&ec=302&startURL=%2Fs%2F",
+      "eligibility": {
+        "notes": "You can't do your regular work for at least 8 days, lost wages because of the disability, were working or looking for work when it started, earned at least $300 with SDI taken out of your pay in your base period, and have a doctor/practitioner certify the disability. Part-time workers may qualify."
+      }
+    },
+    "division-behavioral-health-and-recovery-services-san-mateo-county-health-7e2c8ed765": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "San Mateo County's mental health and substance use services, including prevention, outpatient and inpatient treatment, residential care, detox, and medication-assisted treatment."
+    },
+    "dmv-for-veterans-3fcd83b181": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Helps veterans get a Veteran designation on their California driver's license, veteran logo license plates, or Disabled Veteran plates through the County Veteran Service Office.",
+      "required_documents": [
+        "Military discharge papers (DD-214)",
+        "VA Award Letter (for Disabled Veteran plates, if first visit to the CVSO)",
+        "Proof of vehicle registration (for Disabled Veteran plates)"
+      ],
+      "eligibility": {
+        "requires_veteran": true,
+        "notes": "Veteran designation requires a discharge rating of at least General Discharge. Disabled Veteran plates require a VA-certified condition such as 100% service-connected disability or a service-connected disability affecting mobility, vision, or use of limbs."
+      }
+    },
+    "education-programs-sacred-heart-community-service-dace442723": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Sacred Heart offers early learning and parenting support for families with babies and toddlers, plus after school and summer programs for low-income students in San José and Gilroy.",
+      "phone": "(408) 278-2193"
+    },
+    "employment-services-for-people-with-disabilities-e18487f896": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "EDD helps people with disabilities find jobs with job listings, career coaching, workshops, skills testing, and links to community support through America's Job Centers."
+    },
+    "energy-service-sacred-heart-community-service-27b8f6a4a7": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Helps low-income Santa Clara County households pay home energy bills with one HEAP payment a year ($328 to $521), and helps with PG&E's CARE discount.",
+      "phone": "(877) 278-6455",
+      "required_documents": [
+        "US government-issued photo ID of the applicant",
+        "All pages of your current month's energy bill",
+        "Proof of income from all sources for everyone in the household 18 or older"
+      ],
+      "eligibility": {
+        "notes": "Must live in Santa Clara County and have monthly household gross income below the page's income chart. Energy must come from PG&E, Silicon Valley Power, City of Palo Alto, be submetered, or included in rent. Non-emergency; payment can take 6-8 weeks."
+      }
+    },
+    "family-caregiver-services-consumer-69380bcfaa": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Gives family caregivers a break (respite care) and training. Services are provided through your local Area Agency on Aging.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "Caregivers 18+ caring for someone 60+ or someone of any age with Alzheimer's or a related disorder; relatives (not parents) 55+ raising children under 18; relatives (including parents) 55+ caring for someone of any age with a disability."
+      },
+      "phone": ""
+    },
+    "finding-a-job-sacred-heart-community-service-9f9016055e": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Sacred Heart in San José helps job seekers with resumes, interview practice, job searching, and financial coaching. A new-member orientation is required.",
+      "phone": "(408) 278-2172"
+    },
+    "food-assistance-8284381cab": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "CalFresh gives people with low income a monthly amount on a debit-like card to help buy food. San Mateo County takes applications.",
+      "phone": "(800) 223-8383",
+      "application_url": "https://www.smcgov.org/hsa/apply-calfresh"
+    },
+    "food-services-samaritan-house-e19bba4058": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Samaritan House offers a food pantry, weeknight take-out dinners, weekend lunch, after-school snacks, and meal delivery for seniors and people with disabilities. A food voucher needs an application.",
+      "phone": "(650) 347-3648"
+    },
+    "from-service-to-success-e731b28e27": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "EDD gives veterans, service members, and their spouses priority for job referrals and training, plus help from veteran job specialists at America's Job Centers.",
+      "application_url": "https://www.caljobs.ca.gov/vosnet/default.aspx"
+    },
+    "get-free-or-low-cost-legal-help-78de83c3ab": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Every California superior court has a free self-help center that helps people without a lawyer understand their case and forms. The page also points to legal aid and lawyer referral services.",
+      "eligibility": {
+        "notes": "Open to anyone; no income or residency requirement stated for court self-help centers. Separate legal aid programs depend on income and type of problem."
+      }
+    },
+    "health-dental-samaritan-house-6388b937a4": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Clinics in San Mateo and Redwood City offering medical, dental, vision, and mental health care for low-income, uninsured San Mateo County residents. Start with a case manager referral.",
+      "phone": "(650) 347-3648",
+      "eligibility": {
+        "notes": "For low-income, uninsured people living in San Mateo County, often those who earn too much for Medi-Cal and have no job-based insurance. Needs a referral from a Samaritan House case manager; appointment only."
+      }
+    },
+    "health-care-services-san-mateo-county-health-7442177252": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/about-us/health-coverage-unit/",
+      "application_url": "https://smchealth.org/about-us/health-coverage-unit/",
+      "description": "The county Health Coverage Unit helps people sign up for health coverage like Medi-Cal, Covered California, and county programs such as ACE. Help and screening are free. Call to start.",
+      "phone": "(650) 616-2002",
+      "required_documents": [
+        "Proof of income for all working household members (if any)",
+        "Proof of identity",
+        "Proof of address",
+        "Social Security or Tax ID number (if you have one)",
+        "Immigration or work documents (if you have them)"
+      ],
+      "eligibility": {
+        "notes": "Free help for San Mateo County residents. Which program you qualify for depends on income (FPL-based limits), immigration status, where you live, and age, disability, family size or medical need. Legal status is not required for County-funded coverage."
+      }
+    },
+    "home-community-services-consumer-dc02aa6b3d": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Helps adults 60 and older stay independent with in-home help, adult day care, respite, transportation, legal help, and care management through local Area Agencies on Aging.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "People 60 or older, regardless of income."
+      },
+      "phone": ""
+    },
+    "housing-and-disability-advocacy-program-cbecae5deb": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "For people experiencing homelessness who likely qualify for disability benefits. Offers help applying for benefits, case management, and housing help like rent, deposits, and shelter. Run by counties.",
+      "phone": "(916) 651-5155",
+      "eligibility": {
+        "housing_status_any_of": [
+          "unhoused"
+        ],
+        "notes": "For people experiencing homelessness who are likely eligible for disability benefits; chronic homelessness is prioritized. Run by your county; contact your county point of contact."
+      }
+    },
+    "impact-on-older-adults-cf382039ed": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Story page, not a program (checked 2026-09-30)."
+    },
+    "individuals-families-ca-department-of-developmental-services-3bda8e5926": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "The state Department of Developmental Services supports people with intellectual and developmental disabilities, such as autism, cerebral palsy, and epilepsy, through local regional centers.",
+      "phone": "(833) 421-0061",
+      "application_url": "https://www.dds.ca.gov/rc/lookup-rcs-by-county/"
+    },
+    "legal-services-consumer-d4f7dcfa92": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Legal help for older adults on housing, fraud, elder abuse, Social Security, SSI, Medicare, Medi-Cal, and more, through your local Area Agency on Aging.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "People 60 or older, regardless of income. The page also mentions adults with disabilities."
+      },
+      "phone": ""
+    },
+    "low-income-home-energy-assistance-program-f802146034": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Helps low-income households pay heating and cooling bills, get crisis help with energy, and get free weatherization upgrades. Apply through your local energy agency."
+    },
+    "meal-programs-consumer-f1c9fd7d5f": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Healthy meals for older adults, served at community sites or delivered to homes, plus nutrition education. Offered through local Area Agencies on Aging.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "Group meals: age 60+, their spouse (any age), or a person with a disability living where meals are served. Home-delivered: age 60+ with limited ability to leave home or cook, their spouse, or a person with a disability living with a participant."
+      },
+      "phone": ""
+    },
+    "medi-cal-services-consumer-5a65c2761c": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Pointer page to CBAS and MSSP, which are listed separately (checked 2026-09-30)."
+    },
+    "medicare-counseling-hicap-consumer-eaa1e63ca6": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "HICAP gives free, private one-on-one help with Medicare, long-term care insurance, and other health insurance questions, including appeals. It is for people on Medicare or about to get it.",
+      "phone": "(800) 434-0222",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "Counseling is for people 65 or older who are eligible for Medicare, people under 65 with a disability who are eligible for Medicare, and people who will soon be eligible for Medicare. Education events are open to any age."
+      }
+    },
+    "multipurpose-senior-services-program-medicare-services-3e363af167": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "MSSP helps adults 60 and older on Medi-Cal who need nursing-home-level care stay at home. A care team makes a plan and can arrange services like care management, adult day care, home repair, respite, rides, and meals.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "notes": "Must be 60 or older, eligible for Medi-Cal under a qualifying primary Medi-Cal aid code, and certified or certifiable for placement in a skilled nursing facility."
+      },
+      "phone": ""
+    },
+    "senior-employment-training-consumer-5092db0756": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "SCSEP is a paid job training program for low-income, unemployed adults 55 and older. People work about 20 hours a week at nonprofits or government agencies, earn minimum wage, and build skills for a regular job.",
+      "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
+      "eligibility": {
+        "max_fpl_percent": 125,
+        "notes": "Must be 55 or older and unemployed. Priority goes to veterans and qualified spouses, people over 65, people with disabilities, people with limited English, rural residents, people who are homeless or at risk, and formerly incarcerated people. Not every local agency offers it."
+      },
+      "phone": ""
+    },
+    "mental-health-services-san-mateo-county-health-d331d3a748": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/behavioral-health-recovery-services/programs-and-services/behavioral-health-recovery-services-clinical-services/",
+      "application_url": "https://smchealth.org/division/divisions/behavioral-health-recovery-services/contact-behavioral-health-recovery-services/",
+      "description": "County Behavioral Health & Recovery Services offers mental health care at clinics across the county for all ages. Walk in for a same-day screening, or call the Access Call Center for help finding care.",
+      "phone": "(800) 686-0101",
+      "eligibility": {
+        "notes": "All ages. Request services by calling the Access Call Center or walking in to any regional clinic for Same Day Assistance (first-come, first-served). Contact page: BHRS serves people who are uninsured or have Medi-Cal, CareAdvantage, Medicare, ACE or HealthWorx."
+      }
+    },
+    "protecting-older-and-dependent-adults-7cbb064d03": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/aging-and-adult-services/aging-disability-services-programs-and-services/adult-protective-services/",
+      "application_url": "https://smchealth.org/division/divisions/aging-and-adult-services/aging-disability-services-programs-and-services/adult-protective-services/",
+      "description": "Adult Protective Services helps older adults (60+) and dependent adults (18-59) who are being abused, neglected, or taken advantage of. Call the 24/7 line to report abuse. You can stay anonymous.",
+      "phone": "(844) 868-0938",
+      "eligibility": {
+        "notes": "For adults 60 and older and dependent adults ages 18-59 who are victims of abuse, neglect or exploitation. Anyone can report; non-mandated reporters may report without giving their name. Home Safe program: must be an APS client (or in intake), experiencing or at imminent risk of homelessness, and agree to participate."
+      }
+    },
+    "services-aging-and-disability-san-mateo-county-health-c340ebf37d": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/aging-and-adult-services/",
+      "application_url": "https://smchealth.org/division/divisions/aging-and-adult-services/contact-us/",
+      "description": "Aging & Disability Services helps older adults and people with disabilities. It offers abuse protection, in-home care (IHSS), public guardian help, and referrals to local services. A 24-hour line is available.",
+      "phone": "(844) 868-0938"
+    },
+    "services-general-health-san-mateo-county-health-9d053aaad6": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/services/smch-services/medical-services/",
+      "application_url": "https://smchealth.org/medical-center/san-mateo-medical-center/contact/",
+      "description": "San Mateo Medical Center is the county's public hospital and clinic system. It offers primary care, dental care, specialty care, women's health, and emergency care for people across the county.",
+      "phone": "(650) 372-3200"
+    },
+    "services-mental-health-substance-use-san-mateo-county-health-aa4699a495": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/behavioral-health-recovery-services/",
+      "application_url": "https://smchealth.org/division/divisions/behavioral-health-recovery-services/contact-behavioral-health-recovery-services/",
+      "description": "County Behavioral Health & Recovery Services offers mental health and substance use care, including treatment, detox, and recovery support. Call the 24/7 Access Call Center to get connected.",
+      "phone": "(800) 686-0101",
+      "eligibility": {
+        "notes": "Serves people of all cultures and ages needing mental health and/or substance use support. Access Call Center is the entry point for Medi-Cal members seeking non-emergency care. Serves people who are uninsured or have Medi-Cal, CareAdvantage, Medicare, ACE or HealthWorx."
+      }
+    },
+    "services-parenting-support-classes-san-mateo-county-health-9bb82ccf2a": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "exclude": true,
+      "exclude_reason": "Source page removed; no replacement found (checked 2026-09-30). Old page listed free parenting classes. Checked full sitemap, Family Health Services programs list, services hub (Family Support, Early Childhood & Nutrition) a"
+    },
+    "services-pregnancy-children-families-san-mateo-county-health-69f5ab8dac": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/family-health-services/",
+      "application_url": "https://smchealth.org/division/divisions/family-health-services/contact-us/",
+      "description": "Family Health Services helps low-income parents and children in San Mateo County. Services include home visits, health screenings, vaccine clinics, lead checks, WIC nutrition help, and support for kids with special health needs.",
+      "phone": "(650) 573-3501",
+      "eligibility": {
+        "notes": "Focuses on San Mateo County parents and children who are low-income and have faced health inequities."
+      }
+    },
+    "services-where-to-get-care-san-mateo-county-health-8b22f5e434": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/medical-center/san-mateo-medical-center/",
+      "application_url": "https://smchealth.org/medical-center/san-mateo-medical-center/contact/",
+      "description": "San Mateo Medical Center is the county's public hospital and clinics. It offers primary and specialty care for the whole family, plus emergency, surgery, and rehab services. New patients can call for help getting started.",
+      "phone": "(650) 372-3200"
+    },
+    "services-women-infants-children-wic-program-san-mateo-county-health-eeb00151b8": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/family-health-services/programs-and-services/women-infants-children-wic/",
+      "application_url": "https://smchealth.org/division/divisions/family-health-services/programs-and-services/women-infants-children-wic/",
+      "description": "WIC gives healthy food, nutrition education, breastfeeding help, and health referrals to low-income pregnant or new moms and children under 5. Dads, grandparents, and foster parents can apply for kids too.",
+      "phone": "(650) 573-2168",
+      "eligibility": {
+        "notes": "Serves pregnant women, breastfeeding women up to 1 year postpartum, non-breastfeeding women up to 6 months postpartum, women with a pregnancy loss in the past 6 months, and infants/children under 5 (including foster children). Must meet income guidelines (see CDPH); families on Medi-Cal, CalFresh or CalWORKs qualify."
+      }
+    },
+    "support-for-older-and-dependent-adults-d2364894b8": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "source_url": "https://smchealth.org/division/divisions/aging-and-adult-services/aging-disability-services-programs-and-services/in-home-supportive-services/",
+      "application_url": "https://forms.office.com/Pages/ResponsePage.aspx?id=Nfb6DU2gzEin422hrwiD-aRGdI4qxrFGs92qB-3zFhVUN05TWTAwVFpBQTZYUFJUQTVBNjdCUE5HVi4u",
+      "description": "In-Home Supportive Services (IHSS) pays for help at home, like cooking, cleaning, bathing, and rides to the doctor. It is for people on Medi-Cal who are 65+, blind, or disabled, so they can stay safely at home.",
+      "phone": "(650) 573-3900",
+      "required_documents": [
+        "Online referral form",
+        "IHSS Health Care Certification Form (SOC 873), completed by a licensed health care professional within 45 days of applying"
+      ],
+      "eligibility": {
+        "notes": "Must be 65 or older, blind, or disabled (disability lasting 1 year or longer; disabled children may qualify), live in San Mateo County in your own home, be enrolled in active full-scope Medi-Cal, and complete an in-home assessment. Services may be free or you may pay part based on income."
+      }
+    },
+    "resources-for-child-support-5e2ab0b08e": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "A California Courts list of free child support help. It covers your court's family law facilitator or self-help center, a support calculator, legal aid lookup, and how to apply at your county child support agency.",
+      "application_url": "https://childsupport.ca.gov/apply-for-child-support/"
+    },
+    "resources-for-debt-lawsuits-43f3e4a5da": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "A California Courts list of free help if you are sued over a debt. It covers court self-help centers, legal aid lookup, law libraries, lawyer referrals, and consumer protection offices that explain your rights with debt collectors.",
+      "application_url": "https://selfhelp.courts.ca.gov/self-help/find-self-help"
+    },
+    "resources-for-small-claims-cases-99122b5bbe": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "A California Courts list of free help with small claims cases. It covers small claims advisors, court self-help centers, legal aid lookup, law libraries, and state consumer offices where you can file complaints.",
+      "application_url": "https://selfhelp.courts.ca.gov/self-help/find-self-help"
+    },
+    "supported-employment-program-ca-department-of-rehabilitation-da3d231c03": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "The Department of Rehabilitation's Supported Employment Program gives people with the most significant disabilities a job coach to help them learn a job, do it well, and keep working. DOR services usually last up to 24 months.",
+      "eligibility": {
+        "notes": "For people with a most significant disability, including youth. You apply through the Department of Rehabilitation's general application for DOR services."
+      }
+    },
+    "unemployment-benefits-ee6514d15c": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Unemployment benefits give short-term weekly payments of $40 to $450 to California workers who lost their job or had their hours cut through no fault of their own. The amount depends on what you earned in the past 18 months.",
+      "application_url": "https://myedd.edd.ca.gov/s/login/?language=en_US&ec=302&startURL=%2Fs%2F",
+      "required_documents": [
+        "Social Security number",
+        "Photo ID (such as a driver's license, ID card, or passport)",
+        "A second identity document (such as a W2, utility bill, or birth certificate)",
+        "Employer names, addresses, dates worked, gross wages, and hours for the past 18 months",
+        "Most recent employer and supervisor contact information, last day worked, and last week's gross wages",
+        "USCIS document (such as a Permanent Resident Card or Employment Authorization Card), if not a U.S. citizen",
+        "Standard Form 8, if you worked for the federal government in the last 18 months",
+        "DD214 Member Copy 4, if you served in the military in the last 18 months"
+      ],
+      "eligibility": {
+        "notes": "Must have a Social Security number and, if not a U.S. citizen, work authorization. Must have earned enough wages in the base period (past 18 months). Must be fully or partly unemployed through no fault of your own, and able, available, ready, and looking for work each week. People who quit or were fired may still qualify."
+      }
+    },
+    "utility-assistance-sacred-heart-community-service-8c8ea63e44": {
+      "reviewed_at": "2026-09-30",
+      "reviewed_by": "LifeLine team (source check)",
+      "active": true,
+      "description": "Sacred Heart helps low-income Santa Clara County households with utility bills. HEAP gives a once-a-year credit on your energy bill. WRAP pays up to $1,000 a year on your water bill. Because funding is limited, HEAP help is not guaranteed.",
+      "phone": "(877) 278-6455",
+      "application_url": "https://www.caliheapapply.com/",
+      "required_documents": [
+        "Current proof of income for everyone in the household, or proof of CalFresh or CalWORKs from the last 30 days (for WRAP)",
+        "Completed application",
+        "Residential water bill (for WRAP)"
+      ],
+      "eligibility": {
+        "notes": "For Santa Clara County residents who meet the program's income limits. The posted monthly limit is $3,331 for a 1-person household and $4,356 for 2 (up to $8,841 for 8). HEAP covers PG&E, Silicon Valley Power, City of Palo Alto, submetered, and included-in-rent energy. WRAP requires that you pay a residential water bill due within 30 to 60 days. A HEAP priority plan is in effect, so some income-eligible households may be denied."
+      }
     }
   }
 }

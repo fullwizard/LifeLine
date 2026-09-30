@@ -1,20 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import type { AskableField, Situation } from "@/lib/types";
+import { formatMoney, type MessageKey } from "@/lib/i18n";
+import type { AskableField, ResourceCategory, Situation } from "@/lib/types";
 import type { ParseResponse } from "../actions";
+import { useLanguage } from "./LanguageProvider";
+import { PICKABLE_NEEDS } from "./SituationForm";
 
 export function FollowUpStep({
   parsed,
   pending,
   onAnswer,
+  onNeedsChange,
   onBack,
 }: {
   parsed: ParseResponse;
   pending: boolean;
   onAnswer: (answer: { field: AskableField; value: string } | null) => void;
+  onNeedsChange: (needs: ResourceCategory[]) => void;
   onBack: () => void;
 }) {
+  const { t } = useLanguage();
   const q = parsed.question!;
   const [value, setValue] = useState("");
   const [locationStatus, setLocationStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -39,9 +45,18 @@ export function FollowUpStep({
     );
   }
 
+  const rationale =
+    q.expectedEliminations > 0
+      ? t("fu.rationale", { n: q.expectedEliminations, total: parsed.candidateCount })
+      : t("fu.rationale.fit");
+
   return (
     <div className="grid items-start gap-8 md:grid-cols-[1fr_1.65fr]">
-      <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} />
+      <UnderstoodFacts
+        situation={parsed.situation}
+        candidateCount={parsed.candidateCount}
+        onNeedsChange={pending ? undefined : onNeedsChange}
+      />
 
       <form
         className="rounded-none bg-paper p-5 space-y-4"
@@ -52,11 +67,11 @@ export function FollowUpStep({
         }}
       >
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">A few focused questions</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">{t("fu.kicker")}</p>
           <label htmlFor="answer" className="mt-1 block text-lg font-medium">
-            {q.prompt}
+            {t(`q.${q.field}` as MessageKey)}
           </label>
-          <p className="mt-1 text-sm text-neutral-500">{q.rationale}</p>
+          <p className="mt-1 text-sm text-neutral-500">{rationale}</p>
         </div>
 
         {q.inputType === "select" && (
@@ -77,7 +92,7 @@ export function FollowUpStep({
                   onChange={() => setValue(o.value)}
                   className="mt-0.5 accent-accent-700"
                 />
-                <span>{o.label}</span>
+                <span>{q.field === "housingStatus" ? t(`hs.option.${o.value}` as MessageKey) : o.label}</span>
               </label>
             ))}
           </div>
@@ -86,13 +101,14 @@ export function FollowUpStep({
         {q.inputType === "boolean" && (
           <div className="flex gap-2">
             {[
-              { v: "true", label: "Yes" },
-              { v: "false", label: "No" },
+              { v: "true", label: t("fu.yes") },
+              { v: "false", label: t("fu.no") },
             ].map((o) => (
               <button
                 key={o.v}
                 type="button"
                 onClick={() => setValue(o.v)}
+                aria-pressed={value === o.v}
                 className={
                   "rounded-none border px-5 py-2 text-sm font-medium transition " +
                   (value === o.v ? "border-accent-600 bg-accent-50 text-accent-900" : "border-neutral-200 bg-paper hover:border-neutral-300")
@@ -116,7 +132,7 @@ export function FollowUpStep({
                 setValue(e.target.value);
                 if (q.field === "location") setLocationStatus("idle");
               }}
-              placeholder={q.field === "location" ? "e.g. San Jose, Santa Clara County, or 95112" : q.field === "monthlyIncome" ? "e.g. 2400" : ""}
+              placeholder={q.field === "location" ? t("fu.placeholder.location") : q.field === "monthlyIncome" ? t("fu.placeholder.income") : ""}
               className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
             />
             {q.field === "location" && (
@@ -127,11 +143,11 @@ export function FollowUpStep({
                   disabled={pending || locationStatus === "loading"}
                   className="text-sm font-medium text-accent-700 underline underline-offset-4 hover:text-accent-900 disabled:text-neutral-400"
                 >
-                  {locationStatus === "loading" ? "Finding your location…" : "Use my location"}
+                  {locationStatus === "loading" ? t("fu.locating") : t("fu.useLocation")}
                 </button>
                 {locationStatus === "error" && (
                   <span className="text-sm text-neutral-500" role="status">
-                    Location access was unavailable. Enter a city, county, or ZIP instead.
+                    {t("fu.locationError")}
                   </span>
                 )}
               </div>
@@ -145,10 +161,10 @@ export function FollowUpStep({
             disabled={pending}
             className="rounded-none bg-accent-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-800 disabled:bg-neutral-200 disabled:text-neutral-600"
           >
-            {pending ? "Building your plan…" : value.trim() ? "Continue" : "Skip and build my plan"}
+            {pending ? t("fu.building") : value.trim() ? t("fu.continue") : t("fu.skip")}
           </button>
           <button type="button" onClick={onBack} disabled={pending} className="text-sm text-neutral-500 hover:text-neutral-800">
-            Edit my description
+            {t("fu.edit")}
           </button>
         </div>
       </form>
@@ -156,73 +172,80 @@ export function FollowUpStep({
   );
 }
 
-const STATUS_LABEL: Record<NonNullable<Situation["housingStatus"]>, string> = {
-  housed_stable: "Housed, current on rent",
-  housed_at_risk: "At risk of losing housing",
-  eviction_notice: "Eviction notice received",
-  unhoused: "Currently unhoused",
-};
-
-const NEED_LABEL: Record<string, string> = {
-  rental_assistance: "rent help",
-  food: "food",
-  utility: "utilities",
-  shelter: "shelter",
-  employment: "work",
-  legal: "legal help",
-  health: "health care",
-  benefits: "public benefits",
-  family_support: "family support",
-  veteran_support: "veteran services",
-  older_adult_support: "older adult services",
-  disability: "disability services",
-  mental_health: "mental health support",
-  substance_use: "substance-use support",
-  condition_support: "condition-specific support",
-};
-
 export function UnderstoodFacts({
   situation,
   candidateCount,
+  onNeedsChange,
 }: {
   situation: Situation;
   candidateCount?: number;
+  /** When set, needs become toggles so the person can correct what we read. */
+  onNeedsChange?: (needs: ResourceCategory[]) => void;
 }) {
+  const { lang, t } = useLanguage();
   const chips: string[] = [];
   const loc = situation.location;
   if (loc) {
-    const label = [loc.city, loc.county].filter(Boolean).join(", ") || (loc.zip ? `ZIP ${loc.zip}` : undefined);
-    chips.push(label ?? (loc.lat !== undefined && loc.lng !== undefined ? "Current location" : "Location provided"));
+    const label = [loc.city, loc.county].filter(Boolean).join(", ") || (loc.zip ? t("facts.zip", { zip: loc.zip }) : undefined);
+    chips.push(label ?? (loc.lat !== undefined && loc.lng !== undefined ? t("facts.currentLocation") : t("facts.locationProvided")));
   }
-  if (situation.housingStatus) chips.push(STATUS_LABEL[situation.housingStatus]);
-  if (situation.householdSize) chips.push(`Household of ${situation.householdSize}`);
-  if (situation.monthlyIncome !== undefined) chips.push(`$${situation.monthlyIncome.toLocaleString("en-US")}/month`);
-  if (situation.hasChildren === true) chips.push("Has children");
-  if (situation.hasChildren === false) chips.push("No children");
-  if (situation.isVeteran === true) chips.push("Veteran");
-  if (situation.isVeteran === false) chips.push("Not a veteran");
-  if (situation.needs?.length) chips.push(`Needs: ${situation.needs.map((n) => NEED_LABEL[n] ?? n).join(", ")}`);
+  if (situation.housingStatus) chips.push(t(`status.${situation.housingStatus}` as MessageKey));
+  if (situation.householdSize) chips.push(t("facts.household", { n: situation.householdSize }));
+  if (situation.monthlyIncome !== undefined) chips.push(t("facts.income", { amount: formatMoney(situation.monthlyIncome, lang) }));
+  if (situation.monthlyHousingCost !== undefined) chips.push(t("facts.rent", { amount: formatMoney(situation.monthlyHousingCost, lang) }));
+  if (situation.hasChildren === true) chips.push(t("facts.kids"));
+  if (situation.hasChildren === false) chips.push(t("facts.noKids"));
+  if (situation.isPregnant) chips.push(t("facts.pregnant"));
+  if (situation.age !== undefined) chips.push(t("facts.age", { n: situation.age }));
+  if (situation.isVeteran === true) chips.push(t("facts.veteran"));
+  if (situation.isVeteran === false) chips.push(t("facts.notVeteran"));
+
+  const needs = situation.needs ?? [];
+  const toggleable = Array.from(new Set([...needs, ...PICKABLE_NEEDS]));
+
+  function toggle(need: ResourceCategory) {
+    onNeedsChange?.(needs.includes(need) ? needs.filter((n) => n !== need) : [...needs, need]);
+  }
 
   return (
     <section className="rounded-none bg-neutral-100 px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-medium text-neutral-700">What we understood</h2>
-        {candidateCount !== undefined && (
-          <span className="text-xs text-neutral-500">
-            {candidateCount} possible resource{candidateCount === 1 ? "" : "s"} so far
-          </span>
-        )}
+        <h2 className="text-sm font-medium text-neutral-700">{t("facts.title")}</h2>
+        {candidateCount !== undefined && <span className="text-xs text-neutral-500">{t("facts.count", { n: candidateCount })}</span>}
       </div>
-      {chips.length ? (
+      {chips.length || needs.length ? (
         <ul className="mt-2 flex flex-wrap gap-2">
           {chips.map((c) => (
             <li key={c} className="rounded-none bg-paper px-3 py-1 text-xs text-neutral-800">
               {c}
             </li>
           ))}
+          {!onNeedsChange && needs.length > 0 && (
+            <li className="rounded-none bg-paper px-3 py-1 text-xs text-neutral-800">
+              {t("facts.needs")}: {needs.map((n) => t(`need.${n}` as MessageKey)).join(", ")}
+            </li>
+          )}
         </ul>
       ) : (
-        <p className="mt-2 text-sm text-neutral-500">We could not pick out specific details yet.</p>
+        <p className="mt-2 text-sm text-neutral-500">{t("facts.none")}</p>
+      )}
+      {onNeedsChange && (
+        <div className="mt-3">
+          <p className="text-xs text-neutral-600">{t("facts.editHint")}</p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {toggleable.map((need) => (
+              <button
+                key={need}
+                type="button"
+                aria-pressed={needs.includes(need)}
+                onClick={() => toggle(need)}
+                className="need-chip rounded-none border border-neutral-300 bg-paper px-2.5 py-1 text-xs font-medium text-neutral-800 transition hover:border-accent-600"
+              >
+                {t(`need.${need}` as MessageKey)}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </section>
   );
