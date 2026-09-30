@@ -20,6 +20,33 @@ const candidate = (overrides = {}) => ({
 });
 
 describe("promote", () => {
+  it("applies reviewed descriptions, links, and phone removal, and drops excluded listings", () => {
+    const reviewed = {
+      overrides: {
+        "rent-help-1": {
+          reviewed_at: "2026-09-30",
+          reviewed_by: "tester",
+          description: "Helps pay rent you owe.",
+          application_url: "https://example.org/new-apply",
+          source_url: "https://example.org/new",
+          phone: "",
+        },
+        gone: { reviewed_at: "2026-09-30", reviewed_by: "tester", exclude: true, exclude_reason: "Page removed." },
+      },
+    };
+    const result = promote({ candidates: [candidate({ phone: "1-800-000-0000" }), candidate({ id: "gone" })] }, reviewed);
+    expect(result.errors).toEqual([]);
+    expect(result.resources.map((r) => r.id)).toEqual(["rent-help-1"]);
+    expect(result.resources[0]).toMatchObject({ description: "Helps pay rent you owe.", application_url: "https://example.org/new-apply", source_url: "https://example.org/new" });
+    expect(result.resources[0].phone).toBeUndefined();
+    expect(result.stats.excludedByReview).toBe(1);
+  });
+
+  it("requires a reason to exclude a listing", () => {
+    const result = promote({ candidates: [candidate()] }, { overrides: { "rent-help-1": { reviewed_at: "2026-09-30", reviewed_by: "t", exclude: true } } });
+    expect(result.errors.join(" ")).toMatch(/exclude_reason/);
+  });
+
   it("promotes valid candidates and skips uncategorized ones", () => {
     const result = promote({ candidates: [candidate(), candidate({ id: "x", category: null })] }, { overrides: {} });
     expect(result.errors).toEqual([]);

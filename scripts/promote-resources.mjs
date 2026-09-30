@@ -38,7 +38,10 @@ const ELIGIBILITY_KEYS = {
   housing_status_any_of: "housing_statuses",
   notes: "string",
 };
-const OVERRIDE_KEYS = new Set(["reviewed_at", "reviewed_by", "active", "eligibility_verified", "eligibility", "phone", "address", "response_time_days", "required_documents"]);
+const OVERRIDE_KEYS = new Set([
+  "reviewed_at", "reviewed_by", "active", "eligibility_verified", "eligibility", "phone", "address", "response_time_days",
+  "required_documents", "description", "application_url", "source_url", "exclude", "exclude_reason",
+]);
 // "US", "California", "Santa Clara County, CA", "Santa Clara and San Mateo counties, CA", "San Jose, CA"
 const SERVICE_AREA = /^(?:US|California|[A-Z][\w .'-]+(?: and [A-Z][\w .'-]+)*(?: count(?:y|ies))?, CA)$/;
 
@@ -99,6 +102,9 @@ export function applyOverride(candidate, override) {
   if (override.address !== undefined) out.address = override.address;
   if (override.response_time_days !== undefined) out.response_time_days = override.response_time_days;
   if (override.required_documents !== undefined) out.required_documents = [...override.required_documents];
+  if (override.description !== undefined) out.description = override.description;
+  if (override.application_url !== undefined) out.application_url = override.application_url;
+  if (override.source_url !== undefined) out.source_url = override.source_url;
   if (override.reviewed_at) out.last_verified = override.reviewed_at;
   return out;
 }
@@ -154,12 +160,14 @@ export function promote(crawl, reviewed) {
     for (const key of Object.keys(override)) if (!OVERRIDE_KEYS.has(key)) errors.push(`override "${id}": unknown field "${key}"`);
     if (!override.reviewed_at || !override.reviewed_by) errors.push(`override "${id}": reviewed_at and reviewed_by are required`);
     if (override.eligibility) validateEligibility(override.eligibility, `override "${id}"`, errors);
+    if (override.exclude && !override.exclude_reason) errors.push(`override "${id}": exclude needs an exclude_reason`);
   }
 
   const resources = [];
   const seenIds = new Set();
   const seenApply = new Map();
   let skippedUncategorized = 0;
+  let excluded = 0;
   for (const candidate of candidates) {
     if (!candidate.category) {
       skippedUncategorized += 1;
@@ -171,6 +179,10 @@ export function promote(crawl, reviewed) {
     }
     seenIds.add(candidate.id);
     const override = overrides[candidate.id];
+    if (override?.exclude) {
+      excluded += 1;
+      continue;
+    }
     const resource = toResource(applyOverride(override ? candidate : backfillEligibility(candidate), override));
     validateResource(resource, errors);
     const applyKey = resource.application_url?.toLowerCase();
@@ -186,6 +198,7 @@ export function promote(crawl, reviewed) {
     candidates: candidates.length,
     promoted: resources.length,
     skippedUncategorized,
+    excludedByReview: excluded,
     verified: resources.filter((r) => r.eligibility_verified).length,
     withEligibility: resources.filter((r) => Object.keys(r.eligibility).length > 0).length,
     backfilled: resources.filter((r) => !r.eligibility_verified && Object.keys(r.eligibility).length > 0).length,
