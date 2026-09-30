@@ -36,6 +36,9 @@ lib/followup/           Deterministic next-question selection (expected eliminat
 lib/data/               getResources() → California crawl candidates today, Supabase later; AMI + place lookups
 lib/gemini/             Parser + explainer interfaces; Gemini impls with deterministic fallbacks
 lib/plan/buildPlan.ts   The only place the layers are wired together
+lib/plan/readyPacket.ts "Get ready" packet: ordered steps, one merged document checklist, call scripts, share text
+lib/benefits/           Benefit estimator (CalFresh $, CARE/FERA, Medi-Cal, WIC, school meals, CalEITC) + dated figures
+lib/i18n/               English/Spanish/Vietnamese/Traditional Chinese strings; missing keys fall back to English
 app/                    Next.js App Router UI (server actions in app/actions.ts)
 ```
 
@@ -54,6 +57,24 @@ app/                    Next.js App Router UI (server actions in app/actions.ts)
   income under the 1-person limit is `met`, over the 8-person limit is
   excluded, and anything between is `unverified`.
 
+### Benefit estimates
+
+`lib/benefits/estimate.ts` applies each program's published rules to what the
+person told us. CalFresh uses the standard formula (gross − 20% of earnings −
+standard deduction − excess shelter, then max allotment − 30% of net) with
+California's 200% FPL gross test. Unknown facts widen the range or downgrade
+the result to "possible"; every estimate lists its assumptions.
+`lib/benefits/figures.ts` holds dated figure sets and switches on October 1.
+**Add next year's block each August** when USDA publishes the SNAP COLA memo.
+
+### Languages
+
+The UI, benefit text, and packet are translated (`lib/i18n/messages/*.ts`);
+`npm test` fails if any language is missing a key or placeholder. The keyword
+parser rewrites everyday Spanish into phrasings its English rules understand
+(`lib/gemini/fallback/spanish.ts`); with `GEMINI_API_KEY` set, any language works.
+Program descriptions and eligibility details come from English sources.
+
 ## Data pipeline
 
 ```
@@ -71,9 +92,11 @@ npm run promote:resources     # validates + applies overrides → data/resources
   housing status, CalWORKs/APS prerequisites, residency, ZIP lists). Everything
   it produces is `eligibility_verified: false` and shown as "needs verification".
 - An override in `eligibility-overrides.json` replaces the record's eligibility
-  wholesale, marks it verified, and can also fix `active`, `phone`,
-  `required_documents`, and `response_time_days`. Only add what you have read
-  on the source page.
+  wholesale, marks it verified, and can also fix `active`, `phone` (`""`
+  removes a wrong number), `required_documents`, `response_time_days`,
+  `description`, `application_url`, and `source_url`. `exclude: true` (with an
+  `exclude_reason`) drops a dead page or non-program. Only add what you have
+  read on the source page.
 - `lib/data/ami.ts` holds HUD FY2026 Area Median Income by county. Refresh it
   each spring.
 

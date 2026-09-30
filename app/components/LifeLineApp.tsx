@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { AskableField, Plan } from "@/lib/types";
+import type { MessageKey } from "@/lib/i18n";
+import type { AskableField, Plan, ResourceCategory } from "@/lib/types";
 import { hasImmediateSafetyConcern } from "@/lib/safety";
-import { answerAndBuildPlan, answerAndContinue, parseAndAsk, type ParseResponse } from "../actions";
+import { answerAndBuildPlan, answerAndContinue, parseAndAsk, refinePlan as refinePlanAction, updateNeeds, type ParseResponse } from "../actions";
 import { CrisisBanner, CrisisSupport } from "./CrisisSupport";
 import { FollowUpStep } from "./FollowUpStep";
+import { useLanguage } from "./LanguageProvider";
 import { PlanView } from "./PlanView";
 import { SituationForm } from "./SituationForm";
 
@@ -15,66 +17,74 @@ type Step =
   | { kind: "followup"; parsed: ParseResponse }
   | { kind: "plan"; plan: Plan };
 
-export function LifeLineApp() {
+export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
+  const { lang, t } = useLanguage();
   const [step, setStep] = useState<Step>({ kind: "input" });
   const [text, setText] = useState("");
+  const [pickedNeeds, setPickedNeeds] = useState<ResourceCategory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  function submitSituation(value: string) {
+  function run(task: () => Promise<void>) {
     setError(null);
-    setText(value);
     startTransition(async () => {
       try {
-        const parsed = await parseAndAsk(value);
-        if (hasImmediateSafetyConcern(parsed.situation)) {
-          setStep({ kind: "crisis", parsed });
-        } else if (parsed.question) {
-          setStep({ kind: "followup", parsed });
-        } else {
-          const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
-          setStep({ kind: "plan", plan });
-        }
+        await task();
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+        setError(e instanceof Error && e.message ? e.message : t("app.error"));
+      }
+    });
+  }
+
+  function submitSituation(value: string, needs: ResourceCategory[]) {
+    setText(value);
+    setPickedNeeds(needs);
+    run(async () => {
+      const parsed = await parseAndAsk(value, needs);
+      if (hasImmediateSafetyConcern(parsed.situation)) {
+        setStep({ kind: "crisis", parsed });
+      } else if (parsed.question) {
+        setStep({ kind: "followup", parsed });
+      } else {
+        setStep({ kind: "plan", plan: await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null, lang) });
       }
     });
   }
 
   function continueFromCrisis(parsed: ParseResponse) {
-    setError(null);
     if (parsed.question) {
+      setError(null);
       setStep({ kind: "followup", parsed });
       return;
     }
-    startTransition(async () => {
-      try {
-        const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
-        setStep({ kind: "plan", plan });
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
-      }
+    run(async () => {
+      setStep({ kind: "plan", plan: await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null, lang) });
     });
   }
 
   function submitAnswer(parsed: ParseResponse, answer: { field: AskableField; value: string } | null) {
-    setError(null);
-    startTransition(async () => {
-      try {
-        if (!answer) {
-          const plan = await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null);
-          setStep({ kind: "plan", plan });
-          return;
-        }
-        const next = await answerAndContinue(parsed.situation, parsed.parsedBy, answer);
-        if ("plan" in next) {
-          setStep({ kind: "plan", plan: next.plan });
-        } else {
-          setStep({ kind: "followup", parsed: next });
-        }
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+    run(async () => {
+      if (!answer) {
+        setStep({ kind: "plan", plan: await answerAndBuildPlan(parsed.situation, parsed.parsedBy, null, lang) });
+        return;
       }
+      const next = await answerAndContinue(parsed.situation, parsed.parsedBy, answer, lang);
+      setStep("plan" in next ? { kind: "plan", plan: next.plan } : { kind: "followup", parsed: next });
+    });
+  }
+
+  /** The person corrected which needs we picked up; recount before asking more. */
+  function changeNeeds(parsed: ParseResponse, needs: ResourceCategory[]) {
+    run(async () => {
+      const { situation, candidateCount } = await updateNeeds(parsed.situation, needs);
+      setStep({ kind: "followup", parsed: { ...parsed, situation, candidateCount } });
+    });
+  }
+
+  /** Rebuild the plan after the person adds a detail from the plan page. */
+  function refinePlan(plan: Plan, answers: { field: AskableField; value: string }[]) {
+    run(async () => {
+      setStep({ kind: "plan", plan: await refinePlanAction(plan.situation, plan.parsedBy, answers, lang) });
     });
   }
 
@@ -87,25 +97,25 @@ export function LifeLineApp() {
     <div className="space-y-6">
       {step.kind === "input" && (
         <h1 className="headline-georgia mx-auto max-w-4xl text-center text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-balance">
-          A Personalized Assistance Plan, At Your Finger Tips.
+          {t("app.headline")}
         </h1>
       )}
-      {step.kind !== "input" && <StepIndicator current={step.kind} />}
+      {step.kind !== "input" && (
+        <h2 className="text-xl sm:text-2xl font-medium text-accent-700 no-print" aria-live="polite">
+          {t(`app.step.${step.kind}` as MessageKey)}
+        </h2>
+      )}
       {error && (
         <div role="alert" className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </div>
       )}
       {step.kind === "input" && (
-        <SituationForm initialText={text} pending={pending} onSubmit={submitSituation} />
+        <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
       )}
       {(step.kind === "followup" || step.kind === "plan") && hasImmediateSafetyConcern(situationOf(step)) && <CrisisBanner />}
       {step.kind === "crisis" && (
-        <CrisisSupport
-          pending={pending}
-          onContinue={() => continueFromCrisis(step.parsed)}
-          onEdit={reset}
-        />
+        <CrisisSupport pending={pending} onContinue={() => continueFromCrisis(step.parsed)} onEdit={reset} />
       )}
       {step.kind === "followup" && (
         <FollowUpStep
@@ -113,10 +123,13 @@ export function LifeLineApp() {
           parsed={step.parsed}
           pending={pending}
           onAnswer={(a) => submitAnswer(step.parsed, a)}
+          onNeedsChange={(needs) => changeNeeds(step.parsed, needs)}
           onBack={reset}
         />
       )}
-      {step.kind === "plan" && <PlanView plan={step.plan} onReset={reset} />}
+      {step.kind === "plan" && (
+        <PlanView plan={step.plan} pending={pending} onRefine={(a) => refinePlan(step.plan, a)} onReset={reset} />
+      )}
     </div>
   );
 }
@@ -125,14 +138,4 @@ function situationOf(step: Step) {
   if (step.kind === "followup" || step.kind === "crisis") return step.parsed.situation;
   if (step.kind === "plan") return step.plan.situation;
   return {};
-}
-
-function StepIndicator({ current }: { current: Step["kind"] }) {
-  const labels = {
-    input: "Tell us what is going on.",
-    crisis: "Support is available right now.",
-    followup: "A little more about you.",
-    plan: "Your next steps.",
-  };
-  return <h2 className="text-xl sm:text-2xl font-medium text-accent-700" aria-live="polite">{labels[current]}</h2>;
 }

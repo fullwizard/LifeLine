@@ -5,6 +5,7 @@
  *
  * AI never selects, ranks, or invents resources.
  */
+import type { Lang } from "../i18n";
 import type { ScoredResource, Situation } from "../types";
 
 export type Provider = "gemini" | "fallback";
@@ -27,5 +28,5 @@ export interface Explanation {
 }
 
 export interface PlanExplainer {
-  explain(situation: Situation, ranked: ScoredResource[]): Promise<Explanation>;
+  explain(situation: Situation, ranked: ScoredResource[], lang?: Lang): Promise<Explanation>;
 }

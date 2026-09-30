@@ -158,9 +158,17 @@ export interface Situation {
   householdSize?: number;
   /** Gross household income per month, USD. */
   monthlyIncome?: number;
+  /** Whether that income is from work, benefits (SSI, Social Security, unemployment…), or both. */
+  incomeSource?: "earned" | "unearned" | "mixed";
+  /** Monthly rent or mortgage payment, when stated. */
+  monthlyHousingCost?: number;
+  /** Age of the person asking, when stated. */
+  age?: number;
   housingStatus?: HousingStatus;
   hasChildren?: boolean;
   isVeteran?: boolean;
+  /** Someone in the household is pregnant. */
+  isPregnant?: boolean;
   /** Categories of help the person asked for. Empty/undefined = unspecified. */
   needs?: ResourceCategory[];
   /** Documents the person says they already have on hand. */
@@ -183,7 +191,9 @@ export type AskableField =
   | "monthlyIncome"
   | "housingStatus"
   | "hasChildren"
-  | "isVeteran";
+  | "isVeteran"
+  /** Not asked by the follow-up engine; set from the plan page to sharpen benefit estimates. */
+  | "monthlyHousingCost";
 
 // ---------------------------------------------------------------------------
 // Matching output
@@ -295,4 +305,6 @@ export interface Plan {
   /** Which parser produced the structured situation. */
   parsedBy: "gemini" | "fallback";
   disclaimer: string;
+  /** Language the prose (summary, steps, notes) was written in. */
+  lang: "en" | "es" | "vi" | "zh";
 }
