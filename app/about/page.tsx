@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="flex-1 w-full max-w-6xl mx-auto px-5 pb-16 sm:px-10">
+    <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-16 sm:px-8">
       <SiteHeader current="about" />
 
       <article className="mx-auto max-w-3xl space-y-8">
         <header>
-          <h1 className="headline-georgia text-3xl sm:text-4xl text-accent-700">About LifeLine</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">About LifeLine</h1>
           <p className="mt-3 text-lg leading-relaxed text-neutral-700">
             LifeLine turns a few sentences about what you are facing into a clear, ordered plan of local
             programs that may be able to help, with an honest account of why each one is on the list. Rent,
@@ -24,7 +24,7 @@ export default function AboutPage() {
         </header>
 
         <section className="space-y-3">
-          <h2 className="text-2xl font-semibold text-neutral-900">Who we are</h2>
+          <h2 className="text-lg font-semibold text-neutral-900">Who we are</h2>
           <p className="leading-relaxed text-neutral-800">
             We are <strong>Caleb Suh</strong> and <strong>Lior Balan</strong>, juniors at Los Altos High School. We
             are drawn to the moments when people have to make a decision and a lot rides on getting it right:
@@ -41,7 +41,7 @@ export default function AboutPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-neutral-900">How it works</h2>
+          <h2 className="text-lg font-semibold text-neutral-900">How it works</h2>
           <ol className="space-y-3 text-neutral-800 leading-relaxed">
             <li>
               1. You describe what is going on. Plain language is fine. If we need more detail to narrow things

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
-import { isLang, LANG_NAMES, LANG_TAG, LANGS, translator, type Lang, type T } from "@/lib/i18n";
+import { isLang, LANG_NAMES, LANG_TAG, LANGS, matchLang, translator, type Lang, type T } from "@/lib/i18n";
 
 const STORAGE_KEY = "lifeline.lang";
 
@@ -16,13 +16,16 @@ const LanguageContext = createContext<LanguageContextValue>({ lang: "en", setLan
 /** First visit: match the browser's language when we support it. */
 function detectLang(): Lang {
   try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (isLang(saved)) return saved;
+    const saved = matchLang(window.localStorage.getItem(STORAGE_KEY));
+    if (saved) return saved;
   } catch {
     // Storage can be blocked (private mode); fall through to the browser language.
   }
-  const browser = (navigator.languages?.[0] ?? navigator.language ?? "en").slice(0, 2).toLowerCase();
-  return isLang(browser) ? browser : "en";
+  for (const tag of navigator.languages ?? [navigator.language]) {
+    const match = matchLang(tag);
+    if (match) return match;
+  }
+  return "en";
 }
 
 // The chosen language lives in localStorage (per browser, never sent anywhere).
