@@ -366,3 +366,56 @@ export const CALIFORNIA_CRAWL_SOURCES = [
 // The next source will be the 211 API. Keep it separate from HTML crawling so
 // its access token, terms, rate limits, and attribution can be handled exactly.
 export const PLANNED_API_SOURCES = ["211.org API"];
+
+/**
+ * USA.gov federal agency directory, allowlisted to the agencies that run
+ * benefits people actually apply for. These are the national tier behind the
+ * local programs: shown as "also worth knowing" when nothing closer covers a
+ * need. The directory has 400+ agencies; everything not listed here is noise
+ * for LifeLine, so only these exact pages are in scope.
+ *
+ * Each page has a uniform layout (description, website, contact, phone, main
+ * address, often a local-office locator), so the normal extractor applies.
+ * categoryByPath is explicit curation and wins over the name heuristics.
+ * USA.gov's robots.txt asks for a 10-second crawl delay; the engine honors it.
+ */
+export const USA_GOV_FEDERAL_AGENCIES = {
+  "/agencies/social-security-administration": "benefits",
+  "/agencies/u-s-department-of-veterans-affairs": "veteran_support",
+  "/agencies/veterans-benefits-administration": "veteran_support",
+  "/agencies/veterans-health-administration": "veteran_support",
+  "/agencies/veterans-employment-and-training-service": "employment",
+  "/agencies/u-s-department-of-housing-and-urban-development": "rental_assistance",
+  "/agencies/public-and-indian-housing": "rental_assistance",
+  "/agencies/office-of-fair-housing-and-equal-opportunity": "legal",
+  "/agencies/administration-for-children-and-families": "family_support",
+  "/agencies/administration-for-community-living": "older_adult_support",
+  "/agencies/centers-for-medicare-and-medicaid-services": "health",
+  "/agencies/indian-health-service": "health",
+  "/agencies/food-and-nutrition-administration": "food",
+  "/agencies/legal-services-corporation": "legal",
+  "/agencies/internal-revenue-service": "benefits",
+  "/agencies/employment-and-training-administration": "employment",
+  "/agencies/substance-abuse-and-mental-health-services-administration": "mental_health",
+};
+
+const USA_GOV_PATHS = Object.keys(USA_GOV_FEDERAL_AGENCIES);
+
+export const FEDERAL_CRAWL_SOURCES = [
+  {
+    id: "usa-gov-federal-benefits",
+    name: "USA.gov federal benefit agencies",
+    startUrl: `https://www.usa.gov${USA_GOV_PATHS[0]}`,
+    startUrls: USA_GOV_PATHS.slice(1).map((path) => `https://www.usa.gov${path}`),
+    allowedOrigins: ["https://www.usa.gov"],
+    allowedPathPrefixes: USA_GOV_PATHS,
+    serviceArea: "US",
+    sourceType: "official",
+    organizationFromTitle: true,
+    categoryByPath: USA_GOV_FEDERAL_AGENCIES,
+    skipEligibilityExtraction: true,
+    crawlOrder: 2,
+    priority: 40,
+    maxPages: USA_GOV_PATHS.length + 3,
+  },
+];

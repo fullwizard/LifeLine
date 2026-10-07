@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
+import { CALIFORNIA_CRAWL_SOURCES, FEDERAL_CRAWL_SOURCES } from "./california-crawl-sources.mjs";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -261,11 +262,25 @@ export function extractEligibility(page) {
   return eligibility;
 }
 
-function organizationFor(page, source) {
+function organizationFor(page, source, name) {
   if (/\b(?:earned income tax credit|caleitc)\b/i.test(`${page.title} ${page.excerpt} ${page.text}`)) {
     return "California Franchise Tax Board";
   }
+  // Directory sources (one page per organization) name the org in the title.
+  if (source.organizationFromTitle && name) return name;
   return source.name;
+}
+
+/** Explicit per-page category from the source definition, if any. */
+function curatedCategory(page, source) {
+  const byPath = source.categoryByPath;
+  if (!byPath) return null;
+  try {
+    const path = new URL(page.canonicalUrl || page.url).pathname.replace(/\/+$/, "");
+    return byPath[path] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function mergeCandidate(existing, candidate) {
@@ -295,7 +310,7 @@ function makeCandidate(page, source, generatedAt) {
   const application = bestApplicationLink(page);
   const description = bestDescription(page);
   const contacts = page.contacts ?? { phones: [], emails: [] };
-  const category = categoryFor(page, name, description);
+  const category = curatedCategory(page, source) ?? categoryFor(page, name, description);
   const evidence = {
     pageTitle: name,
     excerpt: clean(page.excerpt || page.text, 1_200),
@@ -309,12 +324,14 @@ function makeCandidate(page, source, generatedAt) {
   return {
     id: stableId(name, page.canonicalUrl || page.url),
     name,
-    organization: organizationFor(page, source),
+    organization: organizationFor(page, source, name),
     category,
     topics,
     description,
     service_area: [source.serviceArea],
-    eligibility: extractEligibility(page),
+    // Directory pages describe an agency's scope, not applicant rules, so
+    // phrases like "low-income" or "child welfare" there are not eligibility.
+    eligibility: source.skipEligibilityExtraction ? {} : extractEligibility(page),
     eligibility_verified: false,
     required_documents: [],
     application_url: application?.url ?? page.url,
@@ -328,6 +345,18 @@ function makeCandidate(page, source, generatedAt) {
     evidence,
     linkedPrograms: usefulLinks(page),
   };
+}
+
+const SOURCE_DEFINITIONS = new Map([...CALIFORNIA_CRAWL_SOURCES, ...FEDERAL_CRAWL_SOURCES].map((source) => [source.id, source]));
+
+/**
+ * The crawl output records only a few fields of each source. Merge the full
+ * definition back in so per-source hints (categoryByPath, organizationFromTitle,
+ * skipEligibilityExtraction) are available to the normalizer.
+ */
+export function withSourceDefinition(source) {
+  const definition = SOURCE_DEFINITIONS.get(source?.id);
+  return definition ? { ...definition, ...source } : source;
 }
 
 /** Convert crawl evidence into conservative, review-first candidate records. */
@@ -347,7 +376,7 @@ export function normalizeCrawl(crawl) {
       seenCanonicalUrls.add(canonical);
       if (page.contentHash) seenHashes.add(page.contentHash);
       seen.add(canonical);
-      const candidate = makeCandidate(page, source, generatedAt);
+      const candidate = makeCandidate(page, withSourceDefinition(source), generatedAt);
       if (isNavigationPage(candidate.name, candidate.description, candidate.source_url)) continue;
       const key = duplicateKey(candidate);
       const descriptionKey = descriptionDuplicateKey(candidate);

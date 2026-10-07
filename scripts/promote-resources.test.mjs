@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyOverride, backfillEligibility, promote, validateResource } from "./promote-resources.mjs";
+import { applyOverride, backfillEligibility, mergeCandidateSets, promote, validateResource } from "./promote-resources.mjs";
 
 const candidate = (overrides = {}) => ({
   id: "rent-help-1",
@@ -129,5 +129,16 @@ describe("backfillEligibility", () => {
   it("never overwrites eligibility that is already present", () => {
     const c = candidate({ eligibility: { max_ami_percent: 50 }, evidence: { excerpt: "past due rent" } });
     expect(backfillEligibility(c).eligibility).toEqual({ max_ami_percent: 50 });
+  });
+});
+
+describe("mergeCandidateSets", () => {
+  it("concatenates several normalizer outputs and drops duplicate ids", () => {
+    const merged = mergeCandidateSets([
+      { generatedAt: "2026-09-01T00:00:00Z", candidates: [candidate({ id: "a" }), candidate({ id: "b" })] },
+      { generatedAt: "2026-10-01T00:00:00Z", candidates: [candidate({ id: "b" }), candidate({ id: "c", service_area: ["US"] })] },
+    ]);
+    expect(merged.candidates.map((c) => c.id)).toEqual(["a", "b", "c"]);
+    expect(merged.generatedAt).toBe("2026-10-01T00:00:00Z");
   });
 });

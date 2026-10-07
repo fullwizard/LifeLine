@@ -1,21 +1,58 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T17:32:37.169Z",
+  "generatedAt": "2026-10-07T01:51:45.198Z",
   "source": {
-    "candidatesGeneratedAt": "2026-09-22T14:49:03.334Z",
+    "candidatesGeneratedAt": "2026-10-07T01:51:45.135Z",
     "overridesCount": 68
   },
   "stats": {
-    "candidates": 121,
-    "promoted": 68,
+    "candidates": 137,
+    "promoted": 84,
     "skippedUncategorized": 46,
     "excludedByReview": 7,
     "verified": 44,
-    "withEligibility": 48,
-    "backfilled": 4,
+    "withEligibility": 51,
+    "backfilled": 7,
     "inactive": 2
   },
   "resources": [
+    {
+      "id": "administration-for-children-and-families-acf-de5bc23644",
+      "name": "Administration for Children and Families (ACF)",
+      "organization": "Administration for Children and Families (ACF)",
+      "category": "family_support",
+      "description": "Administration for Children and Families (ACF) funds state, territory, local, and tribal organizations to provide family assistance (welfare), child support, child care, Head Start, child welfare, and other programs relating to children and families. Website Administration for Children and Families Contact Contact the Administration for Children and Families Contact information for state and tribal child support agencies Contact information for Temporary Assistance for Needy Families (Welfare) Contact information to report child abuse and neglect Contact your state or territory Low Income Home Energy Assistance Program (LIHEAP) coordinator Contact your tribal Low Income Home Energy Assistance Program (LIHEAP) coordinator Find an office near you Find a Head Start center near you Find your local child support office Find the Administration for Children and Families office in your region Ma",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page. Family must be involved with the child welfare system."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.acf.hhs.gov/about/contact-us",
+      "source_url": "https://www.usa.gov/agencies/administration-for-children-and-families",
+      "last_verified": "2026-10-07"
+    },
+    {
+      "id": "administration-for-community-living-acl-b5be37f405",
+      "name": "Administration for Community Living (ACL)",
+      "organization": "Administration for Community Living (ACL)",
+      "category": "older_adult_support",
+      "description": "Administration for Community Living (ACL) supports the needs of the aging and disability populations, and improves access health care and long-term services. Website Administration for Community Living Contact Contact the Administration for Community Living Phone number 1-202-401-4634 Main address 330 C St SW Washington, DC 20201 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://acl.gov/contact",
+      "source_url": "https://www.usa.gov/agencies/administration-for-community-living",
+      "phone": "1-202-401-4634",
+      "last_verified": "2026-10-07"
+    },
     {
       "id": "adult-protective-services-5ab041903d",
       "name": "Adult Protective Services",
@@ -248,6 +285,24 @@
       "source_url": "https://www.cdss.ca.gov/inforesources/cdss-programs/housing-programs/calworks-housing-support-program",
       "phone": "(916) 651-5155",
       "last_verified": "2026-09-22"
+    },
+    {
+      "id": "centers-for-medicare-and-medicaid-services-cms-af53b71a45",
+      "name": "Centers for Medicare and Medicaid Services (CMS)",
+      "organization": "Centers for Medicare and Medicaid Services (CMS)",
+      "category": "health",
+      "description": "Centers for Medicare and Medicaid Services (CMS) provides health coverage to more than 100 million people through Medicare, Medicaid, the Children’s Health Insurance Program, and the Health Insurance Marketplace. The CMS seeks to strengthen and modernize the Nation’s health care system, to provide access to high quality care and improved health at lower costs. Website Centers for Medicare and Medicaid Services Contact Contact the Centers for Medicare and Medicaid Services Toll-free number 1-800-633-4227 1-800-447-8477 (Medicare fraud hotline) TTY 1-877-486-2048 Find an office near you Contact state Medicaid offices Main address Office of External Affairs 7500 Security Blvd. Baltimore, MD 21244 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.cms.gov/About-CMS/Agency-Information/ContactCMS/index?redirect=/ContactCMS/",
+      "source_url": "https://www.usa.gov/agencies/centers-for-medicare-and-medicaid-services",
+      "phone": "1-800-633-4227",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "cfap-c30103d9cd",
@@ -523,6 +578,24 @@
       "last_verified": "2026-09-30"
     },
     {
+      "id": "employment-and-training-administration-eta-b443c35e40",
+      "name": "Employment and Training Administration (ETA)",
+      "organization": "Employment and Training Administration (ETA)",
+      "category": "employment",
+      "description": "Employment and Training Administration (ETA) provides job training and help with finding jobs and careers. Website Employment and Training Administration Contact Contact the Employment and Training Administration Toll-free number 1-877-872-5627 Email eta.webportal@dol.gov Main address 200 Constitution Ave., NW Washington, DC 20210 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dol.gov/agencies/eta/contact",
+      "source_url": "https://www.usa.gov/agencies/employment-and-training-administration",
+      "phone": "1-877-872-5627",
+      "last_verified": "2026-10-07"
+    },
+    {
       "id": "employment-services-for-people-with-disabilities-e18487f896",
       "name": "Employment Services for People with Disabilities",
       "organization": "California jobs, unemployment and disability benefits",
@@ -599,6 +672,26 @@
       "source_url": "https://www.sacredheartcs.org/programs-finding-a-job",
       "phone": "(408) 278-2172",
       "last_verified": "2026-09-30"
+    },
+    {
+      "id": "food-and-nutrition-administration-fna-abe22caab7",
+      "name": "Food and Nutrition Administration (FNA)",
+      "organization": "Food and Nutrition Administration (FNA)",
+      "category": "food",
+      "description": "Food and Nutrition Administration (FNA) provides children and low-income people access to food, a healthful diet, and nutrition education. Website Food and Nutrition Administration FNA nutrition programs Contact Contact the Food and Nutrition Administration Supplemental Nutrition Assistance Program (SNAP) / Food stamps Child nutrition programs Special Supplemental Nutrition Program for Women, Infants, and Children (WIC) State agency contact information Phone number 1-703-305-2062 Email AskUSDA@usda.gov Main address Braddock Metro Center II 1320 Braddock Place Alexandria, VA 22314 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.fna.usda.gov/contact-us",
+      "source_url": "https://www.usa.gov/agencies/food-and-nutrition-administration",
+      "phone": "1-703-305-2062",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "food-assistance-8284381cab",
@@ -879,6 +972,23 @@
       "last_verified": "2026-09-22"
     },
     {
+      "id": "indian-health-service-ihs-2b3177dd24",
+      "name": "Indian Health Service (IHS)",
+      "organization": "Indian Health Service (IHS)",
+      "category": "health",
+      "description": "Indian Health Service (IHS) provides federal health services to American Indians and Alaska Natives. Website Indian Health Service Contact Contact the Indian Health Service Indian Health Service phone directory Find an office near you Find an Indian Health Service facility near you Main address 5600 Fishers Lane Rockville, MD 20857 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.ihs.gov/contact/",
+      "source_url": "https://www.usa.gov/agencies/indian-health-service",
+      "last_verified": "2026-10-07"
+    },
+    {
       "id": "individuals-families-ca-department-of-developmental-services-3bda8e5926",
       "name": "Individuals & Families : CA Department of Developmental Services",
       "organization": "California developmental disability and family support",
@@ -895,6 +1005,24 @@
       "source_url": "https://www.dds.ca.gov/individuals-and-families/",
       "phone": "(833) 421-0061",
       "last_verified": "2026-09-30"
+    },
+    {
+      "id": "internal-revenue-service-irs-0d8f2ed75c",
+      "name": "Internal Revenue Service (IRS)",
+      "organization": "Internal Revenue Service (IRS)",
+      "category": "benefits",
+      "description": "Internal Revenue Service (IRS) administers and enforces U.S. federal tax laws. Website Internal Revenue Service Taxpayer Advocacy Panel Contact Contact the IRS for help with your tax questions Toll-free number 1-800-829-1040 TTY 1-800-829-4059 Find an office near you Find a taxpayer assistance center near you Popular services Apply for an Employer ID Number (EIN) Find popular tax forms Learn about child and dependent tax credits Find out how to find unclaimed money from the government Get a fresh start with your tax debt SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.usa.gov/agencies/internal-revenue-service",
+      "source_url": "https://www.usa.gov/agencies/internal-revenue-service",
+      "phone": "1-800-829-1040",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "legal-services-consumer-d4f7dcfa92",
@@ -914,6 +1042,26 @@
       "application_url": "https://www.aging.ca.gov/Find_Services_in_My_County/",
       "source_url": "https://www.aging.ca.gov/Programs_and_Services/Legal_Services/",
       "last_verified": "2026-09-30"
+    },
+    {
+      "id": "legal-services-corporation-a02848e1dc",
+      "name": "Legal Services Corporation",
+      "organization": "Legal Services Corporation",
+      "category": "legal",
+      "description": "Legal Services Corporation is an independent corporation founded by Congress that provides grant funds, training, and technical assistance to civil legal aid programs. The Corporation ensures low income individuals and families have access to quality legal aid. Website Legal Services Corporation Contact Contact the Legal Services Corporation Phone number 1-202-295-1500 Email info@lsc.gov Main address 3333 K St., NW Washington, DC 20007-3522 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {
+        "notes": "Income limits apply; the amounts are not published on the page."
+      },
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.lsc.gov/about-lsc/contact-us",
+      "source_url": "https://www.usa.gov/agencies/legal-services-corporation",
+      "phone": "1-202-295-1500",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "low-income-home-energy-assistance-program-f802146034",
@@ -1051,6 +1199,24 @@
       "source_url": "https://smchealth.org/division/divisions/aging-and-adult-services/aging-disability-services-programs-and-services/adult-protective-services/",
       "phone": "(844) 868-0938",
       "last_verified": "2026-09-30"
+    },
+    {
+      "id": "public-and-indian-housing-pih-d23e209425",
+      "name": "Public and Indian Housing (PIH)",
+      "organization": "Public and Indian Housing (PIH)",
+      "category": "rental_assistance",
+      "description": "Public and Indian Housing (PIH) works to ensure safe, decent and affordable housing. Website Public and Indian Housing Contact Contact Public and Indian Housing Toll-free number 1-800-955-2232 Main address 451 7th St., SW Washington, DC 20410 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.hud.gov/program_offices/public_indian_housing/about/css",
+      "source_url": "https://www.usa.gov/agencies/public-and-indian-housing",
+      "phone": "1-800-955-2232",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "rental-assistance-sacred-heart-community-service-fb4e61cbd2",
@@ -1266,6 +1432,42 @@
       "last_verified": "2026-09-30"
     },
     {
+      "id": "social-security-administration-ssa-b48f1d6ea9",
+      "name": "Social Security Administration (SSA)",
+      "organization": "Social Security Administration (SSA)",
+      "category": "benefits",
+      "description": "Social Security Administration (SSA) has two main functions. One is to assign Social Security numbers. The other is to run the Social Security retirement, survivors, and disability insurance programs. A third function is to run the Supplemental Security Income program, for people who are 65 or older, blind, or with a disability. Website Social Security Administration Contact Contact the Social Security Administration Toll-free number 1-800-772-1213 Find an office near you Find a Social Security office near you Main address 6401 Security Blvd. Baltimore, MD 21235 Popular services Find Social Security forms Change your name Replace your Social Security card SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.ssa.gov/agency/contact/",
+      "source_url": "https://www.usa.gov/agencies/social-security-administration",
+      "phone": "1-800-772-1213",
+      "last_verified": "2026-10-07"
+    },
+    {
+      "id": "substance-abuse-and-mental-health-services-administration-samhsa-36cc1870dd",
+      "name": "Substance Abuse and Mental Health Services Administration (SAMHSA)",
+      "organization": "Substance Abuse and Mental Health Services Administration (SAMHSA)",
+      "category": "mental_health",
+      "description": "Substance Abuse and Mental Health Services Administration (SAMHSA) works to improve substance abuse and mental health treatment services to those who are most in need of them. Website Substance Abuse and Mental Health Services Administration Contact Contact the Substance Abuse and Mental Health Services Administration Suicide prevention hotline Toll-free number 1-877-726-4727 1-800-273-8255 (suicide prevention lifeline) TTY 1-800-487-4889 Email SAMHSAInfo@samhsa.hhs.gov Main address 5600 Fishers Lane Rockville, MD 20857 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "http://www.samhsa.gov/about-us/contact-us",
+      "source_url": "https://www.usa.gov/agencies/substance-abuse-and-mental-health-services-administration",
+      "phone": "1-877-726-4727",
+      "last_verified": "2026-10-07"
+    },
+    {
       "id": "support-for-older-and-dependent-adults-d2364894b8",
       "name": "Support for Older and Dependent Adults",
       "organization": "San Mateo County Health",
@@ -1306,6 +1508,42 @@
       "application_url": "https://www.dor.ca.gov/Home/SupportedEmploymentProgram",
       "source_url": "https://www.dor.ca.gov/Home/SupportedEmploymentProgram",
       "last_verified": "2026-09-30"
+    },
+    {
+      "id": "u-s-department-of-housing-and-urban-development-hud-bbcd0bcad2",
+      "name": "U.S. Department of Housing and Urban Development (HUD)",
+      "organization": "U.S. Department of Housing and Urban Development (HUD)",
+      "category": "rental_assistance",
+      "description": "U.S. Department of Housing and Urban Development (HUD) The Department of Housing and Urban Development (HUD) administers programs that provide housing and community development assistance. The Department also works to ensure fair and equal housing opportunity for all. Website Department of Housing and Urban Development Contact Contact the Department of Housing and Urban Development Report housing discrimination Department of Housing and Urban Development employee directory Phone number 1-202-708-1112 TTY 1-202-708-1455 Find an office near you HUD resources in your state Find the public housing agency near you Find a Department of Housing counselor near you Housing and Urban Development local offices Main address 451 7th St., SW Washington, DC 20410 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.hud.gov/contact",
+      "source_url": "https://www.usa.gov/agencies/u-s-department-of-housing-and-urban-development",
+      "phone": "1-202-708-1112",
+      "last_verified": "2026-10-07"
+    },
+    {
+      "id": "u-s-department-of-veterans-affairs-va-4fb0d0e0ff",
+      "name": "U.S. Department of Veterans Affairs (VA)",
+      "organization": "U.S. Department of Veterans Affairs (VA)",
+      "category": "veteran_support",
+      "description": "U.S. Department of Veterans Affairs (VA) The Department of Veterans Affairs (VA) runs programs benefiting veterans and members of their families. It offers education opportunities and rehabilitation services and provides compensation payments for disabilities or death related to military service, home loan guaranties, pensions, burials, and health care that includes the services of nursing homes, clinics, and medical centers. Website Department of Veterans Affairs Contact Contact the Department of Veterans Affairs Toll-free number 1-800-698-2411 TTY 7-1-1 Find an office near you Find Veterans Affairs facilities and services near you Popular services Request your military service records Find a VA form SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.va.gov/contact-us/",
+      "source_url": "https://www.usa.gov/agencies/u-s-department-of-veterans-affairs",
+      "phone": "1-800-698-2411",
+      "last_verified": "2026-10-07"
     },
     {
       "id": "unemployment-benefits-ee6514d15c",
@@ -1392,6 +1630,60 @@
       "application_url": "https://www.smcgov.org/hsa/veteran-housing-resources",
       "source_url": "https://www.smcgov.org/hsa/veteran-housing-resources",
       "last_verified": "2026-09-22"
+    },
+    {
+      "id": "veterans-benefits-administration-vba-bf72650d65",
+      "name": "Veterans Benefits Administration (VBA)",
+      "organization": "Veterans Benefits Administration (VBA)",
+      "category": "veteran_support",
+      "description": "Veterans Benefits Administration (VBA) helps veterans receive benefits, such as educational and financial resources. Website Veterans Benefits Administration Contact Contact the Veterans Benefits Administration Toll-free number 1-800-827-1000 TTY 7-1-1 Find an office near you Find VA benefits facilities and services based on address SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.va.gov/contact-us/",
+      "source_url": "https://www.usa.gov/agencies/veterans-benefits-administration",
+      "phone": "1-800-827-1000",
+      "last_verified": "2026-10-07"
+    },
+    {
+      "id": "veterans-health-administration-vha-2bf21cc7fb",
+      "name": "Veterans Health Administration (VHA)",
+      "organization": "Veterans Health Administration (VHA)",
+      "category": "veteran_support",
+      "description": "Veterans Health Administration (VHA) provides primary care, specialized care, and related medical and social support services to American veterans. Website Veterans Health Administration Contact Contact the Veterans Health Administration Toll-free number 1-877-222-8387 Find an office near you Find Veterans Affairs facilities and services near you Main address 810 Vermont Ave. NW Washington, DC 20420 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.va.gov/contact-us/",
+      "source_url": "https://www.usa.gov/agencies/veterans-health-administration",
+      "phone": "1-877-222-8387",
+      "last_verified": "2026-10-07"
+    },
+    {
+      "id": "veterans-employment-and-training-service-vets-28d475023b",
+      "name": "Veterans' Employment and Training Service (VETS)",
+      "organization": "Veterans' Employment and Training Service (VETS)",
+      "category": "employment",
+      "description": "Veterans' Employment and Training Service (VETS) helps veterans find meaningful careers and maximize their employment opportunities. Website Veterans' Employment and Training Service Contact Contact Veterans' Employment and Training Service Phone number 1-202-693-4700 Find an office near you Find Veterans' Employment and Training Service offices near you Main address Office of the Asst. Secretary for Veterans Employment and Training Service 200 Constitution Ave., NW Room S-1325 Washington, DC 20210 SHARE THIS PAGE: Top",
+      "service_area": [
+        "US"
+      ],
+      "active": true,
+      "eligibility": {},
+      "eligibility_verified": false,
+      "required_documents": [],
+      "application_url": "https://www.dol.gov/agencies/vets/about/nationaloffice",
+      "source_url": "https://www.usa.gov/agencies/veterans-employment-and-training-service",
+      "phone": "1-202-693-4700",
+      "last_verified": "2026-10-07"
     }
   ]
 }

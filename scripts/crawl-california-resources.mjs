@@ -2,7 +2,9 @@
 
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { CALIFORNIA_CRAWL_SCOPE, CALIFORNIA_CRAWL_SOURCES, PLANNED_API_SOURCES } from "./california-crawl-sources.mjs";
+import { CALIFORNIA_CRAWL_SCOPE, CALIFORNIA_CRAWL_SOURCES, PLANNED_API_SOURCES, FEDERAL_CRAWL_SOURCES } from "./california-crawl-sources.mjs";
+
+const ALL_CRAWL_SOURCES = [...CALIFORNIA_CRAWL_SOURCES, ...FEDERAL_CRAWL_SOURCES];
 import { crawlSources, DEFAULTS } from "./crawler/engine.mjs";
 import { writeJsonAtomic } from "./crawler/cache.mjs";
 
@@ -37,7 +39,7 @@ export function parseOptions(args) {
     else if (flag === "cache-dir") values.cacheDir = value;
     else throw new Error(`Unknown option: --${flag}`);
   }
-  if (values.only?.some((id) => !CALIFORNIA_CRAWL_SOURCES.some((source) => source.id === id))) {
+  if (values.only?.some((id) => !ALL_CRAWL_SOURCES.some((source) => source.id === id))) {
     throw new Error("Unknown source in --only. Use --list-sources to see available IDs.");
   }
   return values;
@@ -72,12 +74,12 @@ PDF and JavaScript-only content is retained as leads, not fully extracted.`);
     return;
   }
   if (options.listSources) {
-    for (const source of [...CALIFORNIA_CRAWL_SOURCES].sort((a, b) => a.crawlOrder - b.crawlOrder || b.priority - a.priority)) {
+    for (const source of [...ALL_CRAWL_SOURCES].sort((a, b) => a.crawlOrder - b.crawlOrder || b.priority - a.priority)) {
       console.log(`${source.id}\t${source.serviceArea}\t${source.name}`);
     }
     return;
   }
-  const sources = CALIFORNIA_CRAWL_SOURCES.filter((source) => !options.only || options.only.includes(source.id));
+  const sources = ALL_CRAWL_SOURCES.filter((source) => !options.only || options.only.includes(source.id));
   const outputPath = resolve(options.output);
   options.cacheDir = options.cache ? resolve(options.cacheDir ?? join(dirname(outputPath), ".cache")) : null;
   let lastCheckpoint = Date.now();
