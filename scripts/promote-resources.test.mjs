@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyOverride, backfillEligibility, mergeCandidateSets, promote, validateResource } from "./promote-resources.mjs";
+import { applyOverride, backfillEligibility, mergeCandidateSets, promote, reconcileOverrideIds, validateResource } from "./promote-resources.mjs";
 
 const candidate = (overrides = {}) => ({
   id: "rent-help-1",
@@ -93,7 +93,7 @@ describe("promote", () => {
       { overrides: { "gone-id": { reviewed_at: "2026-09-22", reviewed_by: "t" } } },
     );
     expect(errors).toEqual([]);
-    expect(warnings.join("\n")).toMatch(/override "gone-id" does not match/);
+    expect(warnings.join("\n")).toMatch(/override "gone-id" matches no candidate/);
     expect(warnings.join("\n")).toMatch(/shares application_url/);
   });
 
@@ -140,5 +140,48 @@ describe("mergeCandidateSets", () => {
     ]);
     expect(merged.candidates.map((c) => c.id)).toEqual(["a", "b", "c"]);
     expect(merged.generatedAt).toBe("2026-10-01T00:00:00Z");
+  });
+});
+
+describe("re-crawl resilience", () => {
+  const override = { reviewed_at: "2026-09-22", reviewed_by: "t", eligibility: { max_ami_percent: 80 } };
+  const previous = {
+    resources: [
+      { ...candidate({ id: "old-id" }), phone: undefined, eligibility: { max_ami_percent: 80 }, eligibility_verified: true },
+      { ...candidate({ id: "gone-id", name: "Gone Program", source_url: "https://example.org/gone" }), phone: undefined, eligibility: { max_fpl_percent: 200 }, eligibility_verified: true },
+    ],
+  };
+
+  it("re-keys an override when the crawl renamed the id but kept the source_url", () => {
+    const renamed = candidate({ id: "new-id", name: "Rent Help | County" });
+    const { map, missing } = reconcileOverrideIds({ "old-id": override }, [renamed], previous);
+    expect([...map]).toEqual([["old-id", "new-id"]]);
+    expect(missing).toEqual([]);
+    const result = promote({ candidates: [renamed] }, { overrides: { "old-id": override } }, previous);
+    expect(result.errors).toEqual([]);
+    expect(result.resources[0]).toMatchObject({ id: "new-id", eligibility: { max_ami_percent: 80 }, eligibility_verified: true });
+    expect(result.warnings.join("\n")).toMatch(/re-keyed to "new-id"/);
+    expect(result.stats.rekeyedOverrides).toBe(1);
+  });
+
+  it("carries forward a verified record whose page vanished from the crawl, flagged for re-check", () => {
+    const result = promote({ candidates: [candidate()] }, { overrides: { "gone-id": { ...override, eligibility: { max_fpl_percent: 200 } } } }, previous);
+    expect(result.errors).toEqual([]);
+    const carried = result.resources.find((r) => r.id === "gone-id");
+    expect(carried).toMatchObject({ name: "Gone Program", carried_forward: true, eligibility_verified: true });
+    expect(result.warnings.join("\n")).toMatch(/carried forward verified "gone-id"/);
+    expect(result.stats.carriedForward).toBe(1);
+  });
+
+  it("ignores an override with no candidate and no previous record", () => {
+    const result = promote({ candidates: [candidate()] }, { overrides: { "never-existed": override } }, previous);
+    expect(result.errors).toEqual([]);
+    expect(result.resources.map((r) => r.id)).toEqual(["rent-help-1"]);
+    expect(result.warnings.join("\n")).toMatch(/never-existed.*ignored/);
+  });
+
+  it("does not resurrect a record that was excluded by review and then dropped by the crawl", () => {
+    const result = promote({ candidates: [candidate()] }, { overrides: { "gone-id": { reviewed_at: "2026-09-22", reviewed_by: "t", exclude: true, exclude_reason: "closed" } } }, previous);
+    expect(result.resources.map((r) => r.id)).toEqual(["rent-help-1"]);
   });
 });

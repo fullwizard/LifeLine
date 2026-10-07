@@ -17,6 +17,9 @@ import { extractEligibility } from "./normalize-california-resources.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULTS = {
+  // Previous promoted output: lets overrides survive id churn and keeps
+  // verified records a crawl missed.
+  previous: path.join(ROOT, "data/resources.json"),
   // Comma-separated; files that do not exist yet are skipped with a note.
   candidates: [
     path.join(ROOT, "data/crawl-output/california-resource-candidates.json"),
@@ -86,6 +89,7 @@ export function validateResource(resource, errors) {
   for (const field of ["application_url", "source_url"]) if (typeof resource[field] === "string" && !isUrl(resource[field])) errors.push(`${where}: ${field} is not a valid http(s) URL`);
   if (resource.phone !== undefined && resource.phone !== null && typeof resource.phone !== "string") errors.push(`${where}: phone must be a string`);
   if (resource.address !== undefined && resource.address !== null && typeof resource.address !== "string") errors.push(`${where}: address must be a string`);
+  if (resource.carried_forward !== undefined && typeof resource.carried_forward !== "boolean") errors.push(`${where}: carried_forward must be boolean`);
   if (resource.eligibility_verified !== undefined && typeof resource.eligibility_verified !== "boolean") errors.push(`${where}: eligibility_verified must be boolean`);
   if (resource.response_time_days !== undefined && !(typeof resource.response_time_days === "number" && resource.response_time_days >= 0)) errors.push(`${where}: response_time_days must be a non-negative number`);
   validateEligibility(resource.eligibility ?? {}, where, errors);
@@ -151,27 +155,81 @@ function toResource(candidate) {
   };
 }
 
-/** Pure: candidates + overrides → { resources, errors, warnings, stats }. */
-export function promote(crawl, reviewed) {
+function urlKey(url) {
+  return (url ?? "").trim().toLowerCase().replace(/\/+$/, "");
+}
+
+/**
+ * Ids derive from page title + URL, so a re-crawl can rename a record whose
+ * page is unchanged. Match stale override ids to new candidates through the
+ * previous promoted output's source_url.
+ * Returns { map: oldId → newId, missing: override ids with no candidate }.
+ */
+export function reconcileOverrideIds(overrides, candidates, previous) {
+  const ids = new Set(candidates.map((c) => c.id));
+  const byUrl = new Map();
+  for (const c of candidates) {
+    for (const u of [c.source_url, c.evidence?.canonicalUrl]) if (u) byUrl.set(urlKey(u), c.id);
+  }
+  const prevById = new Map((previous?.resources ?? []).map((r) => [r.id, r]));
+  const map = new Map();
+  const missing = [];
+  for (const id of Object.keys(overrides)) {
+    if (ids.has(id)) continue;
+    const prev = prevById.get(id);
+    const newId = prev && byUrl.get(urlKey(prev.source_url));
+    if (newId) map.set(id, newId);
+    else missing.push(id);
+  }
+  return { map, missing };
+}
+
+/** Pure: candidates + overrides (+ previous output) → { resources, errors, warnings, stats }. */
+export function promote(crawl, reviewed, previous = null) {
   const errors = [];
   const warnings = [];
-  const overrides = reviewed?.overrides ?? {};
+  const rawOverrides = reviewed?.overrides ?? {};
   const candidates = crawl?.candidates ?? [];
-  const byId = new Map(candidates.map((c) => [c.id, c]));
 
-  for (const [id, override] of Object.entries(overrides)) {
-    if (!byId.has(id)) warnings.push(`override "${id}" does not match any candidate (was the id renamed by a re-crawl?)`);
+  for (const [id, override] of Object.entries(rawOverrides)) {
     for (const key of Object.keys(override)) if (!OVERRIDE_KEYS.has(key)) errors.push(`override "${id}": unknown field "${key}"`);
     if (!override.reviewed_at || !override.reviewed_by) errors.push(`override "${id}": reviewed_at and reviewed_by are required`);
     if (override.eligibility) validateEligibility(override.eligibility, `override "${id}"`, errors);
     if (override.exclude && !override.exclude_reason) errors.push(`override "${id}": exclude needs an exclude_reason`);
   }
 
+  // Re-key overrides whose candidate id changed in a re-crawl.
+  const { map: rekeyed, missing } = reconcileOverrideIds(rawOverrides, candidates, previous);
+  const overrides = {};
+  for (const [id, override] of Object.entries(rawOverrides)) overrides[rekeyed.get(id) ?? id] = override;
+  for (const [oldId, newId] of rekeyed) warnings.push(`override "${oldId}" re-keyed to "${newId}" (same source_url); update eligibility-overrides.json`);
+
   const resources = [];
   const seenIds = new Set();
   const seenApply = new Map();
   let skippedUncategorized = 0;
   let excluded = 0;
+  let carriedForward = 0;
+
+  // A human-verified record the latest crawl missed is kept from the previous
+  // output rather than silently dropped, and flagged for re-check.
+  const prevById = new Map((previous?.resources ?? []).map((r) => [r.id, r]));
+  for (const id of missing) {
+    const override = rawOverrides[id];
+    const prev = prevById.get(id);
+    if (override.exclude) continue; // excluded and gone: nothing to keep
+    if (!prev) {
+      warnings.push(`override "${id}" matches no candidate and no previous record; ignored`);
+      continue;
+    }
+    warnings.push(`carried forward verified "${id}" (${prev.name}): its page was not in the latest crawl; re-check ${prev.source_url}`);
+    const resource = { ...prev, carried_forward: true };
+    validateResource(resource, errors);
+    resources.push(resource);
+    seenIds.add(id);
+    carriedForward += 1;
+  }
+
   for (const candidate of candidates) {
     if (!candidate.category) {
       skippedUncategorized += 1;
@@ -207,6 +265,8 @@ export function promote(crawl, reviewed) {
     withEligibility: resources.filter((r) => Object.keys(r.eligibility).length > 0).length,
     backfilled: resources.filter((r) => !r.eligibility_verified && Object.keys(r.eligibility).length > 0).length,
     inactive: resources.filter((r) => !r.active).length,
+    rekeyedOverrides: rekeyed.size,
+    carriedForward,
   };
   return { resources, errors, warnings, stats };
 }
@@ -245,13 +305,19 @@ async function loadCandidateFiles(files) {
 export async function main(args = process.argv.slice(2)) {
   const options = { ...DEFAULTS };
   for (const arg of args) {
-    const match = /^--(candidates|overrides|output)=(.+)$/.exec(arg);
+    const match = /^--(candidates|overrides|output|previous)=(.+)$/.exec(arg);
     if (!match) throw new Error(`Invalid option: ${arg}`);
     options[match[1]] = match[1] === "candidates" ? match[2] : path.resolve(match[2]);
   }
   const crawl = await loadCandidateFiles(options.candidates.split(",").map((p) => path.resolve(p.trim())).filter(Boolean));
   const reviewed = JSON.parse(await readFile(options.overrides, "utf8"));
-  const { resources, errors, warnings, stats } = promote(crawl, reviewed);
+  let previous = null;
+  try {
+    previous = JSON.parse(await readFile(options.previous, "utf8"));
+  } catch {
+    console.warn(`note: no previous output at ${path.relative(ROOT, options.previous)}; nothing to carry forward`);
+  }
+  const { resources, errors, warnings, stats } = promote(crawl, reviewed, previous);
   for (const w of warnings) console.warn(`warning: ${w}`);
   if (errors.length) {
     for (const e of errors) console.error(`error: ${e}`);
@@ -268,7 +334,7 @@ export async function main(args = process.argv.slice(2)) {
     resources,
   };
   await writeFile(options.output, `${JSON.stringify(output, null, 2)}\n`);
-  console.log(`Wrote ${resources.length} resources to ${path.relative(ROOT, options.output)} (${stats.verified} verified, ${stats.withEligibility} with eligibility, ${stats.inactive} inactive, ${stats.skippedUncategorized} uncategorized skipped)`);
+  console.log(`Wrote ${resources.length} resources to ${path.relative(ROOT, options.output)} (${stats.verified} verified, ${stats.withEligibility} with eligibility, ${stats.inactive} inactive, ${stats.skippedUncategorized} uncategorized skipped, ${stats.rekeyedOverrides} overrides re-keyed, ${stats.carriedForward} carried forward)`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
