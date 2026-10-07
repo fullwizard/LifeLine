@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractEligibility, normalizeCrawl } from "./normalize-california-resources.mjs";
+import { extractEligibility, normalizeCrawl, withSourceDefinition } from "./normalize-california-resources.mjs";
 
 const page = (overrides = {}) => ({
   url: "https://example.ca.gov/food",
@@ -252,5 +252,44 @@ describe("extractEligibility", () => {
   it("does not invent rules from generic text", () => {
     expect(extractEligibility({ text: "Apply for food help and eligibility information." })).toEqual({});
     expect(extractEligibility({ text: "We honor all military veterans for their service." }).requires_veteran).toBeUndefined();
+  });
+});
+
+describe("directory sources (USA.gov)", () => {
+  const directorySource = {
+    id: "usa-gov-federal-benefits",
+    name: "USA.gov federal benefit agencies",
+    serviceArea: "US",
+    sourceType: "official",
+    evidenceUrls: [],
+  };
+  const agencyPage = page({
+    url: "https://www.usa.gov/agencies/social-security-administration",
+    title: "Social Security Administration (SSA) | USAGov",
+    description: "The SSA runs retirement and disability insurance programs and administers Supplemental Security Income for low-income seniors.",
+    excerpt: "The SSA runs retirement and disability insurance programs and administers Supplemental Security Income for low-income seniors. Toll-free: 1-800-772-1213.",
+    text: "The SSA runs retirement and disability insurance programs and administers Supplemental Security Income for low-income seniors. Toll-free: 1-800-772-1213.",
+    relevance: { relevant: true, topics: ["disability", "public_benefits"], matchedTerms: ["ssi"] },
+    links: [{ url: "https://www.ssa.gov/agency/contact/", text: "Contact the Social Security Administration", context: "" }],
+    contacts: { phones: [{ value: "1-800-772-1213" }], emails: [] },
+  });
+
+  it("uses the curated category, names the agency as the organization, and does not guess eligibility", () => {
+    const result = normalizeCrawl({ sources: [{ ...directorySource, pages: [agencyPage] }] });
+    expect(result.candidates).toHaveLength(1);
+    expect(result.candidates[0]).toMatchObject({
+      category: "benefits",
+      organization: "Social Security Administration (SSA)",
+      service_area: ["US"],
+      eligibility: {},
+      eligibility_verified: false,
+    });
+  });
+
+  it("withSourceDefinition merges the full source definition by id", () => {
+    const merged = withSourceDefinition(directorySource);
+    expect(merged.organizationFromTitle).toBe(true);
+    expect(merged.categoryByPath["/agencies/social-security-administration"]).toBe("benefits");
+    expect(withSourceDefinition({ id: "nope", name: "x" })).toEqual({ id: "nope", name: "x" });
   });
 });

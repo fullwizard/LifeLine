@@ -10,14 +10,18 @@
  *
  *   node scripts/promote-resources.mjs [--candidates=path] [--overrides=path] [--output=path]
  */
-import { readFile, writeFile } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { extractEligibility } from "./normalize-california-resources.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULTS = {
-  candidates: path.join(ROOT, "data/crawl-output/california-resource-candidates.json"),
+  // Comma-separated; files that do not exist yet are skipped with a note.
+  candidates: [
+    path.join(ROOT, "data/crawl-output/california-resource-candidates.json"),
+    path.join(ROOT, "data/crawl-output/federal-resource-candidates.json"),
+  ].join(","),
   overrides: path.join(ROOT, "data/reviewed/eligibility-overrides.json"),
   output: path.join(ROOT, "data/resources.json"),
 };
@@ -207,14 +211,45 @@ export function promote(crawl, reviewed) {
   return { resources, errors, warnings, stats };
 }
 
+/** Concatenate the candidate lists of several normalizer outputs. */
+export function mergeCandidateSets(sets) {
+  const candidates = [];
+  const seen = new Set();
+  let generatedAt = null;
+  for (const set of sets) {
+    for (const candidate of set.candidates ?? []) {
+      if (seen.has(candidate.id)) continue;
+      seen.add(candidate.id);
+      candidates.push(candidate);
+    }
+    if (set.generatedAt && (!generatedAt || set.generatedAt > generatedAt)) generatedAt = set.generatedAt;
+  }
+  return { candidates, generatedAt };
+}
+
+async function loadCandidateFiles(files) {
+  const sets = [];
+  for (const file of files) {
+    try {
+      await access(file);
+    } catch {
+      console.warn(`note: ${path.relative(ROOT, file)} not found; skipping`);
+      continue;
+    }
+    sets.push(JSON.parse(await readFile(file, "utf8")));
+  }
+  if (sets.length === 0) throw new Error("No candidate files found");
+  return mergeCandidateSets(sets);
+}
+
 export async function main(args = process.argv.slice(2)) {
   const options = { ...DEFAULTS };
   for (const arg of args) {
     const match = /^--(candidates|overrides|output)=(.+)$/.exec(arg);
     if (!match) throw new Error(`Invalid option: ${arg}`);
-    options[match[1]] = path.resolve(match[2]);
+    options[match[1]] = match[1] === "candidates" ? match[2] : path.resolve(match[2]);
   }
-  const crawl = JSON.parse(await readFile(options.candidates, "utf8"));
+  const crawl = await loadCandidateFiles(options.candidates.split(",").map((p) => path.resolve(p.trim())).filter(Boolean));
   const reviewed = JSON.parse(await readFile(options.overrides, "utf8"));
   const { resources, errors, warnings, stats } = promote(crawl, reviewed);
   for (const w of warnings) console.warn(`warning: ${w}`);
