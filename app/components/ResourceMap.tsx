@@ -7,12 +7,14 @@ import { useEffect, useMemo } from "react";
 import { CircleMarker, GeoJSON, MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import counties from "@/data/geo/bay-area-counties.json";
 import type { MapArea, MapDot, PlanMapData } from "@/lib/map/planMapData";
+import { useLanguage } from "./LanguageProvider";
 
 type CountyFeature = Feature<Polygon | MultiPolygon, { name: string; county: string }>;
 const COUNTIES = counties as unknown as FeatureCollection<Polygon | MultiPolygon, { name: string; county: string }>;
 const BAY_AREA_CENTER: [number, number] = [37.55, -122.15];
 
 export function ResourceMap({ data }: { data: PlanMapData }) {
+  const { t } = useLanguage();
   const areasByName = useMemo(() => new Map(data.areas.map((a) => [a.name, a])), [data.areas]);
   const features = COUNTIES.features.filter((f) => areasByName.has(f.properties.name));
   const exact = data.dots.filter((d) => d.placement === "address").length;
@@ -20,8 +22,8 @@ export function ResourceMap({ data }: { data: PlanMapData }) {
   const notDrawn = data.statewide.length + data.national.length - data.dots.filter((d) => d.placement === "near_you").length;
 
   return (
-    <div className="space-y-3">
-      <div className="h-[420px] w-full overflow-hidden rounded-none border border-neutral-200">
+    <div className="space-y-2">
+      <div className="h-72 w-full overflow-hidden rounded-lg border border-neutral-200 sm:h-80">
         <MapContainer center={BAY_AREA_CENTER} zoom={9} scrollWheelZoom={false} className="h-full w-full" attributionControl>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -33,7 +35,7 @@ export function ResourceMap({ data }: { data: PlanMapData }) {
               <GeoJSON
                 key={feature.properties.name}
                 data={feature as CountyFeature}
-                style={{ color: "#b52a16", weight: 1.5, fillColor: "#fbd95b", fillOpacity: 0.42 }}
+                style={{ color: "#b52a16", weight: 1.25, fillColor: "#b52a16", fillOpacity: 0.07 }}
               >
                 <Popup maxWidth={320}>
                   <AreaPopup area={area} />
@@ -50,65 +52,58 @@ export function ResourceMap({ data }: { data: PlanMapData }) {
                 <br />
                 <span className="text-xs">{dot.placeLabel}</span>
                 <br />
-                <a href={`#resource-${dot.id}`}>See details</a>
+                <a href={`#resource-${dot.id}`}>{t("map.details")}</a>
               </Popup>
             </Marker>
           ))}
           {data.user && (
             <CircleMarker center={[data.user.lat, data.user.lng]} radius={9} pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#1d4ed8", fillOpacity: 1 }}>
-              <Popup>{data.user.label} (you)</Popup>
+              <Popup>{t("map.you", { place: data.user.label })}</Popup>
             </CircleMarker>
           )}
           <FitBounds data={data} features={features} />
         </MapContainer>
       </div>
 
-      <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-neutral-700">
+      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500">
         <li className="flex items-center gap-1.5">
-          <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-accent-700 text-[9px] font-semibold text-white" aria-hidden>
-            1
-          </span>
-          your matches
+          <span className="h-2.5 w-2.5 rounded-full bg-accent-700" aria-hidden />
+          {t("map.legend.ranked")}
         </li>
         <li className="flex items-center gap-1.5">
-          <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-neutral-500 text-[9px] font-semibold text-white" aria-hidden>
-            9
-          </span>
-          also worth knowing
+          <span className="h-2.5 w-2.5 rounded-full bg-neutral-500" aria-hidden />
+          {t("map.legend.related")}
         </li>
         {approx > 0 && (
           <li className="flex items-center gap-1.5">
-            <span className="inline-block h-4 w-4 rounded-full border-2 border-dashed border-accent-700 bg-white" aria-hidden />
-            {approx} approximate (serves the area, no published address)
+            <span className="h-2.5 w-2.5 rounded-full border border-dashed border-accent-700 bg-white" aria-hidden />
+            {t("map.legend.approx", { n: approx })}
           </li>
         )}
         {exact > 0 && (
           <li className="flex items-center gap-1.5">
-            <span className="inline-block h-4 w-4 rounded-full border-2 border-white bg-accent-700 shadow" aria-hidden />
-            {exact} exact address
+            <span className="h-2.5 w-2.5 rounded-full bg-accent-700 ring-1 ring-white" aria-hidden />
+            {t("map.legend.exact", { n: exact })}
           </li>
         )}
         {data.user && (
           <li className="flex items-center gap-1.5">
-            <span className="inline-block h-4 w-4 rounded-full bg-blue-700 ring-2 ring-white" aria-hidden /> you
+            <span className="h-2.5 w-2.5 rounded-full bg-blue-700" aria-hidden /> {t("map.legend.you")}
           </li>
         )}
-        {notDrawn > 0 && <li>{notDrawn} statewide or online programs not drawn (add your city to place them)</li>}
+        {notDrawn > 0 && <li>{t("map.legend.notDrawn", { n: notDrawn })}</li>}
       </ul>
-      <p className="text-xs text-neutral-500">
-        Dashed dots are spread out inside the county a program serves so you can see how much help is nearby. They are not
-        office locations. Solid dots mark a published street address. Tap any dot for details.
-      </p>
     </div>
   );
 }
 
 function AreaPopup({ area }: { area: MapArea }) {
+  const { t } = useLanguage();
   const shown = area.resources.slice(0, 8);
   return (
     <div className="text-sm">
       <strong>
-        {area.resources.length} program{area.resources.length === 1 ? "" : "s"} serve {area.county}
+        {t("map.popup.count", { n: area.resources.length, county: area.county })}
       </strong>
       <ol className="mt-1 list-none space-y-0.5 p-0">
         {shown.map((r) => (
@@ -119,7 +114,7 @@ function AreaPopup({ area }: { area: MapArea }) {
           </li>
         ))}
       </ol>
-      {area.resources.length > shown.length && <p className="mt-1 text-xs">…and {area.resources.length - shown.length} more in the list below.</p>}
+      {area.resources.length > shown.length && <p className="mt-1 text-xs">{t("map.popup.more", { n: area.resources.length - shown.length })}</p>}
     </div>
   );
 }

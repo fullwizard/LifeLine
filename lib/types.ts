@@ -306,5 +306,5 @@ export interface Plan {
   parsedBy: "gemini" | "fallback";
   disclaimer: string;
   /** Language the prose (summary, steps, notes) was written in. */
-  lang: "en" | "es" | "vi" | "zh";
+  lang: "en" | "es" | "vi" | "zh-Hans" | "zh-Hant";
 }

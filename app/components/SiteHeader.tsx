@@ -6,8 +6,8 @@ import { LanguagePicker } from "./LanguageProvider";
 export function SiteHeader({ current }: { current: "home" | "about" | "mission" }) {
   const cls = (page: typeof current) => (page === current ? "site-nav-current" : undefined);
   return (
-    <header className="mb-6 no-print">
-      <div className="site-masthead py-6">
+    <header className="mb-6 border-b border-neutral-200 no-print sm:mb-8">
+      <div className="site-masthead py-3">
         <Link href="/" aria-label="LifeLine home">
           <Image src="/lifeline-logo.png" alt="LifeLine" width={1000} height={1000} className="site-brand" priority />
         </Link>
