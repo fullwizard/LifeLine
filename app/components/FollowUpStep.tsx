@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { formatMoney, type MessageKey } from "@/lib/i18n";
-import type { AskableField, ResourceCategory, Situation } from "@/lib/types";
+import { RESOURCE_CATEGORIES, type AskableField, type ResourceCategory, type Situation } from "@/lib/types";
 import type { ParseResponse } from "../actions";
 import { useLanguage } from "./LanguageProvider";
 import { PICKABLE_NEEDS } from "./SituationForm";
+import { Button, Card, Spinner } from "./ui";
 
 export function FollowUpStep({
   parsed,
@@ -47,141 +48,140 @@ export function FollowUpStep({
 
   const rationale =
     q.expectedEliminations > 0
-      ? t("fu.rationale", { n: q.expectedEliminations, total: parsed.candidateCount })
+      ? t("fu.rationale", { n: Math.max(1, Math.round(q.expectedEliminations)), total: parsed.candidateCount })
       : t("fu.rationale.fit");
 
   return (
-    <div className="grid items-start gap-8 md:grid-cols-[1fr_1.65fr]">
-      <UnderstoodFacts
-        situation={parsed.situation}
-        candidateCount={parsed.candidateCount}
-        onNeedsChange={pending ? undefined : onNeedsChange}
-      />
-
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
       <form
-        className="rounded-none bg-paper p-5 space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           if (pending) return;
           onAnswer(value.trim() ? { field: q.field, value } : null);
         }}
       >
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-accent-700">{t("fu.kicker")}</p>
-          <label htmlFor="answer" className="mt-1 block text-lg font-medium">
-            {t(`q.${q.field}` as MessageKey)}
-          </label>
-          <p className="mt-1 text-sm text-neutral-500">{rationale}</p>
-        </div>
-
-        {q.inputType === "select" && (
-          <div className="grid gap-2">
-            {q.options?.map((o) => (
-              <label
-                key={o.value}
-                className={
-                  "flex cursor-pointer items-start gap-3 rounded-none border px-3 py-2.5 text-sm transition " +
-                  (value === o.value ? "border-accent-600 bg-accent-50" : "border-neutral-200 hover:border-neutral-300")
-                }
-              >
-                <input
-                  type="radio"
-                  name="answer"
-                  value={o.value}
-                  checked={value === o.value}
-                  onChange={() => setValue(o.value)}
-                  className="mt-0.5 accent-accent-700"
-                />
-                <span>{q.field === "housingStatus" ? t(`hs.option.${o.value}` as MessageKey) : o.label}</span>
+        <Card className="shadow-sm">
+          <div className="space-y-5 p-5 sm:p-6">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">{t("fu.kicker")}</p>
+              <label htmlFor="answer" className="mt-1.5 block text-xl font-semibold tracking-tight text-neutral-900">
+                {t(`q.${q.field}` as MessageKey)}
               </label>
-            ))}
-          </div>
-        )}
+              <p className="mt-1.5 text-sm text-neutral-500">{rationale}</p>
+            </div>
 
-        {q.inputType === "boolean" && (
-          <div className="flex gap-2">
-            {[
-              { v: "true", label: t("fu.yes") },
-              { v: "false", label: t("fu.no") },
-            ].map((o) => (
-              <button
-                key={o.v}
-                type="button"
-                onClick={() => setValue(o.v)}
-                aria-pressed={value === o.v}
-                className={
-                  "rounded-none border px-5 py-2 text-sm font-medium transition " +
-                  (value === o.v ? "border-accent-600 bg-accent-50 text-accent-900" : "border-neutral-200 bg-paper hover:border-neutral-300")
-                }
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
-        )}
+            {q.inputType === "select" && (
+              <div className="grid gap-2" role="radiogroup">
+                {q.options?.map((o) => (
+                  <label
+                    key={o.value}
+                    className={
+                      "flex cursor-pointer items-start gap-3 rounded-md border px-3.5 py-3 text-sm transition-colors " +
+                      (value === o.value ? "border-accent-700 bg-accent-50 text-neutral-900" : "border-neutral-200 text-neutral-700 hover:border-neutral-300")
+                    }
+                  >
+                    <input
+                      type="radio"
+                      name="answer"
+                      value={o.value}
+                      checked={value === o.value}
+                      onChange={() => setValue(o.value)}
+                      className="mt-0.5 accent-accent-700"
+                    />
+                    <span>{q.field === "housingStatus" ? t(`hs.option.${o.value}` as MessageKey) : o.label}</span>
+                  </label>
+                ))}
+              </div>
+            )}
 
-        {(q.inputType === "text" || q.inputType === "number") && (
-          <div className="space-y-2">
-            <input
-              id="answer"
-              type={q.inputType}
-              inputMode={q.inputType === "number" ? "decimal" : undefined}
-              min={q.inputType === "number" ? 0 : undefined}
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                if (q.field === "location") setLocationStatus("idle");
-              }}
-              placeholder={q.field === "location" ? t("fu.placeholder.location") : q.field === "monthlyIncome" ? t("fu.placeholder.income") : ""}
-              className="w-full rounded-none border border-neutral-300 px-3 py-2 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600"
-            />
-            {q.field === "location" && (
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={useBrowserLocation}
-                  disabled={pending || locationStatus === "loading"}
-                  className="text-sm font-medium text-accent-700 underline underline-offset-4 hover:text-accent-900 disabled:text-neutral-400"
-                >
-                  {locationStatus === "loading" ? t("fu.locating") : t("fu.useLocation")}
-                </button>
-                {locationStatus === "error" && (
-                  <span className="text-sm text-neutral-500" role="status">
-                    {t("fu.locationError")}
-                  </span>
+            {q.inputType === "boolean" && (
+              <div className="flex gap-2">
+                {[
+                  { v: "true", label: t("fu.yes") },
+                  { v: "false", label: t("fu.no") },
+                ].map((o) => (
+                  <button
+                    key={o.v}
+                    type="button"
+                    onClick={() => setValue(o.v)}
+                    aria-pressed={value === o.v}
+                    className={
+                      "h-10 min-w-24 rounded-md border px-5 text-sm font-medium transition-colors " +
+                      (value === o.v ? "border-accent-700 bg-accent-50 text-accent-800" : "border-neutral-300 bg-paper text-neutral-800 hover:bg-neutral-50")
+                    }
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {(q.inputType === "text" || q.inputType === "number") && (
+              <div className="space-y-2">
+                <div className="relative max-w-sm">
+                  {q.field === "monthlyIncome" && <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-400">$</span>}
+                  <input
+                    id="answer"
+                    type={q.inputType}
+                    inputMode={q.inputType === "number" ? "decimal" : undefined}
+                    min={q.inputType === "number" ? 0 : undefined}
+                    value={value}
+                    autoFocus
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                      if (q.field === "location") setLocationStatus("idle");
+                    }}
+                    placeholder={q.field === "location" ? t("fu.placeholder.location") : q.field === "monthlyIncome" ? t("fu.placeholder.income") : ""}
+                    className={
+                      "h-10 w-full rounded-md border border-neutral-300 bg-paper px-3 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600/20 " +
+                      (q.field === "monthlyIncome" ? "pl-7" : "")
+                    }
+                  />
+                </div>
+                {q.field === "location" && (
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={useBrowserLocation}
+                      disabled={pending || locationStatus === "loading"}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-700 hover:text-accent-800 disabled:text-neutral-400"
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" />
+                        <circle cx="12" cy="10" r="2.5" />
+                      </svg>
+                      {locationStatus === "loading" ? t("fu.locating") : t("fu.useLocation")}
+                    </button>
+                    {locationStatus === "error" && (
+                      <span className="text-sm text-neutral-500" role="status">
+                        {t("fu.locationError")}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             )}
           </div>
-        )}
 
-        <div className="flex flex-wrap items-center gap-3 pt-1">
-          <button
-            type="submit"
-            disabled={pending}
-            className="rounded-none bg-accent-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-800 disabled:bg-neutral-200 disabled:text-neutral-600"
-          >
-            {pending ? t("fu.building") : value.trim() ? t("fu.continue") : t("fu.skip")}
-          </button>
-          <button type="button" onClick={onBack} disabled={pending} className="text-sm text-neutral-500 hover:text-neutral-800">
-            {t("fu.edit")}
-          </button>
-        </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-5 py-4 sm:px-6">
+            <Button variant="ghost" onClick={onBack} disabled={pending}>
+              ← {t("fu.edit")}
+            </Button>
+            <Button type="submit" variant={value.trim() ? "primary" : "secondary"} disabled={pending}>
+              {pending && <Spinner />}
+              {pending ? t("fu.building") : value.trim() ? t("fu.continue") : t("fu.skip")}
+            </Button>
+          </div>
+        </Card>
       </form>
+
+      <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} onNeedsChange={onNeedsChange} />
     </div>
   );
 }
 
-export function UnderstoodFacts({
-  situation,
-  candidateCount,
-  onNeedsChange,
-}: {
-  situation: Situation;
-  candidateCount?: number;
-  /** When set, needs become toggles so the person can correct what we read. */
-  onNeedsChange?: (needs: ResourceCategory[]) => void;
-}) {
+/** Short labels for what we read from the person's words. */
+export function useFactChips(situation: Situation): string[] {
   const { lang, t } = useLanguage();
   const chips: string[] = [];
   const loc = situation.location;
@@ -199,54 +199,64 @@ export function UnderstoodFacts({
   if (situation.age !== undefined) chips.push(t("facts.age", { n: situation.age }));
   if (situation.isVeteran === true) chips.push(t("facts.veteran"));
   if (situation.isVeteran === false) chips.push(t("facts.notVeteran"));
+  return chips;
+}
 
+export function UnderstoodFacts({
+  situation,
+  candidateCount,
+  onNeedsChange,
+}: {
+  situation: Situation;
+  candidateCount?: number;
+  onNeedsChange: (needs: ResourceCategory[]) => void;
+}) {
+  const { t } = useLanguage();
+  const chips = useFactChips(situation);
   const needs = situation.needs ?? [];
-  const toggleable = Array.from(new Set([...needs, ...PICKABLE_NEEDS]));
+  // A fixed order that never reshuffles on tap: the common needs plus any
+  // others we read from the person's words, in the canonical category order.
+  const [detected] = useState(() => new Set(needs));
+  const options = RESOURCE_CATEGORIES.filter((c) => PICKABLE_NEEDS.includes(c) || detected.has(c) || needs.includes(c));
 
   function toggle(need: ResourceCategory) {
-    onNeedsChange?.(needs.includes(need) ? needs.filter((n) => n !== need) : [...needs, need]);
+    onNeedsChange(needs.includes(need) ? needs.filter((n) => n !== need) : [...needs, need]);
   }
 
   return (
-    <section className="rounded-none bg-neutral-100 px-4 py-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-medium text-neutral-700">{t("facts.title")}</h2>
-        {candidateCount !== undefined && <span className="text-xs text-neutral-500">{t("facts.count", { n: candidateCount })}</span>}
-      </div>
-      {chips.length || needs.length ? (
-        <ul className="mt-2 flex flex-wrap gap-2">
-          {chips.map((c) => (
-            <li key={c} className="rounded-none bg-paper px-3 py-1 text-xs text-neutral-800">
-              {c}
-            </li>
-          ))}
-          {!onNeedsChange && needs.length > 0 && (
-            <li className="rounded-none bg-paper px-3 py-1 text-xs text-neutral-800">
-              {t("facts.needs")}: {needs.map((n) => t(`need.${n}` as MessageKey)).join(", ")}
-            </li>
+    <Card className="lg:sticky lg:top-6">
+      <div className="border-b border-neutral-200 px-4 py-3">
+        <div className="flex items-baseline justify-between gap-2">
+          <h2 className="text-sm font-semibold text-neutral-900">{t("facts.title")}</h2>
+          {candidateCount !== undefined && (
+            <span className="text-xs text-neutral-500 tabular-nums" aria-live="polite">
+              {t("facts.count", { n: candidateCount })}
+            </span>
           )}
-        </ul>
-      ) : (
-        <p className="mt-2 text-sm text-neutral-500">{t("facts.none")}</p>
-      )}
-      {onNeedsChange && (
-        <div className="mt-3">
-          <p className="text-xs text-neutral-600">{t("facts.editHint")}</p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {toggleable.map((need) => (
-              <button
-                key={need}
-                type="button"
-                aria-pressed={needs.includes(need)}
-                onClick={() => toggle(need)}
-                className="need-chip rounded-none border border-neutral-300 bg-paper px-2.5 py-1 text-xs font-medium text-neutral-800 transition hover:border-accent-600"
-              >
-                {t(`need.${need}` as MessageKey)}
-              </button>
-            ))}
-          </div>
         </div>
-      )}
-    </section>
+        {chips.length ? (
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {chips.map((c) => (
+              <li key={c} className="rounded-md bg-neutral-100 px-2 py-0.5 text-xs text-neutral-700">
+                {c}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-2 text-sm text-neutral-500">{t("facts.none")}</p>
+        )}
+      </div>
+      <div className="px-4 py-3">
+        <p className="text-xs font-medium text-neutral-700">{t("facts.needs")}</p>
+        <p className="mt-0.5 text-xs text-neutral-500">{t("facts.editHint")}</p>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {options.map((need) => (
+            <button key={need} type="button" className="chip" aria-pressed={needs.includes(need)} onClick={() => toggle(need)}>
+              {t(`need.${need}` as MessageKey)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </Card>
   );
 }

@@ -1,21 +1,26 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { estimateBenefits } from "@/lib/benefits/estimate";
+import { formatMoney, type MessageKey } from "@/lib/i18n";
 import { buildPlanMapData } from "@/lib/map/planMapData";
 import { buildReadyPacket } from "@/lib/plan/readyPacket";
 import type { AskableField, Plan } from "@/lib/types";
 import { BenefitsPanel } from "./BenefitsPanel";
-import { UnderstoodFacts } from "./FollowUpStep";
+import { useFactChips } from "./FollowUpStep";
 import { useLanguage } from "./LanguageProvider";
 import { ReadyPacketView } from "./ReadyPacketView";
+import { ReportDownloadButton } from "./ReportDownloadButton";
 import { ResourceCard } from "./ResourceCard";
+import { Button } from "./ui";
 
 const ResourceMap = dynamic(() => import("./ResourceMap").then((m) => m.ResourceMap), {
   ssr: false,
-  loading: () => <div className="h-[380px] w-full animate-pulse rounded-none bg-neutral-50" aria-hidden />,
+  loading: () => <div className="h-72 w-full animate-pulse rounded-lg bg-neutral-100 sm:h-80" aria-hidden />,
 });
+
+type Tab = "steps" | "benefits" | "programs";
 
 export function PlanView({
   plan,
@@ -29,132 +34,204 @@ export function PlanView({
   onReset: () => void;
 }) {
   const { lang, t } = useLanguage();
-  const confirmed = plan.ranked.filter((r) => !r.needsVerification).length;
-  const [showMap, setShowMap] = useState(true);
+  const [tab, setTab] = useState<Tab>("steps");
+  const facts = useFactChips(plan.situation);
   const mapData = useMemo(() => buildPlanMapData(plan.ranked, plan.related, plan.situation), [plan]);
-  const mappable = mapData.areas.length > 0 || mapData.pins.length > 0;
+  const mappable = mapData.areas.length > 0 || mapData.dots.length > 0;
   // Pure and fast: recomputed on the client so a language switch re-renders instantly.
   const benefits = useMemo(() => estimateBenefits(plan.situation, t, lang), [plan, t, lang]);
   const packet = useMemo(() => buildReadyPacket(plan, benefits, t, lang), [plan, benefits, t, lang]);
   const shown = [...plan.ranked, ...plan.related];
   const checked = shown.filter((r) => r.resource.eligibility_verified).length;
-  // Summary and steps were written in the language chosen when the plan was built.
+  const confirmed = plan.ranked.filter((r) => !r.needsVerification).length;
+  const todayCount = packet.steps.filter((s) => s.when === "now" || s.when === "today").length;
+  // Summary and notes were written in the language chosen when the plan was built.
   const proseMatches = plan.lang === lang;
+  // Template notes repeat the breakdown shown under "Show why"; only AI-written notes add something.
+  const noteFor = (id: string) => (proseMatches && plan.generatedBy === "gemini" ? plan.resourceNotes[id] : undefined);
+
+  // Map popups link to "#resource-<id>": open the Programs tab, then scroll to the card.
+  useEffect(() => {
+    function onHash() {
+      const id = window.location.hash.slice(1);
+      if (!id.startsWith("resource-")) return;
+      setTab("programs");
+      requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const tabs: { id: Tab; label: string; count?: string }[] = [
+    { id: "steps", label: t("tab.steps") },
+    { id: "benefits", label: t("tab.benefits"), count: benefits.estimates.length ? String(benefits.estimates.length) : undefined },
+    { id: "programs", label: t("tab.programs"), count: String(shown.length) },
+  ];
 
   return (
     <div className="space-y-6">
-      <UnderstoodFacts situation={plan.situation} />
-
-      <nav aria-label={t("plan.title")} className="sticky top-0 z-10 -mx-1 flex gap-1 bg-paper/95 px-1 py-2 backdrop-blur no-print">
-        {[
-          { href: "#benefits", label: t("nav.benefits") },
-          { href: "#ready", label: t("nav.ready") },
-          { href: "#programs", label: t("nav.programs") },
-        ].map((l) => (
-          <a key={l.href} href={l.href} className="rounded-none bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-900 hover:bg-neutral-200">
-            {l.label}
-          </a>
-        ))}
-      </nav>
-
-      {proseMatches && (
-        <section className="rounded-none bg-accent-50 p-5">
-          <h2 className="text-lg font-semibold text-accent-950">{t("plan.title")}</h2>
-          <p className="mt-2 text-neutral-800 leading-relaxed">{plan.summary}</p>
-        </section>
-      )}
-
-      <BenefitsPanel summary={benefits} pending={pending} onRefine={onRefine} />
-
-      <ReadyPacketView packet={packet} />
-
-      <section id="programs" className="scroll-mt-20">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-lg font-semibold">
-            {plan.ranked.length === 1 ? t("plan.matching.one") : t("plan.matching", { n: plan.ranked.length })}
-          </h2>
-          <p className="text-xs text-neutral-500">
-            {t("plan.counts", { confirmed, unverified: plan.ranked.length - confirmed, excluded: plan.excludedCount })}
-          </p>
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0 max-w-3xl">
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">{t("plan.title")}</h1>
+          {facts.length > 0 && (
+            <p className="mt-2 text-sm text-neutral-600">
+              {facts.map((f, i) => (
+                <span key={f}>
+                  {i > 0 && <span className="mx-1.5 text-neutral-300">·</span>}
+                  {f}
+                </span>
+              ))}
+            </p>
+          )}
+          {proseMatches && plan.summary && <p className="mt-3 text-sm leading-relaxed text-neutral-700">{plan.summary}</p>}
         </div>
-        {shown.length > 0 && (
-          <p className="mt-2 text-sm text-neutral-700">
-            <span className="font-medium">{t("trust.title")}: </span>
-            {t("trust.body", { checked, total: shown.length })}
-          </p>
-        )}
-        {lang !== "en" && <p className="mt-1 text-xs text-neutral-500">{t("plan.englishNote")}</p>}
-        <Legend />
-        {mappable && (
-          <div className="mt-4 no-print">
-            <button
-              type="button"
-              onClick={() => setShowMap((v) => !v)}
-              aria-expanded={showMap}
-              className="text-sm font-medium text-accent-700 underline-offset-4 hover:underline"
-            >
-              {showMap ? t("map.hide") : t("map.show")}
-            </button>
-            {showMap && (
-              <div className="mt-3">
-                <ResourceMap data={mapData} />
-              </div>
-            )}
-          </div>
-        )}
-        {plan.ranked.length === 0 ? (
-          <p className="mt-4 rounded-none bg-paper p-4 text-sm text-neutral-600">{t("plan.noMatch")}</p>
-        ) : (
-          <ol className="mt-4 space-y-4">
-            {plan.ranked.map((r, i) => (
-              <li key={r.resource.id}>
-                <ResourceCard rank={i + 1} scored={r} note={proseMatches ? plan.resourceNotes[r.resource.id] : undefined} />
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
+        <div className="flex flex-wrap gap-2 no-print">
+          <ReportDownloadButton plan={plan} benefits={benefits} packet={packet} />
+          <Button variant="ghost" onClick={onReset}>
+            {t("plan.edit")}
+          </Button>
+        </div>
+      </header>
 
-      {plan.related.length > 0 && (
-        <section>
-          <h2 className="text-lg font-semibold">{t("plan.related.title")}</h2>
-          <p className="text-xs text-neutral-500">{t("plan.related.sub")}</p>
-          <ol className="mt-4 space-y-4">
-            {plan.related.map((r, i) => (
-              <li key={r.resource.id}>
-                <ResourceCard
-                  rank={plan.ranked.length + i + 1}
-                  scored={r}
-                  note={proseMatches ? plan.resourceNotes[r.resource.id] : undefined}
-                />
-              </li>
-            ))}
-          </ol>
+      {mappable && (
+        <section aria-label={t("map.title")} className="no-print">
+          <ResourceMap data={mapData} />
         </section>
       )}
 
-      <p className="rounded-none bg-amber-50 px-4 py-3 text-xs text-amber-900 leading-relaxed">{t("plan.disclaimer")}</p>
+      <div className="grid gap-2 sm:grid-cols-3 sm:gap-3">
+        <Stat
+          label={t("stat.benefits")}
+          value={
+            benefits.monthlyTotal
+              ? benefits.monthlyTotal.low === benefits.monthlyTotal.high
+                ? `${formatMoney(benefits.monthlyTotal.high, lang)}${t("stat.perMonth")}`
+                : `${formatMoney(benefits.monthlyTotal.low, lang)}–${formatMoney(benefits.monthlyTotal.high, lang)}${t("stat.perMonth")}`
+              : String(benefits.estimates.length)
+          }
+          hint={benefits.monthlyTotal ? t("stat.benefits.hint") : t("stat.benefits.count")}
+          onClick={() => setTab("benefits")}
+        />
+        <Stat label={t("stat.today")} value={String(todayCount)} hint={t("stat.today.hint")} onClick={() => setTab("steps")} />
+        <Stat
+          label={t("stat.programs")}
+          value={String(plan.ranked.length)}
+          hint={t("stat.programs.hint", { checked, total: shown.length })}
+          onClick={() => setTab("programs")}
+        />
+      </div>
 
-      <button type="button" onClick={onReset} className="text-sm font-medium text-accent-700 hover:text-accent-900">
-        {t("plan.startOver")}
-      </button>
+      <div>
+        <div role="tablist" aria-label={t("plan.title")} className="flex gap-1 overflow-x-auto border-b border-neutral-200 no-print">
+          {tabs.map((x) => (
+            <button
+              key={x.id}
+              role="tab"
+              id={`tab-${x.id}`}
+              aria-selected={tab === x.id}
+              aria-controls={`panel-${x.id}`}
+              onClick={() => setTab(x.id)}
+              className={
+                "-mb-px flex items-center gap-2 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors " +
+                (tab === x.id ? "border-accent-700 text-neutral-900" : "border-transparent text-neutral-500 hover:text-neutral-800")
+              }
+            >
+              {x.label}
+              {x.count && <span className="rounded-full bg-neutral-100 px-1.5 text-xs text-neutral-600 tabular-nums">{x.count}</span>}
+            </button>
+          ))}
+        </div>
+
+        <div id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={tab !== "steps"} className="print-show pt-6">
+          <ReadyPacketView packet={packet} />
+        </div>
+
+        <div id="panel-benefits" role="tabpanel" aria-labelledby="tab-benefits" hidden={tab !== "benefits"} className="print-show pt-6">
+          <BenefitsPanel summary={benefits} pending={pending} onRefine={onRefine} />
+        </div>
+
+        <div id="panel-programs" role="tabpanel" aria-labelledby="tab-programs" hidden={tab !== "programs"} className="print-show space-y-8 pt-6">
+          <section>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="text-base font-semibold text-neutral-900">
+                {plan.ranked.length === 1 ? t("plan.matching.one") : t("plan.matching", { n: plan.ranked.length })}
+              </h2>
+              <p className="text-xs text-neutral-500 tabular-nums">
+                {t("plan.counts", { confirmed, unverified: plan.ranked.length - confirmed, excluded: plan.excludedCount })}
+              </p>
+            </div>
+            <p className="mt-1 text-sm text-neutral-500">{t("trust.body", { checked, total: shown.length })}</p>
+            {lang !== "en" && <p className="mt-1 text-xs text-neutral-500">{t("plan.englishNote")}</p>}
+            <Legend />
+            {plan.ranked.length === 0 ? (
+              <p className="mt-4 rounded-lg border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">{t("plan.noMatch")}</p>
+            ) : (
+              <ol className="mt-4 space-y-3">
+                {plan.ranked.map((r, i) => (
+                  <li key={r.resource.id}>
+                    <ResourceCard rank={i + 1} scored={r} note={noteFor(r.resource.id)} />
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+
+          {plan.related.length > 0 && (
+            <section>
+              <h2 className="text-base font-semibold text-neutral-900">{t("plan.related.title")}</h2>
+              <p className="mt-0.5 text-sm text-neutral-500">{t("plan.related.sub")}</p>
+              <ol className="mt-4 space-y-3">
+                {plan.related.map((r, i) => (
+                  <li key={r.resource.id}>
+                    <ResourceCard
+                      rank={plan.ranked.length + i + 1}
+                      scored={r}
+                      note={noteFor(r.resource.id)}
+                    />
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+        </div>
+      </div>
+
+      <p className="border-t border-neutral-200 pt-4 text-xs leading-relaxed text-neutral-500">{t("plan.disclaimer")}</p>
     </div>
+  );
+}
+
+function Stat({ label, value, hint, onClick }: { label: string; value: string; hint: string; onClick: () => void }) {
+  // Phones: a compact row (label and hint left, value right). Wider screens: a tile.
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="grid grid-cols-[1fr_auto] items-center gap-x-4 rounded-lg border border-neutral-200 bg-paper px-4 py-3 text-left transition-colors hover:border-neutral-300 hover:bg-neutral-50 sm:grid-cols-1 sm:py-4"
+    >
+      <span className="col-start-1 row-start-1 text-xs font-medium text-neutral-500">{label}</span>
+      <span className="col-start-2 row-span-2 row-start-1 text-xl font-semibold tracking-tight text-neutral-900 tabular-nums sm:col-start-1 sm:row-span-1 sm:row-start-2 sm:mt-1 sm:text-2xl">
+        {value}
+      </span>
+      <span className="col-start-1 row-start-2 text-xs text-neutral-500 sm:row-start-3 sm:mt-0.5">{hint}</span>
+    </button>
   );
 }
 
 function Legend() {
   const { t } = useLanguage();
+  const items: [string, MessageKey][] = [
+    ["bg-emerald-500", "legend.met"],
+    ["bg-amber-500", "legend.unverified"],
+    ["bg-neutral-300", "legend.unmet"],
+  ];
   return (
-    <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-600">
-      <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden /> {t("legend.met")}
-      </li>
-      <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden /> {t("legend.unverified")}
-      </li>
-      <li className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-neutral-400" aria-hidden /> {t("legend.unmet")}
-      </li>
+    <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500">
+      {items.map(([color, key]) => (
+        <li key={key} className="flex items-center gap-1.5">
+          <span className={`h-2 w-2 rounded-full ${color}`} aria-hidden /> {t(key)}
+        </li>
+      ))}
     </ul>
   );
 }
