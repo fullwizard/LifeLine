@@ -44,6 +44,7 @@ function toResource(record: PromotedRecord): Resource {
     source_url: record.source_url,
     ...("phone" in record && record.phone ? { phone: record.phone } : {}),
     ...("address" in record && typeof record.address === "string" ? { address: record.address } : {}),
+    ...("carried_forward" in record && record.carried_forward === true ? { carried_forward: true } : {}),
     ...("response_time_days" in record && typeof record.response_time_days === "number" ? { response_time_days: record.response_time_days } : {}),
     ...(coordinatesForServiceArea(record.service_area) ?? {}),
     last_verified: record.last_verified,

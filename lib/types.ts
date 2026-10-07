@@ -129,6 +129,11 @@ export interface Resource {
   /** ISO date the listing was last verified against the source. */
   last_verified?: string;
   /**
+   * True when the latest crawl did not find this record's page and it was kept
+   * from the previous verified output. Re-check before relying on it.
+   */
+  carried_forward?: boolean;
+  /**
    * Street address of a walk-in location, when the source publishes one.
    * Only records with an address are drawn as pins; lat/lng without an
    * address is an approximate service-area center.
