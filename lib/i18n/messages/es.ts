@@ -274,8 +274,8 @@ export const es: Partial<Record<MessageKey, string>> = {
   // Resource card
   "card.apply": "Solicitar / más información",
   "card.call": "Llamar al {phone}",
-  "card.show": "Ver por qué es el #{rank} · puntaje {score}",
-  "card.hide": "Ocultar por qué es el #{rank} · puntaje {score}",
+  "card.show": "Por qué coincide",
+  "card.hide": "Ocultar detalles",
   "card.verify": "{n} cosas por verificar",
   "card.verify.one": "1 cosa por verificar",
   "card.allConfirmed": "Todo confirmado",

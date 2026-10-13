@@ -24,7 +24,7 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
           {packet.steps.map((s, i) => (
             <li key={i} className="relative flex gap-4 pb-6 last:pb-0">
               {i < packet.steps.length - 1 && <span className="absolute left-[13px] top-7 bottom-0 w-px bg-neutral-200" aria-hidden />}
-              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-paper text-xs font-semibold text-neutral-700 tabular-nums">
+              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center border border-neutral-900 bg-paper text-xs font-semibold text-neutral-900 tabular-nums">
                 {i + 1}
               </span>
               <div className="min-w-0 pt-0.5">
@@ -54,7 +54,7 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
             <Card className="mt-4 divide-y divide-neutral-200">
               {packet.documents.map((d) => (
                 <label key={d.key} className="flex cursor-pointer gap-3 px-4 py-3 hover:bg-neutral-50">
-                  <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 rounded accent-accent-700" />
+                  <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 rounded-none accent-accent-700" />
                   <span className="min-w-0 text-sm">
                     <span className="block font-medium text-neutral-900">{d.label}</span>
                     {d.tip && <span className="mt-0.5 block text-xs leading-relaxed text-neutral-600">{d.tip}</span>}

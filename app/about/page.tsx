@@ -12,55 +12,31 @@ export default function AboutPage() {
     <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-16 sm:px-8">
       <SiteHeader current="about" />
 
-      <article className="mx-auto max-w-3xl space-y-8">
-        <header>
-          <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">About LifeLine</h1>
-          <p className="mt-3 text-lg leading-relaxed text-neutral-700">
-            LifeLine turns a few sentences about what you are facing into a clear, ordered plan of local
-            programs that may be able to help, with an honest account of why each one is on the list. Rent,
-            food, utility bills, legal trouble, health care, work: if there is a program for it, we want you to
-            find it in minutes, not days.
+      <article className="mx-auto max-w-3xl space-y-10 py-2 sm:py-6">
+        <header className="max-w-2xl">
+          <h1 className="text-4xl font-semibold tracking-[-0.035em] text-neutral-950 sm:text-5xl">About LifeLine</h1>
+          <p className="mt-4 text-lg leading-relaxed text-neutral-600">
+            Describe what is happening. LifeLine finds relevant California programs and puts the next steps in order.
           </p>
         </header>
 
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-neutral-900">Who we are</h2>
-          <p className="leading-relaxed text-neutral-800">
-            We are <strong>Caleb Suh</strong> and <strong>Lior Balan</strong>, juniors at Los Altos High School. We
-            are drawn to the moments when people have to make a decision and a lot rides on getting it right:
-            a rent payment you cannot make, a shut-off notice, a job that disappeared, a parent who suddenly
-            needs care.
-          </p>
-          <p className="leading-relaxed text-neutral-800">
-            We grew up in Los Altos, where the cost of living is among the highest in the country. Watching
-            families around us stretch to get by made one thing obvious: the help that exists is scattered across
-            dozens of websites, hotlines, and PDFs, and the people who need it most have the least time to hunt for
-            it. We started with housing because it is where the clock runs fastest, and built outward from there.
-            LifeLine is our attempt to close that gap.
+        <section className="grid gap-3 sm:grid-cols-[10rem_1fr] sm:gap-6">
+          <h2 className="text-base font-semibold text-neutral-950">Who we are</h2>
+          <p className="max-w-2xl leading-relaxed text-neutral-800">
+            Caleb Suh and Lior Balan are students at Los Altos High School. We built LifeLine after seeing how hard it can be to find useful help across scattered websites, phone lines, and PDFs.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-neutral-900">How it works</h2>
-          <ol className="space-y-3 text-neutral-800 leading-relaxed">
-            <li>
-              1. You describe what is going on. Plain language is fine. If we need more detail to narrow things
-              down, we ask a few focused follow-up questions instead of sending you through a long form.
-            </li>
-            <li>
-              2. Rules pick and rank the programs. Every resource is checked against fixed,
-              transparent criteria: where you live, whether the program is open, and whether anything you told us
-              rules it out. Programs are ordered by how well they fit and how quickly they can respond.
-            </li>
-            <li>
-              3. You see the reasoning. Each program shows exactly which facts matched, which we
-              could not confirm, and what documents to bring. AI only helps read your description and write the
-              summary. It never chooses or invents a resource.
-            </li>
+        <section className="grid gap-3 sm:grid-cols-[10rem_1fr] sm:gap-6">
+          <h2 className="text-base font-semibold text-neutral-950">How it works</h2>
+          <ol className="space-y-4 text-neutral-800">
+            <li className="grid grid-cols-[2rem_1fr] gap-3"><span className="text-sm text-accent-700">01</span><span>Tell us what you need in plain language.</span></li>
+            <li className="grid grid-cols-[2rem_1fr] gap-3"><span className="text-sm text-accent-700">02</span><span>Answer a few questions that change which programs fit.</span></li>
+            <li className="grid grid-cols-[2rem_1fr] gap-3"><span className="text-sm text-accent-700">03</span><span>Get an ordered plan with links, calls, and documents.</span></li>
           </ol>
         </section>
 
-        <p className="text-neutral-700">
+        <p className="pt-2 text-neutral-700">
           Read more about <Link href="/mission" className="underline text-accent-700">why we built this</Link>, or{" "}
           <Link href="/" className="underline text-accent-700">get your plan</Link>.
         </p>

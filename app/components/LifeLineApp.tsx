@@ -112,25 +112,24 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
   return (
     <div>
       {step.kind === "input" ? (
-        <div className="mx-auto max-w-2xl pt-6 pb-4 sm:pt-12">
-          <p className="text-sm font-medium text-accent-700">{t("app.eyebrow")}</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900 text-balance sm:text-4xl">{t("app.headline")}</h1>
-          <p className="mt-3 text-base leading-relaxed text-neutral-600 sm:text-lg">{t("app.sub")}</p>
+        <div className="mx-auto max-w-2xl pt-3 text-center sm:pt-7">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent-700">{t("app.eyebrow")}</p>
+          <h1 className="mt-3 text-4xl font-semibold leading-[1.06] tracking-[-0.035em] text-neutral-950 text-balance sm:text-5xl">{t("app.headline")}</h1>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">{t("app.sub")}</p>
         </div>
       ) : (
         <Stepper stage={stage} />
       )}
 
       {error && (
-        <div role="alert" className="mx-auto mb-4 max-w-2xl rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div role="alert" className="mx-auto mb-4 max-w-3xl rounded-[2px] border-l-4 border-red-700 bg-red-50 px-4 py-3 text-sm text-red-900">
           {error}
         </div>
       )}
 
       {step.kind === "input" && (
-        <div className="mx-auto max-w-2xl">
+        <div className="mx-auto mt-8 max-w-3xl">
           <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
-          <HowItWorks />
         </div>
       )}
       {(step.kind === "followup" || step.kind === "plan") && hasImmediateSafetyConcern(situationOf(step)) && (
@@ -171,33 +170,13 @@ function Stepper({ stage }: { stage: number }) {
           {i > 0 && <span className="h-px w-6 bg-neutral-300 sm:w-10" aria-hidden />}
           <span
             className={
-              "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold " +
-              (i < stage ? "bg-neutral-900 text-white" : i === stage ? "bg-accent-700 text-white" : "bg-neutral-200 text-neutral-500")
+              "flex h-6 w-6 items-center justify-center rounded-[2px] border text-xs font-semibold " +
+              (i < stage ? "border-neutral-900 bg-neutral-900 text-white" : i === stage ? "border-accent-700 bg-accent-700 text-white" : "border-neutral-300 bg-paper text-neutral-500")
             }
           >
             {i < stage ? "✓" : i + 1}
           </span>
           <span className={i === stage ? "font-medium text-neutral-900" : "text-neutral-500"}>{t(key)}</span>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-function HowItWorks() {
-  const { t } = useLanguage();
-  const items: [MessageKey, MessageKey][] = [
-    ["how.1.title", "how.1.body"],
-    ["how.2.title", "how.2.body"],
-    ["how.3.title", "how.3.body"],
-  ];
-  return (
-    <ol className="mt-10 grid gap-6 border-t border-neutral-200 pt-8 sm:grid-cols-3">
-      {items.map(([title, body], i) => (
-        <li key={title}>
-          <p className="text-xs font-semibold text-neutral-400 tabular-nums">0{i + 1}</p>
-          <p className="mt-1 text-sm font-semibold text-neutral-900">{t(title)}</p>
-          <p className="mt-1 text-sm leading-relaxed text-neutral-500">{t(body)}</p>
         </li>
       ))}
     </ol>

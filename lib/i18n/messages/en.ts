@@ -4,9 +4,9 @@
  */
 export const en = {
   // App shell
-  "app.eyebrow": "Free · Private · No sign-up",
-  "app.headline": "Find the help you can get, and a plan to get it.",
-  "app.sub": "Describe what you're going through. LifeLine matches you with local programs, estimates the benefits you may qualify for, and tells you exactly what to do first.",
+  "app.eyebrow": "California assistance, sorted",
+  "app.headline": "Find help. Know what to do next.",
+  "app.sub": "Tell us what is happening. Get a focused list of programs and a practical plan.",
   "stepper.label": "Progress",
   "stepper.describe": "Describe",
   "stepper.details": "Details",
@@ -22,7 +22,7 @@ export const en = {
 
   // Situation form
   "form.label": "Tell us what is going on.",
-  "form.guidance": "Where you live, who lives with you, what you are facing, and roughly what your household earns. Housing, food, bills, legal trouble, health, work: anything counts. Write in any language. Anything you leave out, we may ask about.",
+  "form.guidance": "Include your city or county and the main problem. We will ask for any missing detail that changes your matches.",
   "form.example": "Try an example",
   "form.example.1": "I live in San Jose with two kids. I'm behind on rent and got an eviction notice. I earn $2,400 a month and need utility help too.",
   "form.example.2": "Veteran in Redwood City. Lost my job last month and I'm sleeping in my car. Need shelter and help finding work.",
@@ -31,9 +31,9 @@ export const en = {
   "form.chips": "Or tap what you need help with:",
   "form.submit": "Find help",
   "form.submitting": "Reading your situation…",
-  "form.offline": "Your words are read by rules on our server, not sent to an AI company.",
-  "form.ai": "We use Google's Gemini AI to read your words. LifeLine doesn't save them.",
-  "form.privacy": "Nothing you type is saved. No account, no sign-in. LifeLine covers California, focused on Santa Clara and San Mateo counties. Always confirm program details with the organization.",
+  "form.offline": "Private. Read by LifeLine's rules and not saved.",
+  "form.ai": "Private. Read with Gemini and not saved by LifeLine.",
+  "form.privacy": "California coverage, focused on Santa Clara and San Mateo counties. Confirm details with each program.",
 
   // Needs
   "need.rental_assistance": "Rent",
@@ -70,8 +70,8 @@ export const en = {
   "q.householdSize": "How many people live in your household, including you?",
   "q.hasChildren": "Do you have children under 18 living with you?",
   "q.isVeteran": "Have you served in the U.S. military?",
-  "fu.rationale": "Answering this would rule out about {n} of {total} possible programs, so your plan is more accurate.",
-  "fu.rationale.fit": "This helps compare programs by fit and gives you more useful next steps.",
+  "fu.rationale": "This may narrow {total} possible programs by about {n}.",
+  "fu.rationale.fit": "This helps us rank the strongest matches.",
   "fu.yes": "Yes",
   "fu.no": "No",
   "fu.useLocation": "Use my location",
@@ -101,7 +101,7 @@ export const en = {
   "facts.currentLocation": "Current location",
   "facts.locationProvided": "Location provided",
   "facts.zip": "ZIP {zip}",
-  "facts.editHint": "Missing something? Tap a need to add or remove it.",
+  "facts.editHint": "Add or remove a need.",
 
   // Crisis
   "crisis.kicker": "Support is available now",
@@ -118,11 +118,11 @@ export const en = {
   "plan.title": "Your plan",
   "plan.matching": "{n} matching programs",
   "plan.matching.one": "1 matching program",
-  "plan.counts": "{confirmed} fully confirmed · {unverified} need verification · {excluded} ruled out",
+  "plan.counts": "{confirmed} confirmed · {unverified} to verify · {excluded} excluded",
   "plan.noMatch": "No programs matched. Try adding your city or county.",
   "plan.related.title": "Also worth knowing",
-  "plan.related.sub": "Programs in related categories that often help in situations like yours. Same rules, same checks.",
-  "plan.disclaimer": "LifeLine does not decide who qualifies. Items marked \"confirmed\" match what you told us; items marked \"needs verification\" must be checked with the organization. Program details change — confirm before relying on them.",
+  "plan.related.sub": "Other programs that may help.",
+  "plan.disclaimer": "Each organization makes the final eligibility decision. Confirm details before applying.",
   "plan.englishNote": "Program details come from official English-language sources.",
   "plan.edit": "Edit my answers",
   "tab.steps": "Next steps",
@@ -160,7 +160,7 @@ export const en = {
 
   // Benefits section
   "benefits.title": "Money and savings you may be missing",
-  "benefits.sub": "Estimated from what you told us, using the programs' published rules. Only the agency can make the final decision.",
+  "benefits.sub": "Estimates based on published program rules.",
   "benefits.total": "About {low}–{high} a month in food benefits",
   "benefits.totalOne": "About {amount} a month in food benefits",
   "benefits.plus": "plus the discounts and coverage below",
@@ -319,13 +319,13 @@ export const en = {
   // Resource card
   "card.apply": "Apply / learn more",
   "card.call": "Call {phone}",
-  "card.show": "Show why this is #{rank} · score {score}",
-  "card.hide": "Hide why this is #{rank} · score {score}",
+  "card.show": "Why this matches",
+  "card.hide": "Hide details",
   "card.verify": "{n} things to verify",
   "card.verify.one": "1 thing to verify",
   "card.allConfirmed": "All checks confirmed",
   "card.checked": "Checked against official source · {date}",
-  "card.unchecked": "Not yet checked by our team",
+  "card.unchecked": "Needs source review",
   "card.bring": "Bring: {list}.",
   "card.source": "Source:",
   "status.met": "Confirmed",

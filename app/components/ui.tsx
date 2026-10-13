@@ -8,9 +8,9 @@ type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "md";
 
 const VARIANT: Record<Variant, string> = {
-  primary: "bg-accent-700 text-white hover:bg-accent-800 disabled:bg-neutral-200 disabled:text-neutral-500",
-  secondary: "border border-neutral-300 bg-paper text-neutral-800 hover:bg-neutral-50 disabled:text-neutral-400",
-  ghost: "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 disabled:text-neutral-400",
+  primary: "border border-accent-700 bg-accent-700 text-white hover:border-accent-900 hover:bg-accent-900 disabled:border-neutral-200 disabled:bg-neutral-200 disabled:text-neutral-500",
+  secondary: "border border-neutral-300 bg-paper text-neutral-900 hover:border-neutral-700 hover:bg-signal-soft disabled:border-neutral-200 disabled:text-neutral-400",
+  ghost: "border border-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 disabled:text-neutral-400",
 };
 
 const SIZE: Record<Size, string> = {
@@ -19,7 +19,7 @@ const SIZE: Record<Size, string> = {
 };
 
 export function buttonClass(variant: Variant = "secondary", size: Size = "md", extra = ""): string {
-  return `inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md font-medium transition-colors disabled:cursor-not-allowed ${VARIANT[variant]} ${SIZE[size]} ${extra}`;
+  return `inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[2px] font-semibold transition-colors disabled:cursor-not-allowed ${VARIANT[variant]} ${SIZE[size]} ${extra}`;
 }
 
 export function Button({
@@ -46,31 +46,31 @@ export function ButtonLink({
 type Tone = "neutral" | "success" | "warning" | "danger" | "accent";
 
 const TONE: Record<Tone, string> = {
-  neutral: "bg-neutral-100 text-neutral-700",
-  success: "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200",
-  warning: "bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-200",
+  neutral: "bg-neutral-100 text-neutral-800",
+  success: "bg-neutral-900 text-white",
+  warning: "bg-signal text-neutral-950",
   danger: "bg-red-700 text-white",
   accent: "bg-accent-700 text-white",
 };
 
 export function Badge({ tone = "neutral", children, className = "" }: { tone?: Tone; children: ReactNode; className?: string }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${TONE[tone]} ${className}`}>
+    <span className={`inline-flex items-center rounded-[2px] px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] whitespace-nowrap ${TONE[tone]} ${className}`}>
       {children}
     </span>
   );
 }
 
 export function Card({ className = "", ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`rounded-lg border border-neutral-200 bg-paper ${className}`} {...props} />;
+  return <div className={`rounded-[2px] border border-neutral-300 bg-paper ${className}`} {...props} />;
 }
 
 export function SectionHeader({ title, description, action }: { title: ReactNode; description?: ReactNode; action?: ReactNode }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div className="min-w-0">
-        <h2 className="text-base font-semibold text-neutral-900">{title}</h2>
-        {description && <p className="mt-0.5 text-sm text-neutral-500">{description}</p>}
+        <h2 className="text-lg font-semibold tracking-tight text-neutral-950">{title}</h2>
+        {description && <p className="mt-1 max-w-2xl text-sm text-neutral-600">{description}</p>}
       </div>
       {action}
     </div>

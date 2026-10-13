@@ -274,8 +274,8 @@ export const vi: Partial<Record<MessageKey, string>> = {
   // Resource card
   "card.apply": "Nộp đơn / tìm hiểu thêm",
   "card.call": "Gọi {phone}",
-  "card.show": "Xem lý do xếp hạng #{rank} · điểm {score}",
-  "card.hide": "Ẩn lý do xếp hạng #{rank} · điểm {score}",
+  "card.show": "Vì sao phù hợp",
+  "card.hide": "Ẩn chi tiết",
   "card.verify": "{n} điều cần xác minh",
   "card.verify.one": "1 điều cần xác minh",
   "card.allConfirmed": "Tất cả đã được xác nhận",

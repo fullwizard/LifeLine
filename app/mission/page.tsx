@@ -12,56 +12,29 @@ export default function MissionPage() {
     <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-16 sm:px-8">
       <SiteHeader current="mission" />
 
-      <article className="mx-auto max-w-3xl space-y-8">
-        <header>
-          <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Our mission</h1>
-          <p className="mt-3 text-xl leading-relaxed text-neutral-800">
-            When the stakes are high, everyone deserves a clear next step.
-          </p>
+      <article className="mx-auto max-w-3xl space-y-10 py-2 sm:py-6">
+        <header className="max-w-2xl">
+          <p className="text-sm font-semibold text-accent-700">Our mission</p>
+          <h1 className="mt-2 text-4xl font-semibold leading-[1.08] tracking-[-0.035em] text-neutral-950 sm:text-5xl">
+            A clear next step when it matters most.
+          </h1>
         </header>
 
-        <section className="space-y-4 leading-relaxed text-neutral-800">
-          <p>
-            Hard moments are not rare. In the Bay Area, where we live, a single missed paycheck or an
-            unexpected bill can put a family a few weeks away from an eviction notice, an empty fridge, or a
-            shut-off. The programs designed to catch people in those moments exist, but finding the right one
-            means knowing what to search for, decoding eligibility rules, and calling around while the clock
-            runs.
-          </p>
-          <p>
-            We are Caleb Suh and Lior Balan, two juniors at Los Altos High School. We care about the decisions
-            people make under pressure, and we noticed that the people facing the hardest ones were getting the
-            least help making them. Our mission is to give anyone in a tough spot a plan they can act on in
-            minutes: the right programs, in the right order, with the reasoning laid out plainly. Housing was
-            our starting point because it is where the stakes are highest, and the same approach now covers food,
-            utilities, legal help, health care, benefits, and support for families, veterans, and older adults.
-            We started in the Bay Area because it is home, and we are building toward verified, up-to-date
-            listings that can serve more communities over time.
-          </p>
-        </section>
+        <p className="max-w-2xl text-lg leading-relaxed text-neutral-800">
+          Useful programs already exist. Finding the right one should not require hours of searching through government pages. LifeLine turns a difficult situation into a short, practical plan.
+        </p>
 
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-neutral-900">What we promise</h2>
-          <ul className="list-disc space-y-3 pl-6 text-neutral-800 leading-relaxed marker:text-accent-700">
-            <li>
-              Clarity over cleverness. Resources are chosen by transparent rules, not by a black
-              box. You can see why every program is on your list.
-            </li>
-            <li>
-              Honesty about uncertainty. We will never tell you that you qualify. We show what
-              matched, what still needs confirming, and who makes the final call.
-            </li>
-            <li>
-              Respect for your time. One description, a short set of focused questions, and a plan. No
-              accounts, no forms that take an hour.
-            </li>
-            <li>
-              Privacy by default. Nothing you type is stored. Your situation is yours.
-            </li>
+        <section className="grid gap-3 sm:grid-cols-[10rem_1fr] sm:gap-6">
+          <h2 className="text-base font-semibold text-neutral-950">What we promise</h2>
+          <ul className="space-y-3 text-neutral-800">
+            <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 bg-signal" aria-hidden />Show why each program fits.</li>
+            <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 bg-signal" aria-hidden />Mark what still needs confirmation.</li>
+            <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 bg-signal" aria-hidden />Ask only for details that improve the plan.</li>
+            <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 bg-signal" aria-hidden />Do not save what you type.</li>
           </ul>
         </section>
 
-        <p className="text-neutral-700">
+        <p className="pt-2 text-neutral-700">
           Learn <Link href="/about" className="underline text-accent-700">how LifeLine works</Link>, or{" "}
           <Link href="/" className="underline text-accent-700">get your plan</Link>.
         </p>
