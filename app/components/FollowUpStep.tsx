@@ -60,10 +60,10 @@ export function FollowUpStep({
           onAnswer(value.trim() ? { field: q.field, value } : null);
         }}
       >
-        <Card className="shadow-sm">
+        <Card>
           <div className="space-y-5 p-5 sm:p-6">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">{t("fu.kicker")}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent-700">{t("fu.kicker")}</p>
               <label htmlFor="answer" className="mt-1.5 block text-xl font-semibold tracking-tight text-neutral-900">
                 {t(`q.${q.field}` as MessageKey)}
               </label>
@@ -76,8 +76,8 @@ export function FollowUpStep({
                   <label
                     key={o.value}
                     className={
-                      "flex cursor-pointer items-start gap-3 rounded-md border px-3.5 py-3 text-sm transition-colors " +
-                      (value === o.value ? "border-accent-700 bg-accent-50 text-neutral-900" : "border-neutral-200 text-neutral-700 hover:border-neutral-300")
+                      "flex cursor-pointer items-start gap-3 rounded-[2px] border px-3.5 py-3 text-sm transition-colors " +
+                      (value === o.value ? "border-accent-700 bg-signal-soft text-neutral-950" : "border-neutral-300 text-neutral-700 hover:border-neutral-500")
                     }
                   >
                     <input
@@ -106,8 +106,8 @@ export function FollowUpStep({
                     onClick={() => setValue(o.v)}
                     aria-pressed={value === o.v}
                     className={
-                      "h-10 min-w-24 rounded-md border px-5 text-sm font-medium transition-colors " +
-                      (value === o.v ? "border-accent-700 bg-accent-50 text-accent-800" : "border-neutral-300 bg-paper text-neutral-800 hover:bg-neutral-50")
+                      "h-10 min-w-24 rounded-[2px] border px-5 text-sm font-semibold transition-colors " +
+                      (value === o.v ? "border-accent-700 bg-signal text-neutral-950" : "border-neutral-300 bg-paper text-neutral-900 hover:border-neutral-500 hover:bg-signal-soft")
                     }
                   >
                     {o.label}
@@ -133,7 +133,7 @@ export function FollowUpStep({
                     }}
                     placeholder={q.field === "location" ? t("fu.placeholder.location") : q.field === "monthlyIncome" ? t("fu.placeholder.income") : ""}
                     className={
-                      "h-10 w-full rounded-md border border-neutral-300 bg-paper px-3 text-base focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600/20 " +
+                      "h-10 w-full rounded-[2px] border border-neutral-300 bg-paper px-3 text-base focus:border-accent-700 focus:outline-none " +
                       (q.field === "monthlyIncome" ? "pl-7" : "")
                     }
                   />
@@ -163,7 +163,7 @@ export function FollowUpStep({
             )}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-5 py-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 bg-paper px-5 py-4 sm:px-6">
             <Button variant="ghost" onClick={onBack} disabled={pending}>
               ← {t("fu.edit")}
             </Button>
@@ -224,8 +224,8 @@ export function UnderstoodFacts({
   }
 
   return (
-    <Card className="lg:sticky lg:top-6">
-      <div className="border-b border-neutral-200 px-4 py-3">
+    <aside className="border-l-2 border-signal pl-4 lg:sticky lg:top-6">
+      <div className="border-b border-neutral-300 pb-4">
         <div className="flex items-baseline justify-between gap-2">
           <h2 className="text-sm font-semibold text-neutral-900">{t("facts.title")}</h2>
           {candidateCount !== undefined && (
@@ -237,7 +237,7 @@ export function UnderstoodFacts({
         {chips.length ? (
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {chips.map((c) => (
-              <li key={c} className="rounded-md bg-neutral-100 px-2 py-0.5 text-xs text-neutral-700">
+              <li key={c} className="border border-neutral-300 px-2 py-0.5 text-xs text-neutral-700">
                 {c}
               </li>
             ))}
@@ -246,7 +246,7 @@ export function UnderstoodFacts({
           <p className="mt-2 text-sm text-neutral-500">{t("facts.none")}</p>
         )}
       </div>
-      <div className="px-4 py-3">
+      <div className="pt-4">
         <p className="text-xs font-medium text-neutral-700">{t("facts.needs")}</p>
         <p className="mt-0.5 text-xs text-neutral-500">{t("facts.editHint")}</p>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -257,6 +257,6 @@ export function UnderstoodFacts({
           ))}
         </div>
       </div>
-    </Card>
+    </aside>
   );
 }

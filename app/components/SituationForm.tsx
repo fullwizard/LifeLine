@@ -60,7 +60,7 @@ export function SituationForm({
         if (canSubmit) onSubmit(text, needs);
       }}
     >
-      <Card className="shadow-sm">
+      <Card>
         <div className="space-y-5 p-5 sm:p-6">
           <div>
             <div className="flex items-baseline justify-between gap-3">
@@ -71,7 +71,7 @@ export function SituationForm({
                 type="button"
                 onClick={tryExample}
                 disabled={pending}
-                className="text-sm font-medium text-accent-700 hover:text-accent-800 disabled:text-neutral-400"
+                className="text-sm font-semibold text-accent-700 underline decoration-2 underline-offset-4 hover:text-accent-900 disabled:text-neutral-400"
               >
                 {t("form.example")}
               </button>
@@ -93,7 +93,7 @@ export function SituationForm({
               maxLength={4000}
               placeholder={examples[0]}
               disabled={pending}
-              className="mt-3 block w-full resize-y rounded-md border border-neutral-300 bg-paper px-3.5 py-3 text-base leading-relaxed text-neutral-900 placeholder:text-neutral-400 focus:border-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-600/20"
+              className="mt-3 block w-full resize-y rounded-[2px] border border-neutral-300 bg-paper px-3.5 py-3 text-base leading-relaxed text-neutral-950 placeholder:text-neutral-400 focus:border-accent-700 focus:outline-none"
             />
           </div>
 
@@ -116,7 +116,7 @@ export function SituationForm({
           </fieldset>
         </div>
 
-        <div className="flex flex-col-reverse gap-3 border-t border-neutral-200 bg-neutral-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 rounded-b-lg">
+        <div className="flex flex-col-reverse gap-3 border-t border-neutral-200 bg-paper px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p className="flex items-start gap-2 text-xs leading-relaxed text-neutral-500">
             <svg className="mt-0.5 h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <rect x="4" y="10" width="16" height="11" rx="2" />

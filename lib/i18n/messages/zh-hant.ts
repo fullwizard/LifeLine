@@ -274,8 +274,8 @@ export const zhHant: Partial<Record<MessageKey, string>> = {
   // Resource card
   "card.apply": "申請／了解更多",
   "card.call": "撥打 {phone}",
-  "card.show": "顯示為何排第 {rank} 名 · 分數 {score}",
-  "card.hide": "隱藏為何排第 {rank} 名 · 分數 {score}",
+  "card.show": "為何符合",
+  "card.hide": "隱藏詳細資料",
   "card.verify": "{n} 項需要核實",
   "card.verify.one": "1 項需要核實",
   "card.allConfirmed": "所有檢查均已確認",

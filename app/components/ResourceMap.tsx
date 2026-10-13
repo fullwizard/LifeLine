@@ -23,7 +23,7 @@ export function ResourceMap({ data }: { data: PlanMapData }) {
 
   return (
     <div className="space-y-2">
-      <div className="h-72 w-full overflow-hidden rounded-lg border border-neutral-200 sm:h-80">
+      <div className="h-72 w-full overflow-hidden border border-neutral-200 sm:h-80">
         <MapContainer center={BAY_AREA_CENTER} zoom={9} scrollWheelZoom={false} className="h-full w-full" attributionControl>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

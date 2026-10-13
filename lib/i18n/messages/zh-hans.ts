@@ -274,8 +274,8 @@ export const zhHans: Partial<Record<MessageKey, string>> = {
   // Resource card
   "card.apply": "申请／了解更多",
   "card.call": "拨打 {phone}",
-  "card.show": "显示为何排第 {rank} 名 · 分数 {score}",
-  "card.hide": "隐藏为何排第 {rank} 名 · 分数 {score}",
+  "card.show": "为何匹配",
+  "card.hide": "隐藏详情",
   "card.verify": "{n} 项需要核实",
   "card.verify.one": "1 项需要核实",
   "card.allConfirmed": "所有检查均已确认",

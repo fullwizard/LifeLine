@@ -34,11 +34,14 @@
   --color-accent-800: #93200e;
   --color-accent-900: #731b10;
   --color-accent-950: #491108;
+  --color-signal: #f4c430;
+  --color-signal-soft: #fff4bd;
 }
 
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  background: var(--color-paper);
 }
 
 @layer base {
@@ -70,12 +73,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 2rem;
+  min-height: 4.75rem;
 }
 
 .site-brand {
-  width: 8.5rem;
-  height: 3rem;
+  width: 9.5rem;
+  height: 3.25rem;
   object-fit: cover;
   object-position: center;
 }
@@ -85,16 +89,16 @@ body {
   align-items: center;
   gap: 1.5rem;
   font-size: 0.875rem;
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-800);
+  font-weight: 600;
 }
 
 .site-nav a:hover {
-  color: var(--color-neutral-900);
+  color: var(--color-accent-700);
 }
 
 .site-nav .site-nav-current {
-  color: var(--color-neutral-900);
-  font-weight: 500;
+  color: var(--color-accent-700);
 }
 
 .language-picker {
@@ -107,9 +111,9 @@ body {
 .language-picker select {
   appearance: none;
   border: 1px solid var(--color-neutral-200);
-  border-radius: 0.375rem;
+  border-radius: 2px;
   background: var(--color-paper);
-  padding: 0.25rem 0.625rem;
+  padding: 0.3rem 0.625rem;
   font-size: 0.8125rem;
   color: var(--color-neutral-800);
 }
@@ -131,7 +135,7 @@ body {
   align-items: center;
   gap: 0.375rem;
   border: 1px solid var(--color-neutral-200);
-  border-radius: 9999px;
+  border-radius: 2px;
   background: var(--color-paper);
   padding: 0.3125rem 0.75rem;
   font-size: 0.8125rem;
@@ -147,13 +151,13 @@ body {
 }
 
 .chip:hover {
-  border-color: var(--color-neutral-400);
+  border-color: var(--color-neutral-900);
 }
 
 .chip[aria-pressed="true"] {
-  border-color: var(--color-accent-700);
-  background: var(--color-accent-50);
-  color: var(--color-accent-800);
+  border-color: var(--color-neutral-900);
+  background: var(--color-signal);
+  color: var(--color-neutral-950);
 }
 
 .chip:disabled {
