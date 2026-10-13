@@ -3,6 +3,11 @@ import type { MessageKey } from "./en";
 export const zhHant: Partial<Record<MessageKey, string>> = {
   // App shell
   "app.headline": "找到您可以獲得的幫助，以及取得幫助的計劃。",
+  "quick.title": "實用資源",
+  "quick.211": "211 本地服務",
+  "quick.988": "988 自殺與危機生命線",
+  "quick.ca": "加州援助計畫",
+  "quick.edd": "加州失業救濟",
   "app.error": "出了點問題，請再試一次。",
   "lang.label": "語言",
 

@@ -35,6 +35,24 @@ const URGENT_STATUSES = new Set(["eviction_notice", "unhoused"]);
 const NEAR_MILES = 5;
 const MID_MILES = 15;
 
+// Only unknowns that can change eligibility keep a result from being shown as
+// fully matched. Distance, response time, and document preparation are useful
+// context, but they do not decide whether someone qualifies for a program.
+const ELIGIBILITY_FACTORS = new Set<BreakdownItem["factor"]>([
+  "service_area",
+  "need_match",
+  "income_limit",
+  "eviction_notice",
+  "children",
+  "veteran",
+  "housing_status",
+  "other_conditions",
+]);
+
+export function isEligibilityUnverified(item: BreakdownItem): boolean {
+  return item.status === "unverified" && ELIGIBILITY_FACTORS.has(item.factor);
+}
+
 export function scoreResource(
   resource: Resource,
   situation: Situation,
@@ -295,7 +313,7 @@ export function scoreResource(
     resource,
     score,
     breakdown: b,
-    needsVerification: b.some((item) => item.status === "unverified"),
+    needsVerification: b.some(isEligibilityUnverified),
   };
 }
 

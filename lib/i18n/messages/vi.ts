@@ -3,6 +3,11 @@ import type { MessageKey } from "./en";
 export const vi: Partial<Record<MessageKey, string>> = {
   // App shell
   "app.headline": "Tìm sự trợ giúp quý vị có thể nhận, và kế hoạch để nhận được.",
+  "quick.title": "Nguồn trợ giúp hữu ích",
+  "quick.211": "Dịch vụ địa phương 211",
+  "quick.988": "Đường dây 988 hỗ trợ khủng hoảng và phòng ngừa tự tử",
+  "quick.ca": "Các chương trình hỗ trợ California",
+  "quick.edd": "Trợ cấp thất nghiệp California",
   "app.error": "Đã xảy ra lỗi. Xin vui lòng thử lại.",
   "lang.label": "Ngôn ngữ",
 

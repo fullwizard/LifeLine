@@ -46,11 +46,6 @@ export function FollowUpStep({
     );
   }
 
-  const rationale =
-    q.expectedEliminations > 0
-      ? t("fu.rationale", { n: Math.max(1, Math.round(q.expectedEliminations)), total: parsed.candidateCount })
-      : t("fu.rationale.fit");
-
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
       <form
@@ -63,11 +58,9 @@ export function FollowUpStep({
         <Card>
           <div className="space-y-5 p-5 sm:p-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent-700">{t("fu.kicker")}</p>
-              <label htmlFor="answer" className="mt-1.5 block text-xl font-semibold tracking-tight text-neutral-900">
+              <label htmlFor="answer" className="block text-xl font-semibold tracking-tight text-neutral-900">
                 {t(`q.${q.field}` as MessageKey)}
               </label>
-              <p className="mt-1.5 text-sm text-neutral-500">{rationale}</p>
             </div>
 
             {q.inputType === "select" && (
@@ -107,7 +100,7 @@ export function FollowUpStep({
                     aria-pressed={value === o.v}
                     className={
                       "h-10 min-w-24 rounded-[2px] border px-5 text-sm font-semibold transition-colors " +
-                      (value === o.v ? "border-accent-700 bg-signal text-neutral-950" : "border-neutral-300 bg-paper text-neutral-900 hover:border-neutral-500 hover:bg-signal-soft")
+                      (value === o.v ? "border-accent-700 bg-signal text-white" : "border-neutral-300 bg-paper text-neutral-900 hover:border-neutral-500 hover:bg-signal-soft")
                     }
                   >
                     {o.label}
@@ -175,7 +168,7 @@ export function FollowUpStep({
         </Card>
       </form>
 
-      <UnderstoodFacts situation={parsed.situation} candidateCount={parsed.candidateCount} onNeedsChange={onNeedsChange} />
+      <UnderstoodFacts situation={parsed.situation} onNeedsChange={onNeedsChange} />
     </div>
   );
 }
@@ -204,11 +197,9 @@ export function useFactChips(situation: Situation): string[] {
 
 export function UnderstoodFacts({
   situation,
-  candidateCount,
   onNeedsChange,
 }: {
   situation: Situation;
-  candidateCount?: number;
   onNeedsChange: (needs: ResourceCategory[]) => void;
 }) {
   const { t } = useLanguage();
@@ -226,15 +217,8 @@ export function UnderstoodFacts({
   return (
     <aside className="border-l-2 border-signal pl-4 lg:sticky lg:top-6">
       <div className="border-b border-neutral-300 pb-4">
-        <div className="flex items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold text-neutral-900">{t("facts.title")}</h2>
-          {candidateCount !== undefined && (
-            <span className="text-xs text-neutral-500 tabular-nums" aria-live="polite">
-              {t("facts.count", { n: candidateCount })}
-            </span>
-          )}
-        </div>
-        {chips.length ? (
+        <h2 className="text-sm font-semibold text-neutral-900">{t("facts.title")}</h2>
+        {chips.length > 0 && (
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {chips.map((c) => (
               <li key={c} className="border border-neutral-300 px-2 py-0.5 text-xs text-neutral-700">
@@ -242,13 +226,10 @@ export function UnderstoodFacts({
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="mt-2 text-sm text-neutral-500">{t("facts.none")}</p>
         )}
       </div>
       <div className="pt-4">
         <p className="text-xs font-medium text-neutral-700">{t("facts.needs")}</p>
-        <p className="mt-0.5 text-xs text-neutral-500">{t("facts.editHint")}</p>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           {options.map((need) => (
             <button key={need} type="button" className="chip" aria-pressed={needs.includes(need)} onClick={() => toggle(need)}>

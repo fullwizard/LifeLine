@@ -24,7 +24,7 @@ export function BenefitsPanel({
 
   return (
     <section aria-labelledby="benefits-title">
-      <SectionHeader title={<span id="benefits-title">{t("benefits.title")}</span>} description={t("benefits.sub")} />
+      <SectionHeader title={<span id="benefits-title">{t("benefits.title")}</span>} />
 
       {monthlyTotal && (
         <div className="mt-4 border-l-[6px] border-accent-700 bg-signal-soft p-5">

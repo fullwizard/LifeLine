@@ -1,13 +1,14 @@
 /**
  * RANK. Deterministic ordering of scored resources.
  *   1. higher score first
- *   2. fewer unverified factors first (more certainty wins ties)
+ *   2. fewer unverified eligibility factors first (more certainty wins ties)
  *   3. name, for a stable order
  */
 import type { ScoredResource } from "../types";
+import { isEligibilityUnverified } from "./score";
 
 export function unverifiedCount(s: ScoredResource): number {
-  return s.breakdown.filter((b) => b.status === "unverified").length;
+  return s.breakdown.filter(isEligibilityUnverified).length;
 }
 
 export function rank(scored: ScoredResource[]): ScoredResource[] {

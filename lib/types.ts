@@ -232,7 +232,7 @@ export interface ScoredResource {
   resource: Resource;
   score: number;
   breakdown: BreakdownItem[];
-  /** True if any breakdown item is "unverified" — the org must confirm. */
+  /** True when a material eligibility factor is still unverified. */
   needsVerification: boolean;
 }
 

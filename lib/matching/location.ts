@@ -18,6 +18,7 @@ type ParsedArea =
   | { kind: "city"; city: string; state: string };
 
 const NATIONAL = new Set(["us", "usa", "national", "nationwide", "united states"]);
+const CALIFORNIA = new Set(["ca", "california"]);
 
 export function norm(s: string | undefined): string {
   return (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
@@ -52,8 +53,9 @@ export function matchArea(entry: string, loc: Location | undefined): AreaMatch {
 
   switch (area.kind) {
     case "state":
-      // A person only supplies city, county, or ZIP in the California flow.
-      // State-wide resource records remain available but need confirmation.
+      // LifeLine currently accepts California locations only. Once the person
+      // supplies a location, a California-wide program is confirmed in-area.
+      if (loc && CALIFORNIA.has(area.state)) return "match";
       return "unknown";
     case "county":
       if (uCounty) {

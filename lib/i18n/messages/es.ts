@@ -3,6 +3,11 @@ import type { MessageKey } from "./en";
 export const es: Partial<Record<MessageKey, string>> = {
   // App shell
   "app.headline": "Encuentre la ayuda que puede recibir y un plan para conseguirla.",
+  "quick.title": "Recursos útiles",
+  "quick.211": "Servicios locales 211",
+  "quick.988": "Línea 988 de prevención del suicidio y crisis",
+  "quick.ca": "Programas de asistencia de California",
+  "quick.edd": "Beneficios de desempleo de California",
   "app.error": "Algo salió mal. Por favor, intente de nuevo.",
   "lang.label": "Idioma",
 
