@@ -19,7 +19,7 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
       <section aria-labelledby="steps-title">
-        <SectionHeader title={<span id="steps-title">{t("packet.steps")}</span>} description={t("packet.sub")} />
+        <SectionHeader title={<span id="steps-title">{t("packet.steps")}</span>} />
         <ol className="mt-4">
           {packet.steps.map((s, i) => (
             <li key={i} className="relative flex gap-4 pb-6 last:pb-0">
@@ -50,7 +50,7 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
       <div className="space-y-8">
         {packet.documents.length > 0 && (
           <section aria-labelledby="docs-title">
-            <SectionHeader title={<span id="docs-title">{t("packet.docs")}</span>} description={t("packet.docs.sub")} />
+            <SectionHeader title={<span id="docs-title">{t("packet.docs")}</span>} />
             <Card className="mt-4 divide-y divide-neutral-200">
               {packet.documents.map((d) => (
                 <label key={d.key} className="flex cursor-pointer gap-3 px-4 py-3 hover:bg-neutral-50">
@@ -150,7 +150,6 @@ function ShareBar({ text }: { text: string }) {
           {t("packet.print")}
         </Button>
       </div>
-      <p className="mt-2 text-xs leading-relaxed text-neutral-500">{t("packet.shareNote")}</p>
     </section>
   );
 }

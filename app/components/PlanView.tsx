@@ -41,7 +41,6 @@ export function PlanView({
   const benefits = useMemo(() => estimateBenefits(plan.situation, t, lang), [plan, t, lang]);
   const packet = useMemo(() => buildReadyPacket(plan, benefits, t, lang), [plan, benefits, t, lang]);
   const shown = [...plan.ranked, ...plan.related];
-  const confirmed = plan.ranked.filter((r) => !r.needsVerification).length;
   // Summary and notes were written in the language chosen when the plan was built.
   const proseMatches = plan.lang === lang;
   // Template notes repeat the breakdown shown under "Show why"; only AI-written notes add something.
@@ -127,14 +126,9 @@ export function PlanView({
 
         <div id="panel-programs" role="tabpanel" aria-labelledby="tab-programs" hidden={tab !== "programs"} className="print-show space-y-8 pt-6">
           <section>
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-base font-semibold text-neutral-900">
-                {plan.ranked.length === 1 ? t("plan.matching.one") : t("plan.matching", { n: plan.ranked.length })}
-              </h2>
-              <p className="text-xs text-neutral-500 tabular-nums">
-                {t("plan.counts", { confirmed, unverified: plan.ranked.length - confirmed, excluded: plan.excludedCount })}
-              </p>
-            </div>
+            <h2 className="text-base font-semibold text-neutral-900">
+              {plan.ranked.length === 1 ? t("plan.matching.one") : t("plan.matching", { n: plan.ranked.length })}
+            </h2>
             {lang !== "en" && <p className="mt-1 text-xs text-neutral-500">{t("plan.englishNote")}</p>}
             {plan.ranked.length === 0 ? (
               <p className="mt-4 border-l-4 border-signal bg-neutral-50 p-5 text-sm text-neutral-700">{t("plan.noMatch")}</p>
@@ -167,8 +161,6 @@ export function PlanView({
           )}
         </div>
       </div>
-
-      <p className="border-t border-neutral-300 pt-4 text-xs leading-relaxed text-neutral-600">{t("plan.disclaimer")}</p>
     </div>
   );
 }

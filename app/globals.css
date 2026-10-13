@@ -10,7 +10,8 @@
  * nothing else should introduce new colors.
  */
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair-display), Georgia, serif;
 
   --color-paper: #ffffff;
   --color-canvas: #fafaf9;
@@ -34,8 +35,8 @@
   --color-accent-800: #93200e;
   --color-accent-900: #731b10;
   --color-accent-950: #491108;
-  --color-signal: #f4c430;
-  --color-signal-soft: #fff4bd;
+  --color-signal: #b52a16;
+  --color-signal-soft: #fbe3de;
 }
 
 body {
@@ -155,9 +156,9 @@ body {
 }
 
 .chip[aria-pressed="true"] {
-  border-color: var(--color-neutral-900);
-  background: var(--color-signal);
-  color: var(--color-neutral-950);
+  border-color: var(--color-accent-700);
+  background: var(--color-accent-700);
+  color: #ffffff;
 }
 
 .chip:disabled {

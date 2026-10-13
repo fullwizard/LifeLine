@@ -8,6 +8,7 @@
 import { Document, Font, Link, Page, StyleSheet, Text, View, pdf } from "@react-pdf/renderer";
 import type { BenefitSummary } from "@/lib/benefits/estimate";
 import { formatMoney, LANG_TAG, type Lang, type MessageKey, type T } from "@/lib/i18n";
+import { isEligibilityUnverified } from "@/lib/matching/score";
 import type { ReadyPacket } from "@/lib/plan/readyPacket";
 import type { Plan } from "@/lib/types";
 
@@ -46,7 +47,7 @@ const C = {
   line: "#e7e5e4",
   accent: "#b52a16",
   green: "#047857",
-  amber: "#b45309",
+  warning: "#b52a16",
 };
 
 const s = StyleSheet.create({
@@ -116,7 +117,7 @@ export function ReportDocument({ plan, benefits, packet, facts, t, lang }: Props
                   <Text style={s.small}>{e.why[0]}</Text>
                 </View>
                 <View style={s.cellSide}>
-                  <Text style={[s.bold, { color: e.status === "likely" ? C.green : C.amber }]}>
+                  <Text style={[s.bold, { color: e.status === "likely" ? C.green : C.warning }]}>
                     {t(e.status === "likely" ? "benefits.likely" : "benefits.possible")}
                   </Text>
                   {e.apply.phone && <Text>{e.apply.phone}</Text>}
@@ -187,7 +188,7 @@ export function ReportDocument({ plan, benefits, packet, facts, t, lang }: Props
           <View>
             <Text style={s.h2} minPresenceAhead={80}>{t("report.programs")}</Text>
             {programs.map((r, i) => {
-              const confirm = r.breakdown.filter((b) => b.status === "unverified").length;
+              const confirm = r.breakdown.filter(isEligibilityUnverified).length;
               return (
                 <View key={r.resource.id} style={s.row} wrap={false}>
                   <View style={s.cellMain}>
@@ -215,9 +216,6 @@ export function ReportDocument({ plan, benefits, packet, facts, t, lang }: Props
             })}
           </View>
         )}
-
-        <Text style={[s.tiny, { marginTop: 18 }]}>{t("plan.disclaimer")}</Text>
-
         <View style={s.footer} fixed>
           <Text>{t("report.footer")}</Text>
           <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />

@@ -2,7 +2,7 @@
  * Template-based plan explainer. Deterministic, no network. Produces prose
  * strictly from the ranked resources and their breakdowns.
  */
-import { humanCategory } from "../../matching/score";
+import { humanCategory, isEligibilityUnverified } from "../../matching/score";
 import { translator, type Lang, type MessageKey, type T } from "../../i18n";
 import type { ScoredResource, Situation } from "../../types";
 import type { Explanation, PlanExplainer } from "../types";
@@ -60,7 +60,7 @@ export function explainByTemplate(situation: Situation, ranked: ScoredResource[]
   if (lang === "en") {
     for (const r of ranked) {
       const met = r.breakdown.filter((b) => b.status === "met" && b.points > 0).map((b) => b.detail);
-      const unverified = r.breakdown.filter((b) => b.status === "unverified").map((b) => b.detail);
+      const unverified = r.breakdown.filter(isEligibilityUnverified).map((b) => b.detail);
       const parts = [`${r.resource.organization} provides ${humanCategory(r.resource.category)}.`];
       if (met.length) parts.push(`What matches: ${met.slice(0, 2).join(" ")}`);
       if (unverified.length) parts.push(`Still to confirm: ${unverified.slice(0, 2).join(" ")}`);

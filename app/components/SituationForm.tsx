@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import type { MessageKey } from "@/lib/i18n";
 import type { ResourceCategory } from "@/lib/types";
 import { useLanguage } from "./LanguageProvider";
-import { Button, Card, Spinner } from "./ui";
+import { Button, Spinner } from "./ui";
 
 /** The common reasons people come; the rest are reachable by typing. */
 export const PICKABLE_NEEDS: ResourceCategory[] = [
@@ -26,13 +26,11 @@ export function SituationForm({
   initialText,
   initialNeeds,
   pending,
-  aiEnabled,
   onSubmit,
 }: {
   initialText: string;
   initialNeeds: ResourceCategory[];
   pending: boolean;
-  aiEnabled: boolean;
   onSubmit: (text: string, needs: ResourceCategory[]) => void;
 }) {
   const { t } = useLanguage();
@@ -60,77 +58,59 @@ export function SituationForm({
         if (canSubmit) onSubmit(text, needs);
       }}
     >
-      <Card>
-        <div className="space-y-5 p-5 sm:p-6">
-          <div>
-            <div className="flex items-baseline justify-between gap-3">
-              <label htmlFor="situation" className="text-base font-semibold text-neutral-900">
-                {t("form.label")}
-              </label>
-              <button
-                type="button"
-                onClick={tryExample}
-                disabled={pending}
-                className="text-sm font-semibold text-accent-700 underline decoration-2 underline-offset-4 hover:text-accent-900 disabled:text-neutral-400"
-              >
-                {t("form.example")}
-              </button>
-            </div>
-            <p id="situation-guidance" className="mt-1 text-sm leading-relaxed text-neutral-500">
-              {t("form.guidance")}
-            </p>
-            <textarea
-              ref={textareaRef}
-              id="situation"
-              name="situation"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && canSubmit) onSubmit(text, needs);
-              }}
-              aria-describedby="situation-guidance"
-              rows={5}
-              maxLength={4000}
-              placeholder={examples[0]}
+      <div className="flex items-baseline justify-between gap-3">
+        <label htmlFor="situation" className="text-xl font-semibold text-neutral-950">
+          {t("form.label")}
+        </label>
+        <button
+          type="button"
+          onClick={tryExample}
+          disabled={pending}
+          className="shrink-0 text-sm font-semibold text-accent-700 hover:text-accent-900 disabled:text-neutral-400"
+        >
+          {t("form.example")} ✦
+        </button>
+      </div>
+      <textarea
+        ref={textareaRef}
+        id="situation"
+        name="situation"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && canSubmit) onSubmit(text, needs);
+        }}
+        rows={7}
+        maxLength={4000}
+        placeholder={examples[0]}
+        disabled={pending}
+        className="mt-4 block w-full resize-y rounded-[2px] border border-neutral-300 bg-paper px-4 py-3 text-base leading-relaxed text-neutral-950 placeholder:text-neutral-400 focus:border-accent-700 focus:outline-none"
+      />
+
+      <fieldset className="mt-4">
+        <legend className="text-sm font-medium text-neutral-700">{t("form.chips")}</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {PICKABLE_NEEDS.map((need) => (
+            <button
+              key={need}
+              type="button"
+              className="chip"
+              aria-pressed={needs.includes(need)}
+              onClick={() => toggleNeed(need)}
               disabled={pending}
-              className="mt-3 block w-full resize-y rounded-[2px] border border-neutral-300 bg-paper px-3.5 py-3 text-base leading-relaxed text-neutral-950 placeholder:text-neutral-400 focus:border-accent-700 focus:outline-none"
-            />
-          </div>
-
-          <fieldset>
-            <legend className="text-sm font-medium text-neutral-700">{t("form.chips")}</legend>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {PICKABLE_NEEDS.map((need) => (
-                <button
-                  key={need}
-                  type="button"
-                  className="chip"
-                  aria-pressed={needs.includes(need)}
-                  onClick={() => toggleNeed(need)}
-                  disabled={pending}
-                >
-                  {t(`need.${need}` as MessageKey)}
-                </button>
-              ))}
-            </div>
-          </fieldset>
+            >
+              {t(`need.${need}` as MessageKey)}
+            </button>
+          ))}
         </div>
+      </fieldset>
 
-        <div className="flex flex-col-reverse gap-3 border-t border-neutral-200 bg-paper px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p className="flex items-start gap-2 text-xs leading-relaxed text-neutral-500">
-            <svg className="mt-0.5 h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect x="4" y="10" width="16" height="11" rx="2" />
-              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-            </svg>
-            <span>{t(aiEnabled ? "form.ai" : "form.offline")}</span>
-          </p>
-          <Button type="submit" variant="primary" disabled={!canSubmit} className="shrink-0">
-            {pending && <Spinner />}
-            {pending ? t("form.submitting") : t("form.submit")}
-          </Button>
-        </div>
-      </Card>
-      <p className="mt-4 text-xs leading-relaxed text-neutral-500">{t("form.privacy")}</p>
+      <div className="mt-6 flex justify-end">
+        <Button type="submit" variant="primary" disabled={!canSubmit} className="shrink-0">
+          {pending && <Spinner />}
+          {pending ? t("form.submitting") : t("form.submit")} {!pending && <span aria-hidden>→</span>}
+        </Button>
+      </div>
     </form>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { MessageKey } from "@/lib/i18n";
+import { isEligibilityUnverified } from "@/lib/matching/score";
 import type { BreakdownItem, ScoredResource } from "@/lib/types";
 import { useLanguage } from "./LanguageProvider";
 import { Badge, Button, ButtonLink } from "./ui";
@@ -10,7 +11,7 @@ export function ResourceCard({ rank, scored, note }: { rank: number; scored: Sco
   const { t } = useLanguage();
   const { resource, breakdown, needsVerification } = scored;
   const [open, setOpen] = useState(false);
-  const unverified = breakdown.filter((b) => b.status === "unverified");
+  const unverified = breakdown.filter(isEligibilityUnverified);
 
   return (
     <article id={`resource-${resource.id}`} className="scroll-mt-6 border-b border-neutral-300 py-5 target:border-l-4 target:border-l-accent-700 target:pl-4 sm:py-6">

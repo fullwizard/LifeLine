@@ -187,6 +187,38 @@ describe("scoring: unverified eligibility is flagged, not assumed", () => {
     expect(known.needsVerification).toBe(false);
     expect(unknown.needsVerification).toBe(true);
   });
+
+  it("does not withhold a full match for unknown distance or document preparation", () => {
+    const resource = makeResource({ id: "prep", required_documents: ["Photo ID"] });
+    const scored = scoreResource(resource, {
+      ...seattleSituation,
+      location: { city: "Seattle", county: "King County" },
+    });
+
+    expect(scored.breakdown).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ factor: "documents", status: "unverified" }),
+        expect.objectContaining({ factor: "distance", status: "unverified" }),
+      ]),
+    );
+    expect(scored.needsVerification).toBe(false);
+  });
+
+  it("still requires verification for unknown eligibility requirements", () => {
+    const resource = makeResource({ id: "eligibility", eligibility: { requires_children: true } });
+    expect(scoreResource(resource, seattleSituation).needsVerification).toBe(true);
+  });
+
+  it("confirms California-wide service for a supplied California location", () => {
+    const resource = makeResource({ id: "statewide-ca", service_area: ["California"] });
+    const scored = scoreResource(resource, {
+      ...seattleSituation,
+      location: { city: "San Jose", county: "Santa Clara County" },
+    });
+
+    expect(scored.breakdown.find((item) => item.factor === "service_area")?.status).toBe("met");
+    expect(scored.needsVerification).toBe(false);
+  });
 });
 
 // ---------------------------------------------------------------------------

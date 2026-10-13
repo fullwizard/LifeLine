@@ -48,7 +48,7 @@ type Tone = "neutral" | "success" | "warning" | "danger" | "accent";
 const TONE: Record<Tone, string> = {
   neutral: "bg-neutral-100 text-neutral-800",
   success: "bg-neutral-900 text-white",
-  warning: "bg-signal text-neutral-950",
+  warning: "bg-signal text-white",
   danger: "bg-red-700 text-white",
   accent: "bg-accent-700 text-white",
 };

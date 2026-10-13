@@ -17,7 +17,7 @@ type Step =
   | { kind: "followup"; parsed: ParseResponse }
   | { kind: "plan"; plan: Plan };
 
-export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
+export function LifeLineApp() {
   const { lang, t } = useLanguage();
   const [step, setStep] = useState<Step>({ kind: "input" });
   const [text, setText] = useState("");
@@ -112,11 +112,17 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
   return (
     <div>
       {step.kind === "input" ? (
-        <div className="mx-auto max-w-2xl pt-3 text-center sm:pt-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent-700">{t("app.eyebrow")}</p>
-          <h1 className="mt-3 text-4xl font-semibold leading-[1.06] tracking-[-0.035em] text-neutral-950 text-balance sm:text-5xl">{t("app.headline")}</h1>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">{t("app.sub")}</p>
-        </div>
+        <section className="grid items-start gap-10 py-4 md:grid-cols-[0.82fr_1.18fr] md:gap-14 md:py-10">
+          <div className="md:pt-8">
+            <h1 className="max-w-md font-display text-5xl font-semibold leading-[0.98] tracking-[-0.035em] text-neutral-950 text-balance sm:text-6xl">
+              {t("app.headline")}
+            </h1>
+            <QuickResources />
+          </div>
+          <div className="md:pt-4">
+            <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} onSubmit={submitSituation} />
+          </div>
+        </section>
       ) : (
         <Stepper stage={stage} />
       )}
@@ -127,11 +133,6 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
         </div>
       )}
 
-      {step.kind === "input" && (
-        <div className="mx-auto mt-8 max-w-3xl">
-          <SituationForm initialText={text} initialNeeds={pickedNeeds} pending={pending} aiEnabled={aiEnabled} onSubmit={submitSituation} />
-        </div>
-      )}
       {(step.kind === "followup" || step.kind === "plan") && hasImmediateSafetyConcern(situationOf(step)) && (
         <div className="mb-6">
           <CrisisBanner />
@@ -155,6 +156,36 @@ export function LifeLineApp({ aiEnabled }: { aiEnabled: boolean }) {
       {step.kind === "plan" && (
         <PlanView plan={step.plan} pending={pending} onRefine={(a) => refinePlan(step.plan, a)} onReset={reset} />
       )}
+    </div>
+  );
+}
+
+function QuickResources() {
+  const { t } = useLanguage();
+  const resources: { label: MessageKey; href: string }[] = [
+    { label: "quick.211", href: "https://211.org/" },
+    { label: "quick.988", href: "https://988lifeline.org" },
+    { label: "quick.ca", href: "https://www.ca.gov/topics/assistance/" },
+    { label: "quick.edd", href: "https://edd.ca.gov/en/unemployment/step-2-apply/" },
+  ];
+
+  return (
+    <div className="mt-9 max-w-sm">
+      <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-neutral-500">{t("quick.title")}</h2>
+      <ul className="mt-3 list-disc space-y-2 pl-5 marker:text-accent-700">
+        {resources.map((resource) => (
+          <li key={resource.label}>
+            <a
+              href={resource.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-accent-700 underline decoration-accent-700/55 underline-offset-4 hover:text-accent-900"
+            >
+              {t(resource.label)}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
