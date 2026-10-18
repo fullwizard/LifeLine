@@ -13,6 +13,7 @@ import { ReadyPacketView } from "./ReadyPacketView";
 import { ReportDownloadButton } from "./ReportDownloadButton";
 import { ResourceCard } from "./ResourceCard";
 import { Button } from "./ui";
+import { useReport } from "./useReport";
 
 const ResourceMap = dynamic(() => import("./ResourceMap").then((m) => m.ResourceMap), {
   ssr: false,
@@ -40,6 +41,8 @@ export function PlanView({
   // Pure and fast: recomputed on the client so a language switch re-renders instantly.
   const benefits = useMemo(() => estimateBenefits(plan.situation, t, lang), [plan, t, lang]);
   const packet = useMemo(() => buildReadyPacket(plan, benefits, t, lang), [plan, benefits, t, lang]);
+  // Download and Print share this, so both produce the same report.pdf.
+  const report = useReport({ plan, benefits, packet, facts });
   const shown = [...plan.ranked, ...plan.related];
   // Summary and notes were written in the language chosen when the plan was built.
   const proseMatches = plan.lang === lang;
@@ -81,7 +84,7 @@ export function PlanView({
           )}
         </div>
         <div className="flex flex-wrap gap-2 no-print">
-          <ReportDownloadButton plan={plan} benefits={benefits} packet={packet} />
+          <ReportDownloadButton report={report} />
           <Button variant="ghost" onClick={onReset}>
             {t("plan.edit")}
           </Button>
@@ -117,7 +120,7 @@ export function PlanView({
         </div>
 
         <div id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={tab !== "steps"} className="print-show pt-6">
-          <ReadyPacketView packet={packet} />
+          <ReadyPacketView packet={packet} onPrint={report.print} printing={report.state === "working"} />
         </div>
 
         <div id="panel-benefits" role="tabpanel" aria-labelledby="tab-benefits" hidden={tab !== "benefits"} className="print-show pt-6">

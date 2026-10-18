@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { MessageKey } from "@/lib/i18n";
 import type { ReadyPacket, StepWhen } from "@/lib/plan/readyPacket";
+import { mailtoLink, smsLink, WINDOWS_MAILTO_LIMIT } from "@/lib/share/shareLinks";
 import { useLanguage } from "./LanguageProvider";
 import { Badge, Button, ButtonLink, Card, PhoneLink, SectionHeader } from "./ui";
 
@@ -13,7 +14,7 @@ const WHEN_TONE: Record<StepWhen, "danger" | "accent" | "neutral"> = {
   next: "neutral",
 };
 
-export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
+export function ReadyPacketView({ packet, onPrint, printing }: { packet: ReadyPacket; onPrint: () => void; printing: boolean }) {
   const { t } = useLanguage();
 
   return (
@@ -65,7 +66,7 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
             </Card>
           </section>
         )}
-        <ShareBar text={packet.shareText} />
+        <ShareBar text={packet.shareText} onPrint={onPrint} printing={printing} />
       </div>
 
       {packet.calls.length > 0 && (
@@ -117,12 +118,61 @@ export function ReadyPacketView({ packet }: { packet: ReadyPacket }) {
   );
 }
 
-function ShareBar({ text }: { text: string }) {
+const noSubscription = () => () => {};
+
+/** Browser-only value that is `false` on the server and during hydration, so markup matches. */
+function useIsWindows(): boolean {
+  return useSyncExternalStore(
+    noSubscription,
+    () => /Windows/i.test(navigator.userAgent),
+    () => false,
+  );
+}
+
+/**
+ * A browser gives no signal when a sms:/mailto: link has no app to open. When
+ * one does open, the page loses focus or is hidden almost at once, so silence
+ * for a moment means nothing opened (a desktop or shared computer with no mail
+ * program). Call `watch()` from the link's click handler.
+ */
+function useNothingOpened(): { nothingOpened: boolean; watch: () => void; clear: () => void } {
+  const [nothingOpened, setNothingOpened] = useState(false);
+  const stopWatching = useRef<() => void>(() => {});
+  useEffect(() => () => stopWatching.current(), []);
+
+  function watch() {
+    stopWatching.current();
+    setNothingOpened(false);
+    const stop = () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("blur", stop);
+      window.removeEventListener("pagehide", stop);
+      document.removeEventListener("visibilitychange", stop);
+    };
+    const timer = window.setTimeout(() => {
+      stop();
+      setNothingOpened(true);
+    }, 1500);
+    window.addEventListener("blur", stop);
+    window.addEventListener("pagehide", stop);
+    document.addEventListener("visibilitychange", stop);
+    stopWatching.current = stop;
+  }
+
+  return { nothingOpened, watch, clear: () => setNothingOpened(false) };
+}
+
+function ShareBar({ text, onPrint, printing }: { text: string; onPrint: () => void; printing: boolean }) {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
-  const body = encodeURIComponent(text);
+  const { nothingOpened, watch, clear } = useNothingOpened();
+  const windows = useIsWindows();
+
+  // Windows mail clients refuse very long links; elsewhere the full plan goes through.
+  const email = mailtoLink(t("share.title"), text, windows ? { maxLength: WINDOWS_MAILTO_LIMIT, truncatedNote: t("packet.truncated") } : {});
 
   async function copy() {
+    clear();
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -137,19 +187,24 @@ function ShareBar({ text }: { text: string }) {
       <p className="text-sm font-medium text-neutral-900">{t("packet.share")}</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {/* sms: and mailto: open the person's own apps; nothing passes through LifeLine. */}
-        <ButtonLink href={`sms:?&body=${body}`} size="sm">
+        <ButtonLink href={smsLink(text)} size="sm" onClick={watch}>
           {t("packet.text")}
         </ButtonLink>
-        <ButtonLink href={`mailto:?subject=${encodeURIComponent(t("share.title"))}&body=${body}`} size="sm">
+        <ButtonLink href={email} size="sm" onClick={watch}>
           {t("packet.email")}
         </ButtonLink>
         <Button size="sm" onClick={copy} aria-live="polite">
           {copied ? t("packet.copied") : t("packet.copy")}
         </Button>
-        <Button size="sm" onClick={() => window.print()}>
-          {t("packet.print")}
+        <Button size="sm" onClick={onPrint} disabled={printing}>
+          {printing ? t("report.working") : t("packet.print")}
         </Button>
       </div>
+      {nothingOpened && (
+        <p role="status" className="mt-2 text-xs leading-relaxed text-neutral-700">
+          {t("packet.noApp")}
+        </p>
+      )}
     </section>
   );
 }

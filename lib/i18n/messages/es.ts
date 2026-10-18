@@ -203,6 +203,8 @@ export const es: Partial<Record<MessageKey, string>> = {
   "packet.text": "Enviármelo por texto",
   "packet.email": "Enviármelo por correo",
   "packet.shareNote": "Esto abre la app de mensajes o de correo de su propio teléfono. LifeLine nunca lo ve ni lo guarda.",
+  "packet.noApp": "¿No se abrió nada? Toque Copiar y péguelo en un mensaje o correo.",
+  "packet.truncated": "(Acortado para que quepa. Use Copiar en LifeLine para ver el plan completo.)",
   "when.now": "Ahora mismo",
   "when.today": "Hoy",
   "when.week": "Esta semana",

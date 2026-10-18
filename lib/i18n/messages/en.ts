@@ -248,6 +248,8 @@ export const en = {
   "packet.text": "Text it to myself",
   "packet.email": "Email it to myself",
   "packet.shareNote": "This opens your own phone or email app. LifeLine never sees or stores it.",
+  "packet.noApp": "Nothing opened? Tap Copy, then paste it into a message or email.",
+  "packet.truncated": "(Shortened to fit. Use Copy on LifeLine for the full plan.)",
   "when.now": "Right now",
   "when.today": "Today",
   "when.week": "This week",

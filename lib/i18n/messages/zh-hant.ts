@@ -203,6 +203,8 @@ export const zhHant: Partial<Record<MessageKey, string>> = {
   "packet.text": "用短訊傳給自己",
   "packet.email": "用電郵寄給自己",
   "packet.shareNote": "這會開啟您自己的手機短訊或電郵程式。LifeLine 不會看到或儲存這些內容。",
+  "packet.noApp": "沒有開啟任何程式？請按「複製」，再貼到短訊或電郵中。",
+  "packet.truncated": "（內容已縮短。請在 LifeLine 使用「複製」取得完整計劃。）",
   "when.now": "立即",
   "when.today": "今天",
   "when.week": "本週",

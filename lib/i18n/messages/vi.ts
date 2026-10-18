@@ -203,6 +203,8 @@ export const vi: Partial<Record<MessageKey, string>> = {
   "packet.text": "Nhắn tin cho chính tôi",
   "packet.email": "Gửi email cho chính tôi",
   "packet.shareNote": "Thao tác này mở ứng dụng tin nhắn hoặc email trên máy của quý vị. LifeLine không bao giờ xem hay lưu lại.",
+  "packet.noApp": "Không có gì mở ra? Hãy bấm Sao chép rồi dán vào tin nhắn hoặc email.",
+  "packet.truncated": "(Đã rút gọn cho vừa. Dùng nút Sao chép trong LifeLine để lấy toàn bộ kế hoạch.)",
   "when.now": "Ngay bây giờ",
   "when.today": "Hôm nay",
   "when.week": "Tuần này",

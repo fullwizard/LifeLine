@@ -203,6 +203,8 @@ export const zhHans: Partial<Record<MessageKey, string>> = {
   "packet.text": "发短信给自己",
   "packet.email": "发邮件给自己",
   "packet.shareNote": "这会打开您自己的手机短信或电子邮件程序。LifeLine 不会看到或保存这些内容。",
+  "packet.noApp": "没有打开任何程序？请点“拷贝”，再粘贴到短信或邮件中。",
+  "packet.truncated": "（内容已缩短。请在 LifeLine 中使用“拷贝”获取完整计划。）",
   "when.now": "立即",
   "when.today": "今天",
   "when.week": "本周",
