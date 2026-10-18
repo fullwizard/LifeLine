@@ -13,7 +13,7 @@ import {
   type ResourceCategory,
   type Situation,
 } from "../types";
-import { generateJson, geminiEnabled } from "./client";
+import { generateJson, geminiEnabled, PARSE_TIMEOUT_MS } from "./client";
 import { keywordParser, parseSituationByKeywords } from "./fallback/keywordParser";
 import type { ParseResult, SituationParser } from "./types";
 
@@ -98,7 +98,7 @@ function toSituation(text: string, g: GeminiSituation): Situation {
 
 export const geminiParser: SituationParser = {
   async parse(text: string): Promise<ParseResult> {
-    const g = await generateJson<GeminiSituation>(buildPrompt(text), SCHEMA);
+    const g = await generateJson<GeminiSituation>(buildPrompt(text), SCHEMA, PARSE_TIMEOUT_MS);
     const situation = toSituation(text, g);
     // Keep explicit keyword signals as a safety net when Gemini misses an
     // indirect request such as "laid off" or a local abbreviation like EPA.

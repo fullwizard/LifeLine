@@ -5,9 +5,16 @@
  */
 import { LANG_NAMES, type Lang } from "../i18n";
 import type { ScoredResource, Situation } from "../types";
-import { generateJson, geminiEnabled } from "./client";
+import { EXPLAIN_TIMEOUT_MS, generateJson, geminiEnabled } from "./client";
 import { explainByTemplate, templateExplainer } from "./fallback/templateExplainer";
 import type { Explanation, PlanExplainer } from "./types";
+
+/**
+ * Gemini writes a note for only the top few programs. Output length is what
+ * makes plans slow (a note for all 19 took 11-38s); the rest show their own
+ * description, as they do without Gemini.
+ */
+export const NOTE_LIMIT = 6;
 
 interface GeminiExplanation {
   summary: string;
@@ -63,7 +70,7 @@ function buildPrompt(situation: Situation, ranked: ScoredResource[], lang: Lang)
     "Return JSON with:",
     "- summary: 2-3 sentences describing the plan overall.",
     "- steps: 3-6 short, ordered next steps (start with the most urgent).",
-    "- resourceNotes: one 1-2 sentence note per resource id explaining why it is on the list and what still needs confirming.",
+    `- resourceNotes: one 1-2 sentence note explaining why it is on the list and what still needs confirming, for ONLY the first ${NOTE_LIMIT} resources (rank 1 to ${NOTE_LIMIT}). Do not write notes for the others.`,
     "",
     "Person's situation (structured):",
     JSON.stringify(facts, null, 2),
@@ -75,15 +82,18 @@ function buildPrompt(situation: Situation, ranked: ScoredResource[], lang: Lang)
 
 export const geminiExplainer: PlanExplainer = {
   async explain(situation, ranked, lang = "en"): Promise<Explanation> {
-    const g = await generateJson<GeminiExplanation>(buildPrompt(situation, ranked, lang), SCHEMA);
+    const g = await generateJson<GeminiExplanation>(buildPrompt(situation, ranked, lang), SCHEMA, EXPLAIN_TIMEOUT_MS);
     const allowed = new Set(ranked.map((r) => r.resource.id));
     const fallback = explainByTemplate(situation, ranked, lang);
     const resourceNotes: Record<string, string> = {};
     for (const n of g.resourceNotes ?? []) {
       if (allowed.has(n.id) && typeof n.note === "string" && n.note.trim()) resourceNotes[n.id] = n.note.trim();
     }
-    // Fill any resource Gemini skipped from the template so nothing goes blank.
-    for (const id of allowed) if (!resourceNotes[id] && fallback.resourceNotes[id]) resourceNotes[id] = fallback.resourceNotes[id];
+    // Fill any of the top resources Gemini skipped from the template. Lower ones get no note on purpose.
+    for (const { resource } of ranked.slice(0, NOTE_LIMIT)) {
+      const id = resource.id;
+      if (!resourceNotes[id] && fallback.resourceNotes[id]) resourceNotes[id] = fallback.resourceNotes[id];
+    }
     return {
       summary: g.summary?.trim() || fallback.summary,
       steps: Array.isArray(g.steps) && g.steps.length ? g.steps.map(String) : fallback.steps,
