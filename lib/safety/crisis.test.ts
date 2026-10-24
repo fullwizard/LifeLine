@@ -16,6 +16,51 @@ describe("crisis detection", () => {
     }
   });
 
+  it("flags slang and euphemisms", () => {
+    for (const text of [
+      `I actually want to kms- all my friends and family left me. I'm living in a car.`,
+      "i want to kms",
+      "KMS honestly",
+      "thinking of unaliving myself",
+      "I'm going to unalive myself tonight",
+      "I want to kill my self",
+      "I want to off myself",
+      "I just want to end it",
+      "I'm gonna end it tonight",
+      "thinking about ending it",
+      "no one would miss me",
+      "nobody'd miss me if I was gone",
+      "everyone is better off without me",
+      "I wish I was never born",
+      "I wish I wouldn't wake up",
+      "I don't want to exist anymore",
+      "I just want to disappear",
+      "I'm going to take all my pills",
+    ]) {
+      expect(detectCrisisIndicators(text), text).toEqual(["suicide_or_self_harm"]);
+    }
+  });
+
+  it("does not flag innocent uses of the same words", () => {
+    for (const text of [
+      "I drive 10 kms to the food bank each way",
+      "it is 12 kms from the shelter",
+      "I want to end it with my boyfriend, he is why I lost the apartment",
+      "I don't want to shoot myself in the foot by missing the deadline",
+      "I drown myself in work and still can't pay rent",
+      "I wish I would wake up earlier for my shift",
+      "I forgot to take my pills and my phone",
+      "my car is dead and I can't get to work",
+    ]) {
+      expect(detectCrisisIndicators(text), text).toEqual([]);
+    }
+  });
+
+  it("respects an explicit denial of slang too", () => {
+    expect(detectCrisisIndicators("I'm not going to kms, I just need help with rent")).toEqual([]);
+    expect(detectCrisisIndicators("I would never unalive myself")).toEqual([]);
+  });
+
   it("does not flag ordinary hardship language", () => {
     for (const text of [
       "I'm behind on rent and really stressed",

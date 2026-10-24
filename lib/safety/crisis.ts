@@ -6,8 +6,18 @@
  */
 import type { CrisisIndicator, Situation } from "../types";
 
-const SUICIDE_OR_SELF_HARM =
+const DIRECT_PHRASES =
   /\b(?:suicid\w*|kill(?:ing)? myself|end(?:ing)? (?:my life|it all|everything)|take (?:my|my own) life|(?:don't|do not|dont) want to (?:live|be alive|be here|wake up|go on) (?:anymore|any more)?|(?:want|wanted|wanting|wish(?:ed)?|ready) to (?:die|be dead|not exist|disappear forever)|better off dead|(?:hurt|harm|cut|cutting|hurting|harming) myself|self[- ]?harm|no reason to (?:live|go on|keep going)|(?:life )?(?:isn't|is not|not) worth living|can't go on|jump off (?:a|the) (?:bridge|building|roof)|overdose on purpose|thinking about (?:ending|dying|death))\b/i;
+
+/**
+ * Slang and euphemisms people actually type ("kms", "unalive"), plus ways of
+ * saying it without the usual words. Each alternative avoids a common innocent
+ * use: "10 kms", "end it with my boyfriend", "shoot myself in the foot".
+ */
+const SLANG_AND_EUPHEMISMS =
+  /\b(?:(?<!\d\s?)kms|un-?aliv(?:e|ed|es|ing)|kill(?:ing)? my ?self|(?:off|end|hang|poison) myself|shoot myself(?! in the (?:foot|leg))|drown myself(?! in (?:work|my work|school|studying))|(?:want(?:ed)?|wanna|going|gonna|ready|planning|trying|thinking (?:of|about)) (?:to )?end(?:ing)? it(?!\s+with\b)|(?:no ?one|nobody)(?: would|'d| will) miss me|better off without me|wish(?:ed)? (?:i|that i) (?:was|were) never born|wish(?:ed)? (?:i|that i) (?:wouldn't|would not|didn't|did not|could never|would never|could just not) wake up|(?:don't|do not|dont) want to (?:exist|be around)|(?:want|wanna) to disappear|slit(?:ting)? my (?:wrists|throat)|(?:take|taking) all (?:of )?my pills)\b/i;
+
+const SUICIDE_OR_SELF_HARM = new RegExp(`${DIRECT_PHRASES.source}|${SLANG_AND_EUPHEMISMS.source}`, "i");
 
 /**
  * An explicit denial right before the phrase ("I am not suicidal", "no
